@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { mockProducts, type Product } from "../data/mockProducts";
+import { useCart } from "../lib/useCart";
 
 export function meta({ params }: { params: { id: string } }) {
   const product = mockProducts.find((p) => p.id === params.id);
@@ -162,6 +163,7 @@ function ProductLayout({ product }: { product: Product }) {
 // ── Product Info ───────────────────────────────────────────────────────────
 
 function ProductInfo({ product }: { product: Product }) {
+  const { add } = useCart();
   const [selectedSize, setSelectedSize] = useState<string | null>(
     product.sizes?.[0] ?? null
   );
@@ -169,6 +171,14 @@ function ProductInfo({ product }: { product: Product }) {
   const [wishlist, setWishlist] = useState(false);
 
   function handleAddToBag() {
+    add({
+      productId: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      image: product.image,
+      size: selectedSize ?? undefined,
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
