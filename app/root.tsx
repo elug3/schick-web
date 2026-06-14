@@ -9,6 +9,7 @@ import {
 } from "react-router";
 
 import "./app.css";
+import { useCart } from "./lib/useCart";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -70,7 +71,7 @@ function AnnouncementBar() {
 
 const navItems = [
   { label: "Home", to: "/", icon: HomeIcon },
-  { label: "History", to: "/history", icon: HistoryIcon },
+  { label: "Bag", to: "/cart", icon: BagIcon },
   { label: "Profile", to: "/profile", icon: ProfileIcon },
 ];
 
@@ -85,6 +86,8 @@ const desktopNavLinks = [
 ];
 
 function TopNav() {
+  const { count } = useCart();
+
   return (
     <header className="fixed inset-x-0 top-8 z-40 bg-white">
       {/* 3-column grid: logo | links | icons */}
@@ -120,11 +123,16 @@ function TopNav() {
         {/* Col 3 — Icons (right-aligned) */}
         <div className="flex justify-end gap-0.5">
           <NavLink
-            to="/history"
-            aria-label="History"
-            className="rounded p-2 text-zinc-400 transition hover:text-zinc-950"
+            to="/cart"
+            aria-label="Shopping bag"
+            className="relative rounded p-2 text-zinc-400 transition hover:text-zinc-950"
           >
-            <HistoryIcon />
+            <BagIcon />
+            {count > 0 && (
+              <span className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center bg-zinc-950 text-[9px] font-semibold text-white">
+                {count > 9 ? "9+" : count}
+              </span>
+            )}
           </NavLink>
           <NavLink
             to="/profile"
@@ -268,6 +276,15 @@ function ProfileIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
       <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 8a7 7 0 0 0-14 0" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function BagIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="M6 8h12l-1 13H7L6 8Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.5" />
+      <path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </svg>
   );
 }
