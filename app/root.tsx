@@ -19,7 +19,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
 
@@ -43,37 +43,189 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-zinc-50 pb-24 text-zinc-950">
-      <Outlet />
+    <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
+      <AnnouncementBar />
+      <TopNav />
+      {/* announcement ~32px + nav h-14 56px = 88px */}
+      <div className="pt-[5.5rem]">
+        <Outlet />
+      </div>
+      <Footer />
       <BottomNav />
+    </div>
+  );
+}
+
+function AnnouncementBar() {
+  return (
+    <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-center bg-zinc-950 px-4 py-2">
+      <p className="text-center text-[10px] tracking-[0.18em] text-white/70 uppercase">
+        Free shipping on orders over $100&ensp;·&ensp;Code&ensp;
+        <span className="font-medium text-[#c8a96e] tracking-widest">SUMMER30</span>
+        &ensp;—&ensp;30% off
+      </p>
     </div>
   );
 }
 
 const navItems = [
   { label: "Home", to: "/", icon: HomeIcon },
-  { label: "Search", to: "/search", icon: SearchIcon },
   { label: "History", to: "/history", icon: HistoryIcon },
   { label: "Profile", to: "/profile", icon: ProfileIcon },
 ];
+
+const desktopNavLinks = [
+  { label: "All Bags", to: "/" },
+  { label: "Gucci", to: "/product/b1" },
+  { label: "Louis Vuitton", to: "/product/b2" },
+  { label: "Chanel", to: "/product/b3" },
+  { label: "Prada", to: "/product/b4" },
+  { label: "Coach", to: "/product/b5" },
+  { label: "Hermès", to: "/product/b6" },
+];
+
+function TopNav() {
+  return (
+    <header className="fixed inset-x-0 top-8 z-40 bg-white">
+      {/* 3-column grid: logo | links | icons */}
+      <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center border-b border-zinc-100 px-6 md:px-10">
+
+        {/* Col 1 — Logo (left-aligned) */}
+        <NavLink
+          to="/"
+          className="justify-self-start text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Schick
+        </NavLink>
+
+        {/* Col 2 — All nav links (truly centered) */}
+        <nav aria-label="Main" className="hidden items-center gap-7 md:flex">
+          {desktopNavLinks.map(({ label, to }) => (
+            <NavLink
+              key={label}
+              to={to}
+              className={({ isActive }) =>
+                [
+                  "whitespace-nowrap text-[11px] uppercase tracking-[0.15em] transition-colors",
+                  isActive ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-950",
+                ].join(" ")
+              }
+            >
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Col 3 — Icons (right-aligned) */}
+        <div className="flex justify-end gap-0.5">
+          <NavLink
+            to="/history"
+            aria-label="History"
+            className="rounded p-2 text-zinc-400 transition hover:text-zinc-950"
+          >
+            <HistoryIcon />
+          </NavLink>
+          <NavLink
+            to="/profile"
+            aria-label="Profile"
+            className="rounded p-2 text-zinc-400 transition hover:text-zinc-950"
+          >
+            <ProfileIcon />
+          </NavLink>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="hidden border-t border-zinc-100 bg-white px-4 py-16 md:block md:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-4 gap-12">
+          {/* Brand */}
+          <div className="col-span-1">
+            <p
+              className="mb-3 text-2xl font-light tracking-[0.35em] uppercase text-zinc-950"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Schick
+            </p>
+            <p className="text-xs leading-relaxed text-zinc-400">
+              Authentic luxury bags from the world's most coveted brands, curated for the modern wardrobe.
+            </p>
+          </div>
+
+          {/* Shop */}
+          <div>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
+              Shop
+            </p>
+            <ul className="space-y-2">
+              {desktopNavLinks.map(({ label, to }) => (
+                <li key={label}>
+                  <NavLink
+                    to={to}
+                    className="text-xs text-zinc-400 transition hover:text-zinc-950"
+                  >
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
+              Services
+            </p>
+            <ul className="space-y-2 text-xs text-zinc-400">
+              <li><NavLink to="/product/c1" className="hover:text-zinc-950 transition">Style Consultation</NavLink></li>
+              <li><NavLink to="/history" className="hover:text-zinc-950 transition">Order History</NavLink></li>
+              <li><NavLink to="/profile" className="hover:text-zinc-950 transition">My Account</NavLink></li>
+            </ul>
+          </div>
+
+          {/* Info */}
+          <div>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
+              Info
+            </p>
+            <ul className="space-y-2 text-xs text-zinc-400">
+              <li>Shipping &amp; Returns</li>
+              <li>Authenticity Guarantee</li>
+              <li>Privacy Policy</li>
+              <li>Terms &amp; Conditions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 flex items-center justify-between border-t border-zinc-100 pt-8">
+          <p className="text-[11px] text-zinc-300">© 2026 Schick. All rights reserved.</p>
+          <p className="text-[11px] text-zinc-300">Premium Bags · Authenticated · Curated</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
 
 function BottomNav() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200 bg-white/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_24px_rgba(24,24,27,0.08)] backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-100 bg-white px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
     >
-      <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
+      <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
         {navItems.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
               [
-                "flex h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-colors",
-                isActive
-                  ? "bg-zinc-950 text-white"
-                  : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950",
+                "flex h-12 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium uppercase tracking-widest transition-colors",
+                isActive ? "text-zinc-950" : "text-zinc-300 hover:text-zinc-950",
               ].join(" ")
             }
           >
@@ -86,16 +238,12 @@ function BottomNav() {
   );
 }
 
+// ── Icons ──────────────────────────────────────────────────────────────────
+
 function HomeIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9.5Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
+      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -103,13 +251,7 @@ function HomeIcon() {
 function SearchIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="m20 20-4.35-4.35M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
+      <path d="m20 20-4.35-4.35M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -117,13 +259,7 @@ function SearchIcon() {
 function HistoryIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 12a8 8 0 1 0 2.35-5.65M4 5v5h5m3-2v5l3 2"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
+      <path d="M4 12a8 8 0 1 0 2.35-5.65M4 5v5h5m3-2v5l3 2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -131,13 +267,7 @@ function HistoryIcon() {
 function ProfileIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 8a7 7 0 0 0-14 0"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
+      <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 8a7 7 0 0 0-14 0" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -149,24 +279,17 @@ export function ErrorBoundary({ error }: { error: unknown }) {
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="container mx-auto p-4 pt-24">
       <h1>{message}</h1>
       <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+      {stack && <pre className="w-full overflow-x-auto p-4"><code>{stack}</code></pre>}
     </main>
   );
 }
