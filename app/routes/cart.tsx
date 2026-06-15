@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { mockProducts } from "../data/mockProducts";
+import { type Bag, fetchBags, bagImage } from "../lib/api";
 import {
   formatPrice,
   FREE_SHIPPING_THRESHOLD,
@@ -24,11 +24,13 @@ export default function CartPage() {
   const [promoCode, setPromoCode] = useState("");
   const [promoInput, setPromoInput] = useState("");
   const [promoError, setPromoError] = useState("");
+  const [recommendations, setRecommendations] = useState<Bag[]>([]);
 
   const summary = totals(promoCode);
-  const recommendations = mockProducts
-    .filter((p) => p.category === "Bag" && p.inStock)
-    .slice(0, 8);
+
+  useEffect(() => {
+    fetchBags().then((bags) => setRecommendations(bags.slice(0, 8))).catch(() => {});
+  }, []);
 
   function applyPromo() {
     const code = promoInput.trim().toUpperCase();
@@ -177,11 +179,7 @@ export default function CartPage() {
   );
 }
 
-function EmptyBag({
-  recommendations,
-}: {
-  recommendations: typeof mockProducts;
-}) {
+function EmptyBag({ recommendations }: { recommendations: Bag[] }) {
   return (
     <>
       <div className="border-b border-zinc-100 py-16 text-center md:py-24">
@@ -219,8 +217,9 @@ function Recommendations({
 }: {
   title: string;
   subtitle: string;
-  products: typeof mockProducts;
+  products: Bag[];
 }) {
+  if (products.length === 0) return null;
   return (
     <section className="mt-16 border-t border-zinc-100 pt-12 md:mt-20 md:pt-16">
       <div className="mb-8">
@@ -237,17 +236,13 @@ function Recommendations({
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
         {products.map((product) => (
-          <Link
-            key={product.id}
-            to={`/product/${product.id}`}
-            className="group"
-          >
+          <Link key={product.id} to={`/product/${product.id}`} className="group">
             <div
               className="relative mb-3 overflow-hidden bg-zinc-50"
               style={{ paddingBottom: "120%" }}
             >
               <img
-                src={product.image}
+                src={bagImage(product.brand)}
                 alt={product.name}
                 className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
               />

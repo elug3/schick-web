@@ -1,27 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { mockProducts, type Product } from "../data/mockProducts";
+import { type ServerProduct, fetchProduct, bagImage } from "../lib/api";
 import { useCart } from "../lib/useCart";
 
-export function meta({ params }: { params: { id: string } }) {
-  const product = mockProducts.find((p) => p.id === params.id);
+export function meta() {
   return [
-    { title: product ? `${product.name} — Schick` : "Product | Schick" },
-    { name: "description", content: product?.description ?? "" },
+    { title: "Product | Schick" },
+    { name: "description", content: "Authentic luxury bag." },
   ];
 }
 
 export default function ProductPage() {
   const { id } = useParams();
-  const product = mockProducts.find((p) => p.id === id);
+  const [product, setProduct] = useState<ServerProduct | null>(null);
+  const [status, setStatus] = useState<"loading" | "unauth" | "error" | "ok">("loading");
 
-  if (!product) {
+  useEffect(() => {
+    if (!id) { setStatus("error"); return; }
+    fetchProduct(id)
+      .then((p) => { setProduct(p); setStatus("ok"); })
+      .catch((e: unknown) => {
+        const msg = e instanceof Error ? e.message : "";
+        setStatus(msg === "Not authenticated" ? "unauth" : "error");
+      });
+  }, [id]);
+
+  if (status === "loading") {
+    return (
+      <main className="mx-auto max-w-7xl animate-pulse px-4 py-10 md:px-8">
+        <div className="flex flex-col gap-10 md:flex-row">
+          <div className="flex-1 bg-zinc-100" style={{ paddingBottom: "120%" }} />
+          <div className="w-full space-y-4 md:w-[420px]">
+            <div className="h-4 w-24 rounded bg-zinc-100" />
+            <div className="h-10 w-64 rounded bg-zinc-100" />
+            <div className="h-8 w-32 rounded bg-zinc-100" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (status === "unauth") {
+    return (
+      <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
+        <p className="text-5xl font-light text-zinc-300" style={{ fontFamily: "var(--font-display)" }}>
+          Sign In Required
+        </p>
+        <p className="text-sm text-zinc-400">Please sign in to view product details.</p>
+        <Link
+          to="/login"
+          className="mt-4 inline-flex h-12 items-center bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+        >
+          Sign In
+        </Link>
+      </main>
+    );
+  }
+
+  if (status === "error" || !product) {
     return (
       <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4">
-        <p
-          className="text-5xl font-light text-zinc-300"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
+        <p className="text-5xl font-light text-zinc-300" style={{ fontFamily: "var(--font-display)" }}>
           Not Found
         </p>
         <p className="text-sm text-zinc-400">This product doesn't exist.</p>
@@ -45,7 +84,7 @@ export default function ProductPage() {
 
 // ── Breadcrumb ─────────────────────────────────────────────────────────────
 
-function Breadcrumb({ product }: { product: Product }) {
+function Breadcrumb({ product }: { product: ServerProduct }) {
   return (
     <div className="border-b border-zinc-100 px-4 py-3 md:px-8">
       <div className="mx-auto max-w-7xl">
@@ -70,13 +109,13 @@ function Breadcrumb({ product }: { product: Product }) {
 
 // ── Main product layout ────────────────────────────────────────────────────
 
-function ProductLayout({ product }: { product: Product }) {
-  // Simulate multiple angles from the single image using crop offsets
+function ProductLayout({ product }: { product: ServerProduct }) {
+  const img = bagImage(product.brand);
   const images = [
-    { src: product.image, position: "object-center" },
-    { src: product.image, position: "object-top" },
-    { src: product.image, position: "object-bottom" },
-    { src: product.image, position: "object-left" },
+    { src: img, position: "object-center" },
+    { src: img, position: "object-top" },
+    { src: img, position: "object-bottom" },
+    { src: img, position: "object-left" },
   ];
 
   const [activeImg, setActiveImg] = useState(0);
@@ -120,18 +159,11 @@ function ProductLayout({ product }: { product: Product }) {
                 className={`absolute inset-0 h-full w-full object-cover transition duration-500 ${images[activeImg].position}`}
               />
               {/* Badge */}
-              {getBadge(product) && (
-                <span
-                  className={`absolute left-4 top-4 px-3 py-1 text-[9px] font-semibold uppercase tracking-wider ${getBadge(product)!.style}`}
-                >
-                  {getBadge(product)!.label}
+              {(() => { const b = getBadge(product); return b && (
+                <span className={`absolute left-4 top-4 px-3 py-1 text-[9px] font-semibold uppercase tracking-wider ${b.style}`}>
+                  {b.label}
                 </span>
-              )}
-              {product.isNew && !getBadge(product) && (
-                <span className="absolute left-4 top-4 border border-zinc-300 bg-white px-3 py-1 text-[9px] font-semibold uppercase tracking-wider text-zinc-700">
-                  New Arrival
-                </span>
-              )}
+              ); })()}
             </div>
 
             {/* Mobile dot nav */}
@@ -162,13 +194,11 @@ function ProductLayout({ product }: { product: Product }) {
 
 // ── Product Info ───────────────────────────────────────────────────────────
 
-function ProductInfo({ product }: { product: Product }) {
+function ProductInfo({ product }: { product: ServerProduct }) {
   const { add } = useCart();
-  const [selectedSize, setSelectedSize] = useState<string | null>(
-    product.sizes?.[0] ?? null
-  );
   const [added, setAdded] = useState(false);
   const [wishlist, setWishlist] = useState(false);
+  const inStock = product.stock > 0;
 
   function handleAddToBag() {
     add({
@@ -176,8 +206,7 @@ function ProductInfo({ product }: { product: Product }) {
       name: product.name,
       brand: product.brand,
       price: product.price,
-      image: product.image,
-      size: selectedSize ?? undefined,
+      image: bagImage(product.brand),
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -202,29 +231,15 @@ function ProductInfo({ product }: { product: Product }) {
         {product.name}
       </h1>
 
-      {/* Rating */}
-      {product.rating && (
-        <div className="mt-3 flex items-center gap-2">
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <StarIcon key={i} filled={i < Math.round(product.rating!)} />
-            ))}
-          </div>
-          <span className="text-xs text-zinc-400">
-            {product.rating} · {product.reviews?.toLocaleString()} reviews
-          </span>
-        </div>
-      )}
-
       {/* Price + stock */}
       <div className="mt-5 flex items-baseline gap-3">
         <span className="text-3xl font-semibold tracking-tight text-zinc-950">
           ${product.price.toLocaleString()}
         </span>
         <span
-          className={`text-[10px] font-semibold uppercase tracking-widest ${product.inStock ? "text-emerald-600" : "text-zinc-400"}`}
+          className={`text-[10px] font-semibold uppercase tracking-widest ${inStock ? "text-emerald-600" : "text-zinc-400"}`}
         >
-          {product.inStock ? "In Stock" : "Out of Stock"}
+          {inStock ? "In Stock" : "Out of Stock"}
         </span>
       </div>
 
@@ -237,9 +252,9 @@ function ProductInfo({ product }: { product: Product }) {
       <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-xs">
         {[
           ["Brand", product.brand],
-          ["Category", product.category],
-          ["Material", "Premium Leather"],
-          ["Origin", "Imported"],
+          ["Category", product.category || "Bags"],
+          ["Material", product.material || "Premium Leather"],
+          ["Color", product.color || "—"],
         ].map(([dt, dd]) => (
           <div key={dt}>
             <dt className="font-semibold uppercase tracking-widest text-zinc-400">{dt}</dt>
@@ -250,46 +265,15 @@ function ProductInfo({ product }: { product: Product }) {
 
       <div className="my-6 h-px bg-zinc-100" />
 
-      {/* Size selector */}
-      {product.sizes && product.sizes.length > 1 && (
-        <div className="mb-6">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              Size
-            </p>
-            {selectedSize && (
-              <span className="text-[10px] text-zinc-400">{selectedSize}</span>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {product.sizes.map((size) => (
-              <button
-                key={size}
-                type="button"
-                onClick={() => setSelectedSize(size)}
-                className={[
-                  "h-9 min-w-[2.75rem] px-3 text-xs font-medium uppercase tracking-wider transition",
-                  selectedSize === size
-                    ? "bg-zinc-950 text-white"
-                    : "border border-zinc-200 text-zinc-600 hover:border-zinc-950",
-                ].join(" ")}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* CTAs */}
       <div className="flex gap-3">
         <button
           type="button"
-          disabled={!product.inStock}
+          disabled={!inStock}
           onClick={handleAddToBag}
           className={[
             "flex h-14 flex-1 items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest transition",
-            product.inStock
+            inStock
               ? added
                 ? "bg-zinc-600 text-white"
                 : "bg-zinc-950 text-white hover:bg-zinc-800"
@@ -298,7 +282,7 @@ function ProductInfo({ product }: { product: Product }) {
         >
           {added ? (
             <><CheckIcon /> Added</>
-          ) : product.inStock ? (
+          ) : inStock ? (
             "Add to Bag"
           ) : (
             "Out of Stock"
@@ -385,13 +369,9 @@ function AccordionItem({ title, body }: { title: string; body: string }) {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function getBadge(product: Product) {
-  if ((product.reviews ?? 0) >= 300 && (product.rating ?? 0) >= 4.9)
-    return { label: "Best", style: "bg-[#c8a96e] text-white" };
-  if ((product.reviews ?? 0) >= 300)
-    return { label: "Top Seller", style: "bg-zinc-950 text-white" };
-  if ((product.rating ?? 0) >= 4.9)
-    return { label: "Top Rated", style: "bg-zinc-700 text-white" };
+function getBadge(product: ServerProduct) {
+  if (product.status === "new") return { label: "New", style: "bg-white text-zinc-950 border border-zinc-200" };
+  if (product.status === "featured") return { label: "Featured", style: "bg-[#c8a96e] text-white" };
   return null;
 }
 

@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { mockProducts } from "../data/mockProducts";
+import { type Bag, fetchBags, bagImage } from "../lib/api";
 
 export function meta() {
   return [
@@ -8,50 +9,6 @@ export function meta() {
   ];
 }
 
-const BRAND_TILES = [
-  {
-    name: "Gucci",
-    to: "/product/b1",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&h=900&fit=crop",
-    label: "Gucci",
-    sub: "Italian Heritage",
-  },
-  {
-    name: "Louis Vuitton",
-    to: "/product/b2",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=900&fit=crop",
-    label: "Louis Vuitton",
-    sub: "Parisian Luxury",
-  },
-  {
-    name: "Chanel",
-    to: "/product/b3",
-    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=800&h=900&fit=crop",
-    label: "Chanel",
-    sub: "Timeless Elegance",
-  },
-  {
-    name: "Prada",
-    to: "/product/b4",
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&h=900&fit=crop",
-    label: "Prada",
-    sub: "Milan Sophistication",
-  },
-  {
-    name: "Coach",
-    to: "/product/b5",
-    image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800&h=900&fit=crop",
-    label: "Coach",
-    sub: "New York Craft",
-  },
-  {
-    name: "Hermès",
-    to: "/product/b6",
-    image: "https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=800&h=900&fit=crop",
-    label: "Hermès",
-    sub: "Ultimate Rarity",
-  },
-];
 
 export default function Home() {
   return (
@@ -113,7 +70,7 @@ function Hero() {
         <div className="absolute inset-0 bg-zinc-950/5" />
         <div className="absolute bottom-8 left-8 right-8">
           <span className="inline-block border border-white/40 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
-            Chanel Classic Flap — $6,200
+            New Season — Curated Luxury
           </span>
         </div>
       </div>
@@ -124,6 +81,24 @@ function Hero() {
 // ── Brand Tiles ────────────────────────────────────────────────────────────
 
 function BrandTiles() {
+  const [tiles, setTiles] = useState<{ brand: string; id: string }[]>([]);
+
+  useEffect(() => {
+    fetchBags().then((bags) => {
+      const seen = new Set<string>();
+      const unique: { brand: string; id: string }[] = [];
+      for (const b of bags) {
+        if (!seen.has(b.brand)) {
+          seen.add(b.brand);
+          unique.push({ brand: b.brand, id: b.id });
+        }
+      }
+      setTiles(unique);
+    }).catch(() => {});
+  }, []);
+
+  if (tiles.length === 0) return null;
+
   return (
     <section className="border-t border-zinc-100 px-4 py-12 md:px-8 md:py-16">
       <div className="mx-auto max-w-7xl">
@@ -135,7 +110,7 @@ function BrandTiles() {
             Shop by Brand
           </h2>
           <Link
-            to="/"
+            to="/category/brand"
             className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 transition hover:text-zinc-950"
           >
             View All
@@ -143,32 +118,21 @@ function BrandTiles() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-          {BRAND_TILES.map((brand) => (
-            <Link
-              key={brand.name}
-              to={brand.to}
-              className="group relative overflow-hidden"
-            >
-              {/* Image */}
+          {tiles.map(({ brand, id }) => (
+            <Link key={brand} to={`/product/${id}`} className="group relative overflow-hidden">
               <div className="relative overflow-hidden" style={{ paddingBottom: "120%" }}>
                 <img
-                  src={brand.image}
-                  alt={brand.label}
+                  src={bagImage(brand)}
+                  alt={brand}
                   className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
-                {/* gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-transparent to-transparent" />
-
-                {/* Text overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                  <p className="text-xs font-light tracking-[0.2em] uppercase text-white/60 mb-1">
-                    {brand.sub}
-                  </p>
                   <p
                     className="text-xl font-light text-white md:text-2xl"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    {brand.label}
+                    {brand}
                   </p>
                 </div>
               </div>
@@ -182,20 +146,19 @@ function BrandTiles() {
 
 // ── Featured Bags ──────────────────────────────────────────────────────────
 
-function getBadge(product: (typeof mockProducts)[number]) {
-  if ((product.reviews ?? 0) >= 300 && (product.rating ?? 0) >= 4.9)
-    return { label: "Best", style: "bg-[#c8a96e] text-white" };
-  if ((product.reviews ?? 0) >= 300)
-    return { label: "Top Seller", style: "bg-zinc-950 text-white" };
-  if ((product.rating ?? 0) >= 4.9)
-    return { label: "Top Rated", style: "bg-zinc-600 text-white" };
-  if (product.isNew)
-    return { label: "New", style: "bg-white text-zinc-950 border border-zinc-200" };
-  return null;
-}
-
 function FeaturedBags() {
-  const featured = mockProducts.filter((p) => p.category === "Bag" && p.inStock);
+  const [bags, setBags] = useState<Bag[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchBags()
+      .then(setBags)
+      .catch((e: unknown) =>
+        setError(e instanceof Error ? e.message : "Failed to load bags")
+      )
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <section className="border-t border-zinc-100 px-4 py-12 md:px-8 md:py-16">
@@ -215,53 +178,48 @@ function FeaturedBags() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 md:gap-x-5 md:gap-y-12">
-          {featured.map((product) => {
-            const badge = getBadge(product);
-            return (
-              <Link
-                key={product.id}
-                to={`/product/${product.id}`}
-                className="group"
-              >
-                {/* Image */}
-                <div className="relative mb-3 overflow-hidden bg-zinc-50" style={{ paddingBottom: "110%" }}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                  {badge && (
-                    <span className={`absolute left-3 top-3 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${badge.style}`}>
-                      {badge.label}
-                    </span>
-                  )}
-                </div>
+        {error && (
+          <p className="text-sm text-zinc-400">{error}</p>
+        )}
 
-                {/* Info */}
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                  {product.brand}
-                </p>
-                <p className="mt-0.5 text-sm font-medium text-zinc-950 leading-snug">
-                  {product.name}
-                </p>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <span className="text-sm font-semibold text-zinc-950">
-                    ${product.price.toLocaleString()}
-                  </span>
-                  {product.rating && (
-                    <span className="flex items-center gap-0.5 text-[10px] text-zinc-400">
-                      <StarIcon />
-                      {product.rating}
-                      {product.reviews && (
-                        <span className="ml-0.5">({product.reviews})</span>
-                      )}
-                    </span>
-                  )}
+        <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 md:gap-x-5 md:gap-y-12">
+          {loading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="mb-3 bg-zinc-100" style={{ paddingBottom: "110%" }} />
+                  <div className="h-2.5 w-16 rounded bg-zinc-100" />
+                  <div className="mt-1.5 h-3.5 w-32 rounded bg-zinc-100" />
+                  <div className="mt-2 h-3 w-20 rounded bg-zinc-100" />
                 </div>
-              </Link>
-            );
-          })}
+              ))
+            : bags.map((bag) => (
+                <Link key={bag.id} to={`/product/${bag.id}`} className="group">
+                  <div
+                    className="relative mb-3 overflow-hidden bg-zinc-50"
+                    style={{ paddingBottom: "110%" }}
+                  >
+                    <img
+                      src={bagImage(bag.brand)}
+                      alt={bag.name}
+                      className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                    {bag.stock <= 5 && bag.stock > 0 && (
+                      <span className="absolute left-3 top-3 bg-zinc-950 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
+                        Low Stock
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+                    {bag.brand}
+                  </p>
+                  <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
+                    {bag.name}
+                  </p>
+                  <p className="mt-1.5 text-sm font-semibold text-zinc-950">
+                    ${bag.price.toLocaleString()}
+                  </p>
+                </Link>
+              ))}
         </div>
       </div>
     </section>
@@ -300,12 +258,3 @@ function EditorialBanner() {
   );
 }
 
-// ── Icons ──────────────────────────────────────────────────────────────────
-
-function StarIcon() {
-  return (
-    <svg aria-hidden="true" className="size-2.5 fill-[#c8a96e]" viewBox="0 0 24 24">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  );
-}

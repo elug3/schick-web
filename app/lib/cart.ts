@@ -3,6 +3,10 @@ export const FREE_SHIPPING_THRESHOLD = 100;
 export const PROMO_CODE = "SUMMER30";
 export const PROMO_DISCOUNT = 0.3;
 
+// Memoize getCart so useSyncExternalStore gets a stable reference when data hasn't changed
+let _cachedJson = "";
+let _cachedCart: CartItem[] = [];
+
 export interface CartItem {
   productId: string;
   name: string;
@@ -36,14 +40,22 @@ export function cartEventName(): string {
 
 export function getCart(): CartItem[] {
   try {
-    return JSON.parse(localStorage.getItem(KEY) ?? "[]") as CartItem[];
+    const json = localStorage.getItem(KEY) ?? "[]";
+    if (json !== _cachedJson) {
+      _cachedJson = json;
+      _cachedCart = JSON.parse(json) as CartItem[];
+    }
+    return _cachedCart;
   } catch {
-    return [];
+    return _cachedCart;
   }
 }
 
 function saveCart(items: CartItem[]): void {
-  localStorage.setItem(KEY, JSON.stringify(items));
+  const json = JSON.stringify(items);
+  _cachedJson = json;
+  _cachedCart = items;
+  localStorage.setItem(KEY, json);
   emitCartUpdate();
 }
 
@@ -109,6 +121,8 @@ export function removeFromCart(
 
 export function clearCart(): void {
   try {
+    _cachedJson = "[]";
+    _cachedCart = [];
     localStorage.removeItem(KEY);
     emitCartUpdate();
   } catch {

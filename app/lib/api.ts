@@ -1,5 +1,80 @@
 import { authedFetch } from "./auth";
 
+// ── Bag types (mirrors server domain.Bag) ─────────────────────────────────
+
+export interface Bag {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  brand: string;
+  color: string;
+  material: string;
+  capacity: string;
+  stock: number;
+}
+
+export interface ServerProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  brand: string;
+  color: string;
+  material: string;
+  stock: number;
+  category: string;
+  status: string;
+  createdAt: string;
+}
+
+// ── Bag listing — public ───────────────────────────────────────────────────
+
+export async function fetchBags(filters?: {
+  brand?: string;
+  color?: string;
+  material?: string;
+}): Promise<Bag[]> {
+  const params = new URLSearchParams();
+  if (filters?.brand) params.set("brand", filters.brand);
+  if (filters?.color) params.set("color", filters.color);
+  if (filters?.material) params.set("material", filters.material);
+
+  const qs = params.size ? `?${params.toString()}` : "";
+  const res = await fetch(`/api/products/bags${qs}`);
+  if (!res.ok) throw new Error(`Bags fetch failed: ${res.status}`);
+  const data = (await res.json()) as { total: number; results: Bag[] | null };
+  return data.results ?? [];
+}
+
+// ── Single product — requires auth ────────────────────────────────────────
+
+export async function fetchProduct(id: string): Promise<ServerProduct> {
+  const res = await authedFetch(`/api/products/${id}`);
+  if (!res.ok) throw new Error(`Product not found: ${id}`);
+  return res.json() as Promise<ServerProduct>;
+}
+
+// ── Brand fallback images (server has no image column) ────────────────────
+
+const BRAND_IMAGES: Record<string, string> = {
+  Gucci: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop",
+  "Louis Vuitton": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=720&fit=crop",
+  Chanel: "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=720&fit=crop",
+  Prada: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=720&fit=crop",
+  Coach: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&h=720&fit=crop",
+  "Hermès": "https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=600&h=720&fit=crop",
+  Dior: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=720&fit=crop",
+  "Bottega Veneta": "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=720&fit=crop",
+};
+
+export function bagImage(brand: string): string {
+  return (
+    BRAND_IMAGES[brand] ??
+    "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop"
+  );
+}
+
 export interface DisplayProduct {
   id: string;
   name: string;

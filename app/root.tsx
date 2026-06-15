@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -47,8 +48,8 @@ export default function App() {
     <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
       <AnnouncementBar />
       <TopNav />
-      {/* announcement ~32px + nav h-14 56px = 88px */}
-      <div className="pt-[5.5rem]">
+      {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
+      <div className="pt-[5.5rem] md:pt-[7.75rem]">
         <Outlet />
       </div>
       <Footer />
@@ -76,51 +77,77 @@ const navItems = [
 ];
 
 const desktopNavLinks = [
-  { label: "All Bags", to: "/" },
-  { label: "Gucci", to: "/product/b1" },
-  { label: "Louis Vuitton", to: "/product/b2" },
-  { label: "Chanel", to: "/product/b3" },
-  { label: "Prada", to: "/product/b4" },
-  { label: "Coach", to: "/product/b5" },
-  { label: "Hermès", to: "/product/b6" },
+  {
+    label: "Product Type",
+    to: "/category/product-type",
+    items: [
+      { label: "Totes", to: "/category/product-type/totes" },
+      { label: "Shoulder Bags", to: "/category/product-type/shoulder-bags" },
+      { label: "Crossbody", to: "/category/product-type/crossbody" },
+      { label: "Clutches", to: "/category/product-type/clutches" },
+      { label: "Mini Bags", to: "/category/product-type/mini-bags" },
+      { label: "Backpacks", to: "/category/product-type/backpacks" },
+      { label: "Wallets", to: "/category/product-type/wallets" },
+    ],
+  },
+  {
+    label: "Brand",
+    to: "/category/brand",
+    items: [
+      { label: "Gucci", to: "/category/brand/gucci", image: "/brands/gucci.svg" },
+      { label: "Louis Vuitton", to: "/category/brand/louis-vuitton", image: "/brands/louis-vuitton.svg" },
+      { label: "Chanel", to: "/category/brand/chanel", image: "/brands/chanel.svg" },
+      { label: "Prada", to: "/category/brand/prada", image: "/brands/prada.svg" },
+      { label: "Hermès", to: "/category/brand/hermes", image: "/brands/hermes.svg" },
+      { label: "Dior", to: "/category/brand/dior", image: "/brands/dior.svg" },
+      { label: "Bottega Veneta", to: "/category/brand/bottega-veneta", image: "/brands/bottega-veneta.svg" },
+      { label: "Coach", to: "/category/brand/coach", image: "/brands/coach.svg" },
+    ],
+  },
+  {
+    label: "Style",
+    to: "/category/style",
+    items: [
+      { label: "Casual", to: "/category/style/casual" },
+      { label: "Evening", to: "/category/style/evening" },
+      { label: "Business", to: "/category/style/business" },
+      { label: "Weekend", to: "/category/style/weekend" },
+      { label: "Statement", to: "/category/style/statement" },
+    ],
+  },
+  {
+    label: "Family",
+    to: "/category/family",
+    items: [
+      { label: "Women", to: "/category/family/women" },
+      { label: "Men", to: "/category/family/men" },
+      { label: "Kids", to: "/category/family/kids" },
+      { label: "Unisex", to: "/category/family/unisex" },
+    ],
+  },
 ];
 
 function TopNav() {
   const { count } = useCart();
+  const [activeNav, setActiveNav] = useState<string | null>(null);
 
   return (
-    <header className="fixed inset-x-0 top-8 z-40 bg-white">
-      {/* 3-column grid: logo | links | icons */}
-      <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center border-b border-zinc-100 px-6 md:px-10">
+    <header
+      className="fixed inset-x-0 top-8 z-40 bg-white"
+      onMouseLeave={() => setActiveNav(null)}
+    >
+      {/* Row 1 — Logo (center) + Icons (right) */}
+      <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 md:px-10">
+        <div />
 
-        {/* Col 1 — Logo (left-aligned) */}
         <NavLink
           to="/"
-          className="justify-self-start text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
+          className="justify-self-center text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
           style={{ fontFamily: "var(--font-display)" }}
         >
           Schick
         </NavLink>
 
-        {/* Col 2 — All nav links (truly centered) */}
-        <nav aria-label="Main" className="hidden items-center gap-7 md:flex">
-          {desktopNavLinks.map(({ label, to }) => (
-            <NavLink
-              key={label}
-              to={to}
-              className={({ isActive }) =>
-                [
-                  "whitespace-nowrap text-[11px] uppercase tracking-[0.15em] transition-colors",
-                  isActive ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-950",
-                ].join(" ")
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Col 3 — Icons (right-aligned) */}
         <div className="flex justify-end gap-0.5">
           <NavLink
             to="/cart"
@@ -143,6 +170,71 @@ function TopNav() {
           </NavLink>
         </div>
       </div>
+
+      {/* Row 2 — Nav links below logo (desktop only) */}
+      <nav
+        aria-label="Main"
+        className="hidden border-b border-zinc-100 md:flex items-center justify-center gap-7 pb-3"
+      >
+        {desktopNavLinks.map(({ label, to }) => (
+          <NavLink
+            key={label}
+            to={to}
+            onMouseEnter={() => setActiveNav(label)}
+            className={({ isActive }) =>
+              [
+                "whitespace-nowrap text-[11px] uppercase tracking-[0.15em] transition-colors",
+                isActive || activeNav === label ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-950",
+              ].join(" ")
+            }
+          >
+            {label}
+          </NavLink>
+        ))}
+      </nav>
+
+      {/* Mega dropdown — half viewport width, centered */}
+      {activeNav && (() => {
+        const activeGroup = desktopNavLinks.find((n) => n.label === activeNav);
+        const isBrand = activeNav === "Brand";
+        return (
+          <div className="absolute inset-x-0 flex justify-center border-b border-zinc-100 bg-white shadow-md">
+            <div className="w-[50vw] px-10 py-8">
+              <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-300">
+                {activeNav}
+              </p>
+              <div className={isBrand ? "grid grid-cols-4 gap-4" : "grid grid-cols-4 gap-x-6 gap-y-3"}>
+                {activeGroup?.items.map((item) =>
+                  isBrand && "image" in item ? (
+                    <NavLink
+                      key={item.label}
+                      to={item.to}
+                      onClick={() => setActiveNav(null)}
+                      aria-label={item.label}
+                      className="group flex items-center justify-center border border-zinc-100 bg-zinc-50 p-4 transition hover:border-zinc-300"
+                    >
+                      <img
+                        src={(item as { image: string }).image}
+                        alt={item.label}
+                        className="h-7 w-auto object-contain opacity-60 transition group-hover:opacity-100"
+                      />
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      key={item.label}
+                      to={item.to}
+                      onClick={() => setActiveNav(null)}
+                      className="text-[11px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950 py-1"
+                    >
+                      {item.label}
+                    </NavLink>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </header>
   );
 }
