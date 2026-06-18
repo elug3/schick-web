@@ -261,6 +261,7 @@ function CouponsSection() {
       const res = await fetch("/api/coupons/redeem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify({ code }),
       });
 
