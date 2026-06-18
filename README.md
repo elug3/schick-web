@@ -69,12 +69,16 @@ http://localhost:5173
 ```
 
 The browser talks only to same-origin `/api/*` routes. React Router server
-routes act as a BFF and forward requests to the Go services configured with:
+routes act as a BFF and forward requests to the internal API gateway configured
+with:
 
 ```bash
-SCHICK_AUTH_API_BASE_URL=http://localhost:8080
-SCHICK_PRODUCT_API_BASE_URL=http://localhost:8081
+SCHICK_API_BASE_URL=http://localhost:8080
 ```
+
+If auth and product services are deployed at separate origins, override the
+shared gateway with `SCHICK_AUTH_API_BASE_URL` and
+`SCHICK_PRODUCT_API_BASE_URL`.
 
 Authenticated browser sessions use an opaque `HttpOnly` session cookie. Access
 and refresh tokens are cached server-side by the BFF; access tokens are reused

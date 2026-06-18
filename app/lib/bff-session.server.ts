@@ -43,12 +43,24 @@ function now(): number {
   return Date.now();
 }
 
+function sharedApiBaseUrl(): string | undefined {
+  return process.env.SCHICK_API_BASE_URL;
+}
+
 function authApiBaseUrl(): string {
-  return process.env.SCHICK_AUTH_API_BASE_URL ?? "http://localhost:8080";
+  return (
+    process.env.SCHICK_AUTH_API_BASE_URL ??
+    sharedApiBaseUrl() ??
+    "http://localhost:8080"
+  );
 }
 
 function productApiBaseUrl(): string {
-  return process.env.SCHICK_PRODUCT_API_BASE_URL ?? "http://localhost:8081";
+  return (
+    process.env.SCHICK_PRODUCT_API_BASE_URL ??
+    sharedApiBaseUrl() ??
+    "http://localhost:8081"
+  );
 }
 
 function apiBaseUrl(service: ApiService): string {
