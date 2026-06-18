@@ -1,0 +1,74 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY || 'schick-web' }}
+
+jobs:
+  image:
+    name: Build and publish image
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.DEPLOY_ON_PUSH == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate deployment configuration
+        env:
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+        run: |
+          test -n "$AWS_ROLE_ARN" || { echo "Missing required secret: AWS_ROLE_ARN"; exit 1; }
+          test -n "$AWS_REGION" || { echo "Missing required variable: AWS_REGION"; exit 1; }
+          test -n "$ECR_REPOSITORY" || { echo "Missing required variable: ECR_REPOSITORY"; exit 1; }
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          IMAGE="$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          LATEST="$REGISTRY/$ECR_REPOSITORY:latest"
+          docker build --tag "$IMAGE" --tag "$LATEST" .
+          docker push "$IMAGE"
+          docker push "$LATEST"
+
+      - name: Deploy ECS service
+        if: ${{ vars.ECS_CLUSTER != '' && vars.ECS_SERVICE != '' }}
+        run: |
+          aws ecs update-service \
+            --cluster "${{ vars.ECS_CLUSTER }}" \
+            --service "${{ vars.ECS_SERVICE }}" \
+            --force-new-deployment
+          aws ecs wait services-stable \
+            --cluster "${{ vars.ECS_CLUSTER }}" \
+            --services "${{ vars.ECS_SERVICE }}"
+
+      - name: Skip ECS deploy
+        if: ${{ vars.ECS_CLUSTER == '' || vars.ECS_SERVICE == '' }}
+        run: echo "Image pushed. Set ECS_CLUSTER and ECS_SERVICE repository variables to enable ECS rollout."

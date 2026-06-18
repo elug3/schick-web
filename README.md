@@ -127,6 +127,37 @@ The production server is then available at:
 http://localhost:3000
 ```
 
+## CI/CD
+
+GitHub Actions workflows are included under `.github/workflows/`:
+
+- `ci.yml` runs on pull requests and pushes to `master`. It installs
+  dependencies, audits production dependencies, runs TypeScript checks, builds
+  the app, and verifies the Docker image builds.
+- `deploy.yml` runs on pushes to `master` and manual dispatch. It builds the
+  Docker image, pushes both the commit SHA tag and `latest` to Amazon ECR, and
+  can force a new ECS service deployment.
+
+Configure these GitHub repository settings before enabling deployment:
+
+| Type | Name | Purpose |
+| --- | --- | --- |
+| Secret | `AWS_ROLE_ARN` | IAM role assumed by GitHub Actions through OIDC |
+| Variable | `AWS_REGION` | AWS region, defaults to `us-east-1` if omitted |
+| Variable | `ECR_REPOSITORY` | ECR repository name, defaults to `schick-web` if omitted |
+| Variable | `DEPLOY_ON_PUSH` | Set to `true` to deploy automatically on `master` pushes |
+| Variable | `ECS_CLUSTER` | ECS cluster name; required for automatic ECS rollout |
+| Variable | `ECS_SERVICE` | ECS service name; required for automatic ECS rollout |
+
+The ECS task definition should provide the runtime API gateway setting:
+
+```bash
+SCHICK_API_BASE_URL=https://internal-api.example.com
+```
+
+If `ECS_CLUSTER` or `ECS_SERVICE` is not set, the deploy workflow still builds
+and pushes the image, then skips the ECS rollout.
+
 ## Content Guidelines
 
 Before adding marketplace content, verify that each product has:
