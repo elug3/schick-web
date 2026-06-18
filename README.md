@@ -68,6 +68,21 @@ The app runs at:
 http://localhost:5173
 ```
 
+The browser talks only to same-origin `/api/*` routes. React Router server
+routes act as a BFF and forward requests to the Go services configured with:
+
+```bash
+SCHICK_AUTH_API_BASE_URL=http://localhost:8080
+SCHICK_PRODUCT_API_BASE_URL=http://localhost:8081
+```
+
+Authenticated browser sessions use an opaque `HttpOnly` session cookie. Access
+and refresh tokens are cached server-side by the BFF; access tokens are reused
+for at most five minutes and refreshed with the cached refresh token pair. The
+BFF includes `audience: "web"` in token requests for the backend contract, but
+the current Go auth service must also support/enforce that claim and configure
+its JWT expiry if the token `exp` itself must be exactly five minutes.
+
 ## Quality Checks
 
 Run TypeScript and React Router type generation:

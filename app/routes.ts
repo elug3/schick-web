@@ -1,6 +1,19 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
+  route("api/v1/auth/login", "routes/api.v1.auth.login.ts"),
+  route("api/v1/auth/register", "routes/api.v1.auth.register.ts"),
+  route("api/v1/auth/refresh", "routes/api.v1.auth.refresh.ts"),
+  route("api/v1/auth/me", "routes/api.v1.auth.me.ts"),
+  route("api/v1/auth/logout", "routes/api.v1.auth.logout.ts"),
+  route("api/products/bags", "routes/api.products.bags.ts"),
+  route("api/products/search", "routes/api.products.search.ts"),
+  route("api/products/upload-url", "routes/api.products.upload-url.ts"),
+  route("api/products", "routes/api.products.ts"),
+  route("api/products/:id", "routes/api.products.id.ts"),
+  route("api/categories", "routes/api.categories.ts"),
+  route("api/filters", "routes/api.filters.ts"),
+  route("api/coupons/redeem", "routes/api.coupons.redeem.ts"),
   index("routes/home.tsx"),
   route("product/:id", "routes/product.tsx"),
   route("cart", "routes/cart.tsx"),
