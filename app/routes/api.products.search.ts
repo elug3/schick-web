@@ -1,7 +1,11 @@
 import type { LoaderFunctionArgs } from "react-router";
 
-import { proxyProductApi } from "../lib/bff-session.server";
+import { searchMockProducts, toSearchResult } from "~/data/mock-products";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return proxyProductApi(request, "/api/products/search");
+  const products = searchMockProducts(new URL(request.url).searchParams).map(
+    toSearchResult
+  );
+
+  return Response.json({ total: products.length, results: products });
 }

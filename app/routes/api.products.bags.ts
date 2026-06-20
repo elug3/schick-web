@@ -1,7 +1,25 @@
 import type { LoaderFunctionArgs } from "react-router";
 
-import { proxyProductApi } from "../lib/bff-session.server";
+import { MOCK_PRODUCTS, toBagResponse } from "~/data/mock-products";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return proxyProductApi(request, "/api/products/bags");
+  const params = new URL(request.url).searchParams;
+  const products = MOCK_PRODUCTS.filter((product) => {
+    for (const [key, value] of params.entries()) {
+      const normalizedValue = value.trim().toLowerCase();
+      if (!normalizedValue) continue;
+
+      const productValue = product[key as keyof typeof product];
+      if (
+        productValue == null ||
+        !String(productValue).toLowerCase().includes(normalizedValue)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }).map(toBagResponse);
+
+  return Response.json({ total: products.length, results: products });
 }
