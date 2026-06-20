@@ -37,7 +37,7 @@ env:
   ECR_REPOSITORY: web           # set this to your Amazon ECR repository name
   ECS_SERVICE: default-schick-web-d90d-service-pkkf3qyk                 # set this to your Amazon ECS service name
   ECS_CLUSTER: production                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: default-schick-web-d90d # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: web-cluster
 
