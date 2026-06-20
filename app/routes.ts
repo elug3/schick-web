@@ -23,4 +23,5 @@ export default [
   route("profile", "routes/profile.tsx"),
   route("login", "routes/login.tsx"),
   route("products/new", "routes/product-new.tsx"),
+  route("*", "routes/not-found.tsx"),
 ] satisfies RouteConfig;
