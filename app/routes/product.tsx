@@ -88,7 +88,7 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
   return (
     <div className="border-b border-zinc-100 px-4 py-3 md:px-8">
       <div className="mx-auto max-w-7xl">
-        <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-400">
+        <nav className="flex items-center gap-2 overflow-x-auto whitespace-nowrap text-[10px] uppercase tracking-widest text-zinc-400">
           <Link to="/" className="transition hover:text-zinc-950">Home</Link>
           <ChevronIcon />
           <Link to="/" className="transition hover:text-zinc-950">Bags</Link>
@@ -266,7 +266,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
       <div className="my-6 h-px bg-zinc-100" />
 
       {/* CTAs */}
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="button"
           disabled={!inStock}
@@ -293,7 +293,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
           type="button"
           onClick={() => setWishlist((v) => !v)}
           aria-label={wishlist ? "Remove from wishlist" : "Add to wishlist"}
-          className="flex h-14 w-14 items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950"
+          className="flex h-14 w-full items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950 sm:w-14"
         >
           <HeartIcon filled={wishlist} />
         </button>

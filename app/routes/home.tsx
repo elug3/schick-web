@@ -25,14 +25,14 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="flex min-h-[88vh] flex-col md:flex-row">
+    <section className="flex min-h-[calc(100svh-5.5rem)] flex-col md:min-h-[88vh] md:flex-row">
       {/* Text pane */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8 py-20 text-center md:items-start md:px-16 md:text-left">
+      <div className="flex flex-1 flex-col items-center justify-center px-6 py-14 text-center sm:px-8 md:items-start md:px-16 md:py-20 md:text-left">
         <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
           New Season 2026
         </p>
         <h1
-          className="text-6xl font-light leading-none tracking-tight text-zinc-950 md:text-8xl lg:text-[7rem]"
+          className="text-5xl font-light leading-none tracking-tight text-zinc-950 sm:text-6xl md:text-8xl lg:text-[7rem]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           Carry
@@ -43,16 +43,16 @@ function Hero() {
           Uncompromising materials. Meticulous craftsmanship. Authentic luxury
           bags from the world's most coveted brands.
         </p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <Link
             to="/"
-            className="inline-flex h-12 items-center gap-2 bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+            className="inline-flex h-12 items-center justify-center gap-2 bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
           >
             Shop Now
           </Link>
           <Link
             to="/product/c1"
-            className="inline-flex h-12 items-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+            className="inline-flex h-12 items-center justify-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
           >
             Style Consult
           </Link>
@@ -60,7 +60,7 @@ function Hero() {
       </div>
 
       {/* Image pane */}
-      <div className="relative hidden overflow-hidden md:flex md:w-[52%]">
+      <div className="relative flex min-h-[48svh] overflow-hidden md:min-h-0 md:w-[52%]">
         <img
           src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1000&h=1200&fit=crop"
           alt="Luxury bag hero"

@@ -45,7 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
+    <div className="min-h-screen overflow-x-hidden bg-white pb-20 text-zinc-950 md:pb-0">
       <AnnouncementBar />
       <TopNav />
       {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
@@ -61,7 +61,7 @@ export default function App() {
 function AnnouncementBar() {
   return (
     <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-center bg-zinc-950 px-4 py-2">
-      <p className="text-center text-[10px] tracking-[0.18em] text-white/70 uppercase">
+      <p className="text-center text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
         Free shipping on orders over $100&ensp;·&ensp;Code&ensp;
         <span className="font-medium text-[#c8a96e] tracking-widest">SUMMER30</span>
         &ensp;—&ensp;30% off
@@ -130,6 +130,11 @@ const desktopNavLinks = [
 function TopNav() {
   const { count } = useCart();
   const [activeNav, setActiveNav] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  function closeMobileMenu() {
+    setMobileMenuOpen(false);
+  }
 
   return (
     <header
@@ -138,10 +143,22 @@ function TopNav() {
     >
       {/* Row 1 — Logo (center) + Icons (right) */}
       <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 md:px-10">
-        <div />
+        <div className="flex justify-start">
+          <button
+            type="button"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="inline-flex size-10 items-center justify-center rounded text-zinc-500 transition hover:text-zinc-950 md:hidden"
+          >
+            {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
 
         <NavLink
           to="/"
+          onClick={closeMobileMenu}
           className="justify-self-center text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
           style={{ fontFamily: "var(--font-display)" }}
         >
@@ -152,6 +169,7 @@ function TopNav() {
           <NavLink
             to="/cart"
             aria-label="Shopping bag"
+            onClick={closeMobileMenu}
             className="relative rounded p-2 text-zinc-400 transition hover:text-zinc-950"
           >
             <BagIcon />
@@ -164,6 +182,7 @@ function TopNav() {
           <NavLink
             to="/profile"
             aria-label="Profile"
+            onClick={closeMobileMenu}
             className="rounded p-2 text-zinc-400 transition hover:text-zinc-950"
           >
             <ProfileIcon />
@@ -235,7 +254,74 @@ function TopNav() {
           </div>
         );
       })()}
+      {mobileMenuOpen && <MobileMenu onNavigate={closeMobileMenu} />}
     </header>
+  );
+}
+
+function MobileMenu({ onNavigate }: { onNavigate: () => void }) {
+  return (
+    <div
+      id="mobile-menu"
+      className="fixed inset-x-0 bottom-0 top-[5.5rem] z-30 overflow-y-auto border-t border-zinc-100 bg-white px-5 pb-28 pt-6 shadow-2xl md:hidden"
+    >
+      <nav aria-label="Mobile shop menu" className="mx-auto max-w-md">
+        <div className="mb-6 grid grid-cols-3 gap-2">
+          {navItems.map(({ label, to, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                [
+                  "flex h-16 flex-col items-center justify-center gap-1 border text-[10px] font-semibold uppercase tracking-widest transition",
+                  isActive
+                    ? "border-zinc-950 bg-zinc-950 text-white"
+                    : "border-zinc-100 text-zinc-500 hover:border-zinc-300 hover:text-zinc-950",
+                ].join(" ")
+              }
+            >
+              <Icon />
+              <span>{label}</span>
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="space-y-7">
+          {desktopNavLinks.map((group) => (
+            <section key={group.label}>
+              <NavLink
+                to={group.to}
+                onClick={onNavigate}
+                className="mb-3 block text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-950"
+              >
+                {group.label}
+              </NavLink>
+              <div className="grid grid-cols-2 gap-2">
+                {group.items.map((item) => (
+                  <NavLink
+                    key={item.label}
+                    to={item.to}
+                    onClick={onNavigate}
+                    className="flex min-h-12 items-center justify-center border border-zinc-100 px-3 py-2 text-center text-[11px] uppercase tracking-[0.12em] text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-950"
+                  >
+                    {"image" in item ? (
+                      <img
+                        src={(item as { image: string }).image}
+                        alt={item.label}
+                        className="max-h-6 max-w-24 object-contain opacity-70"
+                      />
+                    ) : (
+                      item.label
+                    )}
+                  </NavLink>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </nav>
+    </div>
   );
 }
 
@@ -344,6 +430,22 @@ function HomeIcon() {
   return (
     <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
       <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }
