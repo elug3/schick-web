@@ -10,6 +10,7 @@ import {
 } from "react-router";
 
 import "./app.css";
+import { NotFoundPage } from "./components/not-found";
 import { useCart } from "./lib/useCart";
 
 export const links = () => [
@@ -387,6 +388,10 @@ export function ErrorBoundary({ error }: { error: unknown }) {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return <NotFoundPage />;
+    }
+
     message = error.status === 404 ? "404" : "Error";
     details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {

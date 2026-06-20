@@ -1,7 +1,5 @@
-import type { LoaderFunctionArgs } from "react-router";
+import { getMockCategories } from "~/data/mock-products";
 
-import { proxyProductApi } from "../lib/bff-session.server";
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  return proxyProductApi(request, "/api/categories");
+export async function loader() {
+  return Response.json({ categories: getMockCategories() });
 }

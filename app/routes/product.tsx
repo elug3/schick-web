@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
+import { NotFoundPage } from "~/components/not-found";
 import { type ServerProduct, fetchProduct, bagImage } from "../lib/api";
 import { useCart } from "../lib/useCart";
 
@@ -59,18 +60,12 @@ export default function ProductPage() {
 
   if (status === "error" || !product) {
     return (
-      <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4">
-        <p className="text-5xl font-light text-zinc-300" style={{ fontFamily: "var(--font-display)" }}>
-          Not Found
-        </p>
-        <p className="text-sm text-zinc-400">This product doesn't exist.</p>
-        <Link
-          to="/"
-          className="mt-2 text-xs font-semibold uppercase tracking-widest text-zinc-950 underline-offset-4 hover:underline"
-        >
-          Browse all bags
-        </Link>
-      </main>
+      <NotFoundPage
+        eyebrow="No product"
+        title="Product not found"
+        description="We could not find this product. It may have sold out, moved, or no longer be available."
+        primaryAction={{ label: "Browse all bags", to: "/" }}
+      />
     );
   }
 
