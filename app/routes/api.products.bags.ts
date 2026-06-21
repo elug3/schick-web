@@ -4,7 +4,7 @@ import { MOCK_PRODUCTS, toBagResponse } from "~/data/mock-products";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const params = new URL(request.url).searchParams;
-  const products = MOCK_PRODUCTS.filter((product) => {
+  const products = MOCK_PRODUCTS.filter((product) => product.category === "bags").filter((product) => {
     for (const [key, value] of params.entries()) {
       const normalizedValue = value.trim().toLowerCase();
       if (!normalizedValue) continue;

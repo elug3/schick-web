@@ -135,6 +135,31 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.saleDescription": "30% off selected bags",
     "home.shopSale": "Shop Sale",
     "home.summerEditAlt": "Summer Edit",
+    "home.categoryEyebrow": "Curated Categories",
+    "home.categoryTitle": "A sharper luxury edit.",
+    "home.categoryDescription":
+      "Explore an original selection inspired by category-led Korean luxury boutiques: handbags, sneakers, watches, and padded outerwear.",
+    "home.shopCollection": "Shop Collection",
+    "home.categoryBags": "Women’s Handbags",
+    "home.categoryBagsDescription":
+      "Structured icons, soft carryalls, and daily statement pieces.",
+    "home.categorySneakers": "Men’s / Women’s Sneakers",
+    "home.categorySneakersDescription":
+      "Polished trainers with elevated materials and street-ready lines.",
+    "home.categoryWatches": "Men’s / Women’s Watches",
+    "home.categoryWatchesDescription":
+      "Dress and sport profiles selected for everyday precision.",
+    "home.categoryOuterwear": "Men’s / Women’s Padding",
+    "home.categoryOuterwearDescription":
+      "Technical padded layers with a clean city silhouette.",
+    "home.crossCategoryEyebrow": "New Catalogue",
+    "home.crossCategoryTitle": "Products across every edit",
+    "home.crossCategoryDescription":
+      "A broader assortment beyond bags, built with original product copy and category imagery.",
+    "home.categoryLabel.bags": "Handbags",
+    "home.categoryLabel.sneakers": "Sneakers",
+    "home.categoryLabel.watches": "Watches",
+    "home.categoryLabel.outerwear": "Padding",
 
     "product.metaTitle": "Product | Schick",
     "product.metaDescription": "Authentic luxury bag.",
@@ -505,6 +530,31 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.saleDescription": "선정 상품 30% 할인",
     "home.shopSale": "세일 쇼핑",
     "home.summerEditAlt": "서머 에디트",
+    "home.categoryEyebrow": "큐레이션 카테고리",
+    "home.categoryTitle": "더 선명한 럭셔리 셀렉션.",
+    "home.categoryDescription":
+      "카테고리 중심의 한국 럭셔리 부티크 무드에서 영감을 받은 오리지널 셀렉션: 핸드백, 스니커즈, 시계, 패딩 아우터.",
+    "home.shopCollection": "컬렉션 보기",
+    "home.categoryBags": "여성 핸드백",
+    "home.categoryBagsDescription":
+      "구조적인 아이콘, 부드러운 캐리올, 데일리 스테이트먼트 피스.",
+    "home.categorySneakers": "남성/여성 스니커즈",
+    "home.categorySneakersDescription":
+      "고급 소재와 스트리트 감각의 라인을 갖춘 세련된 트레이너.",
+    "home.categoryWatches": "남성/여성 시계",
+    "home.categoryWatchesDescription":
+      "일상적인 정밀함을 위한 드레스 및 스포츠 워치 프로필.",
+    "home.categoryOuterwear": "남성/여성 패딩",
+    "home.categoryOuterwearDescription":
+      "깔끔한 시티 실루엣의 테크니컬 패딩 레이어.",
+    "home.crossCategoryEyebrow": "새 카탈로그",
+    "home.crossCategoryTitle": "모든 에디트의 제품",
+    "home.crossCategoryDescription":
+      "오리지널 제품 카피와 카테고리 이미지를 기반으로 가방을 넘어 확장한 셀렉션.",
+    "home.categoryLabel.bags": "핸드백",
+    "home.categoryLabel.sneakers": "스니커즈",
+    "home.categoryLabel.watches": "시계",
+    "home.categoryLabel.outerwear": "패딩",
 
     "product.metaTitle": "제품 | Schick",
     "product.metaDescription": "정품 럭셔리 백.",
@@ -869,6 +919,27 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.saleDescription": "指定包袋 7 折",
     "home.shopSale": "选购折扣",
     "home.summerEditAlt": "夏日精选",
+    "home.categoryEyebrow": "精选分类",
+    "home.categoryTitle": "更鲜明的奢华甄选。",
+    "home.categoryDescription":
+      "以韩国分类式奢华精品店为灵感，打造原创精选：手袋、运动鞋、腕表和羽绒外套。",
+    "home.shopCollection": "选购系列",
+    "home.categoryBags": "女士手袋",
+    "home.categoryBagsDescription": "结构感经典、柔软托包和日常个性单品。",
+    "home.categorySneakers": "男士/女士运动鞋",
+    "home.categorySneakersDescription": "高级材质与街头线条兼具的精致训练鞋。",
+    "home.categoryWatches": "男士/女士腕表",
+    "home.categoryWatchesDescription": "为日常精准表现甄选的正装与运动表款。",
+    "home.categoryOuterwear": "男士/女士羽绒",
+    "home.categoryOuterwearDescription": "拥有干净都市廓形的技术感保暖外套。",
+    "home.crossCategoryEyebrow": "新目录",
+    "home.crossCategoryTitle": "覆盖每个精选主题的产品",
+    "home.crossCategoryDescription":
+      "以原创产品文案和分类图片扩展包袋之外的商品阵容。",
+    "home.categoryLabel.bags": "手袋",
+    "home.categoryLabel.sneakers": "运动鞋",
+    "home.categoryLabel.watches": "腕表",
+    "home.categoryLabel.outerwear": "羽绒",
 
     "product.metaTitle": "产品 | Schick",
     "product.metaDescription": "正品奢华包袋。",
@@ -1244,6 +1315,83 @@ const productTranslations: Record<
       description: "精致单肩包，采用细腻皮革、标志性五金和可转换肩带设计。",
     },
   },
+  "sneaker-lv-trainer-cream": {
+    ko: {
+      name: "모노그램 코트 트레이너",
+      description:
+        "레이어드 패널, 쿠션 라이닝, 세련된 데일리 실루엣이 특징인 로우 프로파일 가죽 트레이너.",
+    },
+    zh: {
+      name: "老花 Court 训练鞋",
+      description: "低帮皮革训练鞋，配层叠鞋面、缓震内衬和精致日常廓形。",
+    },
+  },
+  "sneaker-golden-star-white": {
+    ko: {
+      name: "빈티지 스타 가죽 스니커즈",
+      description:
+        "스웨이드 포인트, 대비되는 힐 디테일, 자연스러운 빈티지 마감의 디스트레스드 가죽 스니커즈.",
+    },
+    zh: {
+      name: "复古星标皮革运动鞋",
+      description: "做旧皮革运动鞋，配绒面革点缀、撞色后跟和柔和旧化质感。",
+    },
+  },
+  "sneaker-miu-runner-silver": {
+    ko: {
+      name: "테크니컬 메시 러너",
+      description:
+        "스웨이드 오버레이, 메탈릭 포인트, 조각적인 솔을 갖춘 가벼운 믹스 소재 러너.",
+    },
+    zh: {
+      name: "技术网面跑鞋",
+      description: "轻盈混合材质跑鞋，配绒面革覆层、金属点缀和雕塑感鞋底。",
+    },
+  },
+  "watch-cartier-tank-ivory": {
+    ko: {
+      name: "렉탱귤러 드레스 워치",
+      description:
+        "슬림한 직사각 케이스, 로마 숫자 인덱스, 폴리시드 가죽 스트랩이 돋보이는 정제된 드레스 워치.",
+    },
+    zh: {
+      name: "矩形正装腕表",
+      description: "精致正装腕表，配纤薄矩形表壳、罗马刻度和抛光皮革表带。",
+    },
+  },
+  "watch-rolex-diver-black": {
+    ko: {
+      name: "오토매틱 다이버 워치",
+      description:
+        "회전 베젤, 야광 인덱스, 브레이슬릿 스타일 프로필을 갖춘 견고한 오토매틱 워치.",
+    },
+    zh: {
+      name: "自动潜水腕表",
+      description: "坚固自动腕表，配旋转表圈、夜光刻度和链带式轮廓。",
+    },
+  },
+  "outerwear-moncler-quilted-black": {
+    ko: {
+      name: "퀼팅 다운 재킷",
+      description:
+        "조형적인 후드, 은은한 광택의 셸, 가벼운 보온 충전재를 갖춘 따뜻한 퀼팅 재킷.",
+    },
+    zh: {
+      name: "绗缝羽绒夹克",
+      description: "保暖绗缝夹克，配立体兜帽、高光泽外层和轻盈保暖填充。",
+    },
+  },
+  "outerwear-prada-hooded-slate": {
+    ko: {
+      name: "후디드 테크니컬 파카",
+      description:
+        "깔끔한 하드웨어, 패딩 보온성, 미니멀한 도시 실루엣을 갖춘 테크니컬 후드 파카.",
+    },
+    zh: {
+      name: "连帽技术派克大衣",
+      description: "技术感连帽派克，配简洁五金、保暖填充和极简都市廓形。",
+    },
+  },
 };
 
 const valueTranslations: Record<string, Partial<Record<LanguageCode, string>>> = {
@@ -1263,6 +1411,18 @@ const valueTranslations: Record<string, Partial<Record<LanguageCode, string>>> =
   "material.nappa-leather": { ko: "나파 가죽", zh: "纳帕皮革" },
   "material.pebbled-leather": { ko: "페블 가죽", zh: "粒面皮革" },
   "category.bags": { ko: "가방", zh: "包袋" },
+  "category.sneakers": { ko: "스니커즈", zh: "运动鞋" },
+  "category.watches": { ko: "시계", zh: "腕表" },
+  "category.outerwear": { ko: "아우터", zh: "外套" },
+  "color.cream": { ko: "크림", zh: "奶油色" },
+  "color.white": { ko: "화이트", zh: "白色" },
+  "color.silver": { ko: "실버", zh: "银色" },
+  "color.slate": { ko: "슬레이트", zh: "岩灰色" },
+  "material.leather-and-suede": { ko: "가죽 및 스웨이드", zh: "皮革与绒面革" },
+  "material.mesh-and-suede": { ko: "메시 및 스웨이드", zh: "网面与绒面革" },
+  "material.stainless-steel": { ko: "스테인리스 스틸", zh: "不锈钢" },
+  "material.nylon-down": { ko: "나일론 다운", zh: "尼龙羽绒" },
+  "material.technical-nylon": { ko: "테크니컬 나일론", zh: "技术尼龙" },
   "status.new": { ko: "신상품", zh: "新品" },
   "status.featured": { ko: "추천", zh: "精选" },
   "status.standard": { ko: "일반", zh: "标准" },

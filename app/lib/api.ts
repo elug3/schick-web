@@ -75,6 +75,18 @@ export function bagImage(brand: string): string {
   );
 }
 
+const PRODUCT_IMAGES: Record<string, string> = {
+  bags: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop",
+  sneakers: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=720&fit=crop",
+  watches: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&h=720&fit=crop",
+  outerwear: "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=600&h=720&fit=crop",
+};
+
+export function productImage(category: string, brand: string): string {
+  if (category.toLowerCase() === "bags") return bagImage(brand);
+  return PRODUCT_IMAGES[category.toLowerCase()] ?? bagImage(brand);
+}
+
 export interface DisplayProduct {
   id: string;
   name: string;
@@ -89,10 +101,12 @@ export const CATEGORY_IMAGES: Record<string, string> = {
   consultations:
     "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400",
   shoes: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+  sneakers: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
   outerwear: "https://images.unsplash.com/photo-1539533057592-4516c98775cb?w=400",
   bottoms: "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=400",
   bags: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400",
   clocks: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+  watches: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=400",
 };
 
 export function getCategoryImage(category: string): string {

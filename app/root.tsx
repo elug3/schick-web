@@ -88,13 +88,10 @@ const desktopNavLinks = [
     labelKey: "nav.productType",
     to: "/category/product-type",
     items: [
-      { labelKey: "category.totes", to: "/category/product-type/totes" },
-      { labelKey: "category.shoulderBags", to: "/category/product-type/shoulder-bags" },
-      { labelKey: "category.crossbody", to: "/category/product-type/crossbody" },
-      { labelKey: "category.clutches", to: "/category/product-type/clutches" },
-      { labelKey: "category.miniBags", to: "/category/product-type/mini-bags" },
-      { labelKey: "category.backpacks", to: "/category/product-type/backpacks" },
-      { labelKey: "category.wallets", to: "/category/product-type/wallets" },
+      { labelKey: "home.categoryBags", to: "/category/product-type/handbags" },
+      { labelKey: "home.categorySneakers", to: "/category/product-type/sneakers" },
+      { labelKey: "home.categoryWatches", to: "/category/product-type/watches" },
+      { labelKey: "home.categoryOuterwear", to: "/category/product-type/outerwear" },
     ],
   },
   {

@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { type Bag, fetchBags, bagImage } from "../lib/api";
+import {
+  type Bag,
+  type DisplayProduct,
+  fetchBags,
+  bagImage,
+  getCategoryImage,
+  searchProducts,
+} from "../lib/api";
 import { useLanguage } from "../lib/i18n";
 
 export function meta() {
@@ -15,8 +22,10 @@ export default function Home() {
   return (
     <main className="bg-white">
       <Hero />
+      <CategoryPillars />
       <BrandTiles />
       <FeaturedBags />
+      <CrossCategoryProducts />
       <EditorialBanner />
     </main>
   );
@@ -74,6 +83,99 @@ function Hero() {
           <span className="inline-block border border-white/40 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
             {t("home.heroBadge")}
           </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Category Pillars ────────────────────────────────────────────────────────
+
+const categoryPillars = [
+  {
+    key: "bags",
+    titleKey: "home.categoryBags",
+    descriptionKey: "home.categoryBagsDescription",
+    image:
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&h=1100&fit=crop",
+    to: "/category/product-type/totes",
+  },
+  {
+    key: "sneakers",
+    titleKey: "home.categorySneakers",
+    descriptionKey: "home.categorySneakersDescription",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&h=1100&fit=crop",
+    to: "/category/product-type/sneakers",
+  },
+  {
+    key: "watches",
+    titleKey: "home.categoryWatches",
+    descriptionKey: "home.categoryWatchesDescription",
+    image:
+      "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=900&h=1100&fit=crop",
+    to: "/category/product-type/watches",
+  },
+  {
+    key: "outerwear",
+    titleKey: "home.categoryOuterwear",
+    descriptionKey: "home.categoryOuterwearDescription",
+    image:
+      "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=900&h=1100&fit=crop",
+    to: "/category/product-type/outerwear",
+  },
+];
+
+function CategoryPillars() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="bg-zinc-950 px-4 py-14 text-white md:px-8 md:py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 max-w-2xl">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#c8a96e]">
+            {t("home.categoryEyebrow")}
+          </p>
+          <h2
+            className="text-4xl font-light tracking-tight md:text-6xl"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {t("home.categoryTitle")}
+          </h2>
+          <p className="mt-4 text-sm leading-loose text-white/55">
+            {t("home.categoryDescription")}
+          </p>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-4">
+          {categoryPillars.map((category) => (
+            <Link
+              key={category.key}
+              to={category.to}
+              className="group relative min-h-[22rem] overflow-hidden bg-zinc-900"
+            >
+              <img
+                src={category.image}
+                alt={t(category.titleKey)}
+                className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/25 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#c8a96e]">
+                  {t("home.shopCollection")}
+                </p>
+                <h3
+                  className="mt-2 text-3xl font-light"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {t(category.titleKey)}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-white/60">
+                  {t(category.descriptionKey)}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
@@ -224,6 +326,77 @@ function FeaturedBags() {
                   </p>
                 </Link>
               ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Cross-category products ────────────────────────────────────────────────
+
+function CrossCategoryProducts() {
+  const { t, formatCurrency, translateProductName } = useLanguage();
+  const [products, setProducts] = useState<DisplayProduct[]>([]);
+
+  useEffect(() => {
+    Promise.all(
+      ["bags", "sneakers", "watches", "outerwear"].map((category) =>
+        searchProducts(category).then((data) => data.results.slice(0, 2))
+      )
+    )
+      .then((groups) => setProducts(groups.flat()))
+      .catch(() => {});
+  }, []);
+
+  if (products.length === 0) return null;
+
+  return (
+    <section className="border-t border-zinc-100 px-4 py-12 md:px-8 md:py-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+              {t("home.crossCategoryEyebrow")}
+            </p>
+            <h2
+              className="mt-2 text-3xl font-light tracking-tight text-zinc-950 md:text-4xl"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {t("home.crossCategoryTitle")}
+            </h2>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-zinc-400">
+            {t("home.crossCategoryDescription")}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 md:gap-x-5 md:gap-y-12">
+          {products.map((product) => (
+            <Link key={product.id} to={`/product/${product.id}`} className="group">
+              <div
+                className="relative mb-3 overflow-hidden bg-zinc-50"
+                style={{ paddingBottom: "116%" }}
+              >
+                <img
+                  src={getCategoryImage(product.category)}
+                  alt={translateProductName(product.id, product.name)}
+                  className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <span className="absolute left-3 top-3 bg-white/90 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-zinc-950">
+                  {t(`home.categoryLabel.${product.category}`)}
+                </span>
+              </div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+                {product.details.Brand}
+              </p>
+              <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
+                {translateProductName(product.id, product.name)}
+              </p>
+              <p className="mt-1.5 text-sm font-semibold text-zinc-950">
+                {formatCurrency(product.price)}
+              </p>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
