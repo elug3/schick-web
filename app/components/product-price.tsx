@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { getSalePrice } from "../lib/cart";
 import { useLanguage } from "../lib/i18n";
+
+const PRICE_LOAD_DELAY_MS = 800;
 
 export function ProductPrice({
   price,
@@ -8,8 +11,19 @@ export function ProductPrice({
   price: number;
   size?: "sm" | "lg";
 }) {
-  const { formatCurrency } = useLanguage();
+  const { formatCurrency, t } = useLanguage();
+  const [ready, setReady] = useState(false);
   const salePrice = getSalePrice(price);
+
+  useEffect(() => {
+    setReady(false);
+    const timer = window.setTimeout(() => setReady(true), PRICE_LOAD_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [price]);
+
+  if (!ready) {
+    return <PriceLoadingBadge label={t("product.priceLoading")} size={size} />;
+  }
 
   if (size === "lg") {
     return (
@@ -33,5 +47,27 @@ export function ProductPrice({
         {formatCurrency(salePrice)}
       </span>
     </div>
+  );
+}
+
+function PriceLoadingBadge({
+  label,
+  size,
+}: {
+  label: string;
+  size: "sm" | "lg";
+}) {
+  const className = [
+    "inline-flex items-center gap-2 border border-zinc-200 bg-zinc-50 font-semibold uppercase tracking-widest text-zinc-500",
+    size === "lg"
+      ? "px-3 py-1.5 text-[10px]"
+      : "mt-1.5 px-2 py-0.5 text-[9px]",
+  ].join(" ");
+
+  return (
+    <span className={className} aria-live="polite" aria-busy="true">
+      <span className="size-2 animate-pulse rounded-full bg-[#c8a96e]" />
+      {label}
+    </span>
   );
 }

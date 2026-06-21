@@ -204,6 +204,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Every item sold by Schick comes with a certificate of authenticity. We partner directly with authorized retailers to guarantee genuine products.",
     "product.badgeNew": "New",
     "product.badgeFeatured": "Featured",
+    "product.priceLoading": "Loading",
 
     "cart.metaTitle": "Shopping Bag — Schick",
     "cart.metaDescription":
@@ -656,6 +657,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Schick에서 판매되는 모든 제품에는 정품 인증서가 제공됩니다. 정품 보장을 위해 공식 리테일러와 직접 협력합니다.",
     "product.badgeNew": "신상품",
     "product.badgeFeatured": "추천",
+    "product.priceLoading": "불러오는 중",
 
     "cart.metaTitle": "장바구니 — Schick",
     "cart.metaDescription":
@@ -1097,6 +1099,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Schick 售出的每件商品都附带正品证书。我们直接与授权零售商合作，保证商品真实可靠。",
     "product.badgeNew": "新品",
     "product.badgeFeatured": "精选",
+    "product.priceLoading": "加载中",
 
     "cart.metaTitle": "购物袋 — Schick",
     "cart.metaDescription": "查看已选奢华包袋并继续结账。",
