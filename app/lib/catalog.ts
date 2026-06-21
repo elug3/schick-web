@@ -100,6 +100,45 @@ export function categoryTitleKey(
   }
 }
 
+export function facetOptions(facet: CategoryFacet): string[] {
+  switch (facet) {
+    case "product-type":
+      return Object.keys(PRODUCT_TYPE_SLUGS);
+    case "brand":
+      return Object.keys(BRAND_SLUGS);
+    case "style":
+      return Object.keys(STYLE_SLUGS);
+    case "family":
+      return Object.keys(FAMILY_SLUGS);
+  }
+}
+
+export function productMatchesFacetValue(
+  details: Record<string, string | number>,
+  facet: CategoryFacet,
+  value: string
+): boolean {
+  const get = (key: string) => String(details[key] ?? "");
+
+  switch (facet) {
+    case "brand":
+      return get("Brand") === (BRAND_SLUGS[value] ?? value);
+    case "product-type": {
+      if (value === "handbags") return true;
+      const type = PRODUCT_TYPE_SLUGS[value];
+      return type ? get("Type") === type : false;
+    }
+    case "style": {
+      const style = STYLE_SLUGS[value];
+      return style ? get("Style") === style : false;
+    }
+    case "family": {
+      const family = FAMILY_SLUGS[value];
+      return family ? get("Gender") === family : false;
+    }
+  }
+}
+
 export function brandToSlug(brand: string): string | null {
   const entry = Object.entries(BRAND_SLUGS).find(([, name]) => name === brand);
   return entry?.[0] ?? null;

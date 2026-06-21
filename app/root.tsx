@@ -87,7 +87,7 @@ const desktopNavLinks = [
   {
     id: "productType",
     labelKey: "nav.productType",
-    to: "/category/product-type/handbags",
+    to: "/category/product-type",
     items: [
       { labelKey: "home.categoryBags", to: "/category/product-type/handbags" },
       { labelKey: "category.totes", to: "/category/product-type/totes" },
@@ -99,7 +99,7 @@ const desktopNavLinks = [
   {
     id: "brand",
     labelKey: "nav.brand",
-    to: "/category/brand/louis-vuitton",
+    to: "/category/brand",
     items: [
       { label: "Louis Vuitton", to: "/category/brand/louis-vuitton", image: "/brands/louis-vuitton.svg" },
       { label: "Miu Miu", to: "/category/brand/miu-miu", image: "/brands/prada.svg" },
