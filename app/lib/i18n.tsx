@@ -1840,11 +1840,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
 
     function translateProductName(id: string, fallback: string): string {
-      return productTranslations[id]?.[language]?.name ?? fallback;
+      return (
+        productTranslations[id]?.ko?.name ??
+        productTranslations[id]?.[language]?.name ??
+        fallback
+      );
     }
 
     function translateProductDescription(id: string, fallback: string): string {
-      return productTranslations[id]?.[language]?.description ?? fallback;
+      return (
+        productTranslations[id]?.ko?.description ??
+        productTranslations[id]?.[language]?.description ??
+        fallback
+      );
     }
 
     function translateValue(scope: string, fallback: string): string {
