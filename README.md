@@ -140,6 +140,39 @@ Before adding marketplace content, verify that each product has:
 - No unauthorized logos, monograms, protected patterns, or brand identifiers.
 - Clear pricing, shipping, returns, and customer-service information.
 
+## CI/CD
+
+GitHub Actions runs two workflows on every change to `master`:
+
+| Workflow | Trigger | Purpose |
+| --- | --- | --- |
+| [CI](.github/workflows/ci.yml) | Push and pull requests to `master` | Install dependencies, run `npm run typecheck`, run `npm run build`, and verify the Docker image builds |
+| [Deploy](.github/workflows/deploy.yml) | Push to `master` | Build and push the Docker image to Amazon ECR, then roll out a new Amazon ECS task definition |
+
+### CI checks
+
+Pull requests and pushes to `master` must pass:
+
+```bash
+npm ci
+npm run typecheck
+npm run build
+docker build -t schick-web .
+```
+
+### Production deployment
+
+Merging to `master` deploys to Amazon ECS in `us-east-1`:
+
+- **ECR repository:** `web`
+- **ECS cluster:** `production`
+- **ECS service:** `default-schick-web-d90d-service-pkkf3qyk`
+- **Task definition:** [.aws/describe-task-definition](.aws/describe-task-definition)
+
+Deployment uses GitHub OIDC to assume `arn:aws:iam::845061289093:role/github-actions-deploy-role`. Ensure that IAM role trusts this repository and has permissions for ECR push and ECS service updates.
+
+The container listens on port `80` inside the task (`PORT=80`). Override backend URLs at deploy time by adding environment variables to the ECS task definition.
+
 ## Deployment Notes
 
 The application builds into:
