@@ -50,6 +50,24 @@ const initialForm: FormState = {
   cvc: "",
 };
 
+const checkoutSteps = ["information", "delivery", "payment"] as const;
+type CheckoutStep = (typeof checkoutSteps)[number];
+
+const stepFields: Record<CheckoutStep, (keyof FormState)[]> = {
+  information: [
+    "email",
+    "phone",
+    "firstName",
+    "lastName",
+    "address",
+    "city",
+    "state",
+    "zip",
+  ],
+  delivery: [],
+  payment: ["cardName", "cardNumber", "expiry", "cvc"],
+};
+
 export default function CheckoutPage() {
   const { t, formatCurrency, translateProductName } = useLanguage();
   const navigate = useNavigate();
@@ -63,6 +81,7 @@ export default function CheckoutPage() {
   );
   const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [activeStep, setActiveStep] = useState<CheckoutStep>("information");
 
   useEffect(() => {
     setMounted(true);
@@ -88,40 +107,65 @@ export default function CheckoutPage() {
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
 
-  function validate(): boolean {
-    const next: Partial<Record<keyof FormState, string>> = {};
-    const required: (keyof FormState)[] = [
-      "email",
-      "firstName",
-      "lastName",
-      "address",
-      "city",
-      "state",
-      "zip",
-      "phone",
-      "cardName",
-      "cardNumber",
-      "expiry",
-      "cvc",
-    ];
+  const activeStepIndex = checkoutSteps.indexOf(activeStep);
+  const isPaymentStep = activeStep === "payment";
+  const nextStep = checkoutSteps[activeStepIndex + 1];
+  const previousStep = checkoutSteps[activeStepIndex - 1];
+  const stepLabels: Record<CheckoutStep, string> = {
+    information: t("checkout.stepInformation"),
+    delivery: t("checkout.stepDelivery"),
+    payment: t("checkout.stepPayment"),
+  };
+  const primaryActionLabel =
+    activeStep === "information"
+      ? t("checkout.continueToDelivery")
+      : activeStep === "delivery"
+        ? t("checkout.continueToPayment")
+        : t("checkout.placeOrderWithTotal", {
+            total: formatCurrency(checkoutTotal),
+          });
 
-    for (const field of required) {
+  function validateFields(fields: (keyof FormState)[]): boolean {
+    const next: Partial<Record<keyof FormState, string>> = {};
+
+    for (const field of fields) {
       if (!form[field].trim()) {
         next[field] = t("checkout.required");
       }
     }
 
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    if (fields.includes("email") && form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       next.email = t("checkout.validEmail");
     }
 
-    setErrors(next);
+    setErrors((prev) => ({
+      ...prev,
+      ...Object.fromEntries(fields.map((field) => [field, undefined])),
+      ...next,
+    }));
     return Object.keys(next).length === 0;
+  }
+
+  function validateStep(step: CheckoutStep): boolean {
+    return validateFields(stepFields[step]);
+  }
+
+  function handleNextStep() {
+    if (!nextStep || !validateStep(activeStep)) return;
+    setActiveStep(nextStep);
+  }
+
+  function handlePreviousStep() {
+    if (previousStep) setActiveStep(previousStep);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!isPaymentStep) {
+      handleNextStep();
+      return;
+    }
+    if (!validateStep("payment")) return;
 
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1200));
@@ -190,182 +234,219 @@ export default function CheckoutPage() {
           </h1>
         </div>
 
+        <CheckoutStepper
+          activeStep={activeStep}
+          labels={stepLabels}
+          steps={checkoutSteps}
+        />
+
         <form
           onSubmit={handleSubmit}
           className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16"
         >
-          <div className="space-y-12">
-            <CheckoutSection step="01" title={t("checkout.contact")}>
-              <Field
-                label={t("checkout.email")}
-                id="email"
-                type="email"
-                value={form.email}
-                error={errors.email}
-                onChange={(v) => updateField("email", v)}
-                autoComplete="email"
-              />
-              <Field
-                label={t("checkout.phone")}
-                id="phone"
-                type="tel"
-                value={form.phone}
-                error={errors.phone}
-                onChange={(v) => updateField("phone", v)}
-                autoComplete="tel"
-              />
-            </CheckoutSection>
+          <div className="space-y-8">
+            {activeStep === "information" && (
+              <div className="space-y-10">
+                <CheckoutSection step="01" title={t("checkout.contact")}>
+                  <Field
+                    label={t("checkout.email")}
+                    id="email"
+                    type="email"
+                    value={form.email}
+                    error={errors.email}
+                    onChange={(v) => updateField("email", v)}
+                    autoComplete="email"
+                  />
+                  <Field
+                    label={t("checkout.phone")}
+                    id="phone"
+                    type="tel"
+                    value={form.phone}
+                    error={errors.phone}
+                    onChange={(v) => updateField("phone", v)}
+                    autoComplete="tel"
+                  />
+                </CheckoutSection>
 
-            <CheckoutSection step="02" title={t("checkout.shipping")}>
-              <div className="grid gap-4 md:grid-cols-2">
-                <Field
-                  label={t("checkout.firstName")}
-                  id="firstName"
-                  value={form.firstName}
-                  error={errors.firstName}
-                  onChange={(v) => updateField("firstName", v)}
-                  autoComplete="given-name"
-                />
-                <Field
-                  label={t("checkout.lastName")}
-                  id="lastName"
-                  value={form.lastName}
-                  error={errors.lastName}
-                  onChange={(v) => updateField("lastName", v)}
-                  autoComplete="family-name"
-                />
+                <CheckoutSection step="02" title={t("checkout.shipping")}>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field
+                      label={t("checkout.firstName")}
+                      id="firstName"
+                      value={form.firstName}
+                      error={errors.firstName}
+                      onChange={(v) => updateField("firstName", v)}
+                      autoComplete="given-name"
+                    />
+                    <Field
+                      label={t("checkout.lastName")}
+                      id="lastName"
+                      value={form.lastName}
+                      error={errors.lastName}
+                      onChange={(v) => updateField("lastName", v)}
+                      autoComplete="family-name"
+                    />
+                  </div>
+                  <Field
+                    label={t("checkout.address")}
+                    id="address"
+                    value={form.address}
+                    error={errors.address}
+                    onChange={(v) => updateField("address", v)}
+                    autoComplete="street-address"
+                  />
+                  <Field
+                    label={t("checkout.apartment")}
+                    id="apartment"
+                    value={form.apartment}
+                    onChange={(v) => updateField("apartment", v)}
+                    autoComplete="address-line2"
+                  />
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <Field
+                      label={t("checkout.city")}
+                      id="city"
+                      value={form.city}
+                      error={errors.city}
+                      onChange={(v) => updateField("city", v)}
+                      autoComplete="address-level2"
+                    />
+                    <Field
+                      label={t("checkout.state")}
+                      id="state"
+                      value={form.state}
+                      error={errors.state}
+                      onChange={(v) => updateField("state", v)}
+                      autoComplete="address-level1"
+                    />
+                    <Field
+                      label={t("checkout.zip")}
+                      id="zip"
+                      value={form.zip}
+                      error={errors.zip}
+                      onChange={(v) => updateField("zip", v)}
+                      autoComplete="postal-code"
+                    />
+                  </div>
+                  <Field
+                    label={t("checkout.country")}
+                    id="country"
+                    value={form.country}
+                    onChange={(v) => updateField("country", v)}
+                    autoComplete="country-name"
+                  />
+                </CheckoutSection>
               </div>
-              <Field
-                label={t("checkout.address")}
-                id="address"
-                value={form.address}
-                error={errors.address}
-                onChange={(v) => updateField("address", v)}
-                autoComplete="street-address"
-              />
-              <Field
-                label={t("checkout.apartment")}
-                id="apartment"
-                value={form.apartment}
-                onChange={(v) => updateField("apartment", v)}
-                autoComplete="address-line2"
-              />
-              <div className="grid gap-4 md:grid-cols-3">
-                <Field
-                  label={t("checkout.city")}
-                  id="city"
-                  value={form.city}
-                  error={errors.city}
-                  onChange={(v) => updateField("city", v)}
-                  autoComplete="address-level2"
-                />
-                <Field
-                  label={t("checkout.state")}
-                  id="state"
-                  value={form.state}
-                  error={errors.state}
-                  onChange={(v) => updateField("state", v)}
-                  autoComplete="address-level1"
-                />
-                <Field
-                  label={t("checkout.zip")}
-                  id="zip"
-                  value={form.zip}
-                  error={errors.zip}
-                  onChange={(v) => updateField("zip", v)}
-                  autoComplete="postal-code"
-                />
-              </div>
-              <Field
-                label={t("checkout.country")}
-                id="country"
-                value={form.country}
-                onChange={(v) => updateField("country", v)}
-                autoComplete="country-name"
-              />
-            </CheckoutSection>
+            )}
 
-            <CheckoutSection step="03" title={t("checkout.delivery")}>
-              <div className="space-y-3">
-                <DeliveryOption
-                  name="delivery"
-                  value="standard"
-                  checked={form.delivery === "standard"}
-                  title={t("checkout.standardDelivery")}
-                  subtitle={t("checkout.standardDeliveryTime")}
-                  price={
-                    summary.shipping === 0
-                      ? t("cart.complimentary")
-                      : formatCurrency(summary.shipping)
-                  }
-                  onChange={() => updateField("delivery", "standard")}
-                />
-                <DeliveryOption
-                  name="delivery"
-                  value="express"
-                  checked={form.delivery === "express"}
-                  title={t("checkout.expressDelivery")}
-                  subtitle={t("checkout.expressDeliveryTime")}
-                  price={formatCurrency(25)}
-                  onChange={() => updateField("delivery", "express")}
-                />
-              </div>
-            </CheckoutSection>
+            {activeStep === "delivery" && (
+              <CheckoutSection step="02" title={t("checkout.delivery")}>
+                <div className="space-y-3">
+                  <DeliveryOption
+                    name="delivery"
+                    value="standard"
+                    checked={form.delivery === "standard"}
+                    title={t("checkout.standardDelivery")}
+                    subtitle={t("checkout.standardDeliveryTime")}
+                    price={
+                      summary.shipping === 0
+                        ? t("cart.complimentary")
+                        : formatCurrency(summary.shipping)
+                    }
+                    onChange={() => updateField("delivery", "standard")}
+                  />
+                  <DeliveryOption
+                    name="delivery"
+                    value="express"
+                    checked={form.delivery === "express"}
+                    title={t("checkout.expressDelivery")}
+                    subtitle={t("checkout.expressDeliveryTime")}
+                    price={formatCurrency(25)}
+                    onChange={() => updateField("delivery", "express")}
+                  />
+                </div>
+              </CheckoutSection>
+            )}
 
-            <CheckoutSection step="04" title={t("checkout.payment")}>
-              <Field
-                label={t("checkout.cardName")}
-                id="cardName"
-                value={form.cardName}
-                error={errors.cardName}
-                onChange={(v) => updateField("cardName", v)}
-                autoComplete="cc-name"
-              />
-              <Field
-                label={t("checkout.cardNumber")}
-                id="cardNumber"
-                value={form.cardNumber}
-                error={errors.cardNumber}
-                onChange={(v) => updateField("cardNumber", v)}
-                autoComplete="cc-number"
-                placeholder="4242 4242 4242 4242"
-              />
-              <div className="grid gap-4 md:grid-cols-2">
+            {activeStep === "payment" && (
+              <CheckoutSection step="03" title={t("checkout.payment")}>
                 <Field
-                  label={t("checkout.expiry")}
-                  id="expiry"
-                  value={form.expiry}
-                  error={errors.expiry}
-                  onChange={(v) => updateField("expiry", v)}
-                  autoComplete="cc-exp"
-                  placeholder="MM / YY"
+                  label={t("checkout.cardName")}
+                  id="cardName"
+                  value={form.cardName}
+                  error={errors.cardName}
+                  onChange={(v) => updateField("cardName", v)}
+                  autoComplete="cc-name"
                 />
                 <Field
-                  label={t("checkout.cvc")}
-                  id="cvc"
-                  value={form.cvc}
-                  error={errors.cvc}
-                  onChange={(v) => updateField("cvc", v)}
-                  autoComplete="cc-csc"
-                  placeholder="123"
+                  label={t("checkout.cardNumber")}
+                  id="cardNumber"
+                  value={form.cardNumber}
+                  error={errors.cardNumber}
+                  onChange={(v) => updateField("cardNumber", v)}
+                  autoComplete="cc-number"
+                  placeholder="4242 4242 4242 4242"
                 />
-              </div>
-              <p className="text-[11px] leading-relaxed text-zinc-400">
-                {t("checkout.paymentNote")}
-              </p>
-            </CheckoutSection>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field
+                    label={t("checkout.expiry")}
+                    id="expiry"
+                    value={form.expiry}
+                    error={errors.expiry}
+                    onChange={(v) => updateField("expiry", v)}
+                    autoComplete="cc-exp"
+                    placeholder="MM / YY"
+                  />
+                  <Field
+                    label={t("checkout.cvc")}
+                    id="cvc"
+                    value={form.cvc}
+                    error={errors.cvc}
+                    onChange={(v) => updateField("cvc", v)}
+                    autoComplete="cc-csc"
+                    placeholder="123"
+                  />
+                </div>
+                <p className="text-[11px] leading-relaxed text-zinc-400">
+                  {t("checkout.paymentNote")}
+                </p>
+              </CheckoutSection>
+            )}
 
             <div className="lg:hidden">
               <MiniBag items={items} total={checkoutTotal} />
             </div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
-            >
-              {submitting ? t("checkout.processing") : t("checkout.placeOrderWithTotal", { total: formatCurrency(checkoutTotal) })}
-            </button>
+            <div className="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              {previousStep ? (
+                <button
+                  type="button"
+                  onClick={handlePreviousStep}
+                  className="flex h-12 items-center justify-center border border-zinc-200 px-6 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+                >
+                  {t("checkout.previousStep")}
+                </button>
+              ) : (
+                <span />
+              )}
+              {isPaymentStep ? (
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex h-14 items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70 sm:min-w-64"
+                >
+                  {submitting ? t("checkout.processing") : primaryActionLabel}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="flex h-14 items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 sm:min-w-64"
+                >
+                  {primaryActionLabel}
+                </button>
+              )}
+            </div>
           </div>
 
           <aside className="hidden lg:block lg:sticky lg:top-28 lg:self-start">
@@ -410,22 +491,98 @@ export default function CheckoutPage() {
               onApplyPromo={applyPromo}
               checkoutHref="#"
               checkoutLabel={
-                submitting ? t("checkout.processing") : t("checkout.placeOrderWithTotal", { total: formatCurrency(checkoutTotal) })
+                submitting ? t("checkout.processing") : primaryActionLabel
               }
               disabled
             />
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-4 flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
-            >
-              {submitting ? t("checkout.processing") : t("checkout.placeOrder")}
-            </button>
+            <div className="mt-4 space-y-3">
+              {isPaymentStep ? (
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
+                >
+                  {submitting ? t("checkout.processing") : t("checkout.placeOrder")}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+                >
+                  {primaryActionLabel}
+                </button>
+              )}
+              {previousStep && (
+                <button
+                  type="button"
+                  onClick={handlePreviousStep}
+                  className="flex h-12 w-full items-center justify-center border border-zinc-200 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+                >
+                  {t("checkout.previousStep")}
+                </button>
+              )}
+            </div>
           </aside>
         </form>
       </div>
     </main>
+  );
+}
+
+function CheckoutStepper({
+  activeStep,
+  labels,
+  steps,
+}: {
+  activeStep: CheckoutStep;
+  labels: Record<CheckoutStep, string>;
+  steps: readonly CheckoutStep[];
+}) {
+  const { t } = useLanguage();
+  const activeIndex = steps.indexOf(activeStep);
+
+  return (
+    <ol className="mb-10 grid gap-3 border-y border-zinc-100 py-4 md:mb-12 md:grid-cols-3">
+      {steps.map((step, index) => {
+        const isActive = step === activeStep;
+        const isComplete = index < activeIndex;
+
+        return (
+          <li key={step} className="flex items-center gap-3">
+            <span
+              className={[
+                "flex size-8 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold",
+                isActive
+                  ? "border-zinc-950 bg-zinc-950 text-white"
+                  : isComplete
+                    ? "border-[#c8a96e] bg-[#c8a96e] text-white"
+                    : "border-zinc-200 text-zinc-300",
+              ].join(" ")}
+            >
+              {isComplete ? <CheckIcon /> : String(index + 1).padStart(2, "0")}
+            </span>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-300">
+                {t("checkout.stepCount", {
+                  current: index + 1,
+                  total: steps.length,
+                })}
+              </p>
+              <p
+                className={[
+                  "text-sm font-medium",
+                  isActive ? "text-zinc-950" : "text-zinc-400",
+                ].join(" ")}
+              >
+                {labels[step]}
+              </p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 }
 
@@ -588,6 +745,14 @@ function BackIcon() {
   return (
     <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none">
       <path d="m15 18-6-6 6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none">
+      <path d="M20 7 10 17l-5-5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
     </svg>
   );
 }

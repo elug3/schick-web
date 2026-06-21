@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
-import { type ServerProduct, fetchProduct, bagImage } from "../lib/api";
+import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
 
@@ -110,7 +110,7 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
 
 function ProductLayout({ product }: { product: ServerProduct }) {
   const { t, translateProductName } = useLanguage();
-  const img = bagImage(product.brand);
+  const img = productImage(product.category, product.brand);
   const images = [
     { src: img, position: "object-center" },
     { src: img, position: "object-top" },
@@ -213,7 +213,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
       name: product.name,
       brand: product.brand,
       price: product.price,
-      image: bagImage(product.brand),
+      image: productImage(product.category, product.brand),
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);

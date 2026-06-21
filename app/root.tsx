@@ -48,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
+      <div className="min-h-screen bg-white pb-28 text-zinc-950 md:pb-0">
         <AnnouncementBar />
         <TopNav />
         {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
@@ -88,13 +88,10 @@ const desktopNavLinks = [
     labelKey: "nav.productType",
     to: "/category/product-type",
     items: [
-      { labelKey: "category.totes", to: "/category/product-type/totes" },
-      { labelKey: "category.shoulderBags", to: "/category/product-type/shoulder-bags" },
-      { labelKey: "category.crossbody", to: "/category/product-type/crossbody" },
-      { labelKey: "category.clutches", to: "/category/product-type/clutches" },
-      { labelKey: "category.miniBags", to: "/category/product-type/mini-bags" },
-      { labelKey: "category.backpacks", to: "/category/product-type/backpacks" },
-      { labelKey: "category.wallets", to: "/category/product-type/wallets" },
+      { labelKey: "home.categoryBags", to: "/category/product-type/handbags" },
+      { labelKey: "home.categorySneakers", to: "/category/product-type/sneakers" },
+      { labelKey: "home.categoryWatches", to: "/category/product-type/watches" },
+      { labelKey: "home.categoryOuterwear", to: "/category/product-type/outerwear" },
     ],
   },
   {
@@ -153,6 +150,7 @@ function TopNav() {
 
         <NavLink
           to="/"
+          data-brand-logo
           className="justify-self-center text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
           style={{ fontFamily: "var(--font-display)" }}
         >
@@ -254,18 +252,29 @@ function TopNav() {
   );
 }
 
-function LanguageSelector() {
+function LanguageSelector({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
   const { language, languages, setLanguage, t } = useLanguage();
+  const isMobile = variant === "mobile";
 
   return (
-    <label className="mr-1 hidden items-center gap-1 rounded p-1 text-zinc-400 transition hover:text-zinc-950 sm:flex">
+    <label
+      className={[
+        "items-center rounded text-zinc-400 transition hover:text-zinc-950",
+        isMobile
+          ? "inline-flex gap-2 border border-zinc-100 bg-zinc-50 px-3 py-1.5"
+          : "mr-1 hidden gap-1 p-1 sm:flex",
+      ].join(" ")}
+    >
       <span className="sr-only">{t("language.label")}</span>
       <GlobeIcon />
       <select
         value={language}
         onChange={(event) => setLanguage(event.target.value as LanguageCode)}
         aria-label={t("language.label")}
-        className="cursor-pointer bg-transparent text-[10px] font-semibold uppercase tracking-[0.12em] outline-none"
+        className={[
+          "cursor-pointer bg-transparent font-semibold uppercase outline-none",
+          isMobile ? "text-[11px] tracking-[0.08em]" : "text-[10px] tracking-[0.12em]",
+        ].join(" ")}
       >
         {languages.map((option) => (
           <option key={option.code} value={option.code}>
@@ -287,6 +296,7 @@ function Footer() {
           {/* Brand */}
           <div className="col-span-1">
             <p
+              data-brand-logo
               className="mb-3 text-2xl font-light tracking-[0.35em] uppercase text-zinc-950"
               style={{ fontFamily: "var(--font-display)" }}
             >
@@ -359,6 +369,9 @@ function BottomNav() {
       aria-label={t("nav.primary")}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-100 bg-white px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
     >
+      <div className="mx-auto mb-2 flex max-w-md justify-center sm:hidden">
+        <LanguageSelector variant="mobile" />
+      </div>
       <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
         {navItems.map(({ labelKey, to, icon: Icon }) => (
           <NavLink
