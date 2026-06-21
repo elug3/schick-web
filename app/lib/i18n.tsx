@@ -183,6 +183,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.premiumLeather": "Premium Leather",
     "product.added": "Added",
     "product.addToBag": "Add to Bag",
+    "product.buy": "Buy",
+    "product.contactUsTelegram": "Contact Us on Telegram",
     "product.bookStyleConsult": "Book Style Consult",
     "product.removeWishlist": "Remove from wishlist",
     "product.addWishlist": "Add to wishlist",
@@ -631,6 +633,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.premiumLeather": "프리미엄 가죽",
     "product.added": "추가됨",
     "product.addToBag": "장바구니에 담기",
+    "product.buy": "구매하기",
+    "product.contactUsTelegram": "텔레그램 문의하기",
     "product.bookStyleConsult": "스타일 상담 예약",
     "product.removeWishlist": "위시리스트에서 제거",
     "product.addWishlist": "위시리스트에 추가",
@@ -1068,6 +1072,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.premiumLeather": "高级皮革",
     "product.added": "已添加",
     "product.addToBag": "加入购物袋",
+    "product.buy": "购买",
+    "product.contactUsTelegram": "Telegram 联系我们",
     "product.bookStyleConsult": "预约造型咨询",
     "product.removeWishlist": "从愿望清单移除",
     "product.addWishlist": "加入愿望清单",
@@ -1382,94 +1388,247 @@ const productTranslations: Record<
   string,
   Partial<Record<LanguageCode, { name?: string; description?: string }>>
 > = {
-  "bag-gucci-jackie-black": {
+  "bag-lv-express-mm": {
     ko: {
-      name: "재키 1961 스몰 숄더백",
-      description:
-        "곡선 실루엣, 피스톤 하드웨어, 매끄러운 가죽 마감이 돋보이는 구조적인 숄더백.",
+      name: "루이비통 익스프레스 MM",
+      description: "루이비통 익스프레스 MM. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "Jackie 1961 小号单肩包",
-      description: "结构感单肩包，配有弧形廓形、活塞扣件和顺滑皮革饰面。",
+      name: "Louis Vuitton Express MM",
+      description: "Louis Vuitton Express MM，采用涂层帆布材质。",
     },
   },
-  "bag-lv-neverfull-monogram": {
+  "bag-lv-speedy-bandouliere-20": {
     ko: {
-      name: "네버풀 MM 토트",
-      description:
-        "천연 소가죽 트림과 탈착식 파우치가 있는 가벼운 모노그램 캔버스 토트.",
+      name: "루이비통 스피디 반둘리에20",
+      description: "루이비통 스피디 반둘리에20. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "Neverfull MM 托特包",
-      description: "轻盈老花帆布托特包，配天然牛皮饰边和可拆卸手拿包。",
+      name: "Louis Vuitton Speedy Bandoulière 20",
+      description: "Louis Vuitton Speedy Bandoulière 20，采用涂层帆布材质。",
     },
   },
-  "bag-chanel-classic-flap": {
+  "bag-lv-keepall-bandouliere-25": {
     ko: {
-      name: "클래식 미디엄 플랩백",
-      description:
-        "체인 스트랩, 더블 플랩 구조, 시그니처 턴락 클로저가 있는 퀼팅 램스킨 백.",
+      name: "루이비통 키폴 반둘리에 25",
+      description: "루이비통 키폴 반둘리에 25. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "经典中号翻盖包",
-      description: "绗缝羊皮包，配链条肩带、双翻盖结构和标志性旋锁。",
+      name: "Louis Vuitton Keepall Bandoulière 25",
+      description: "Louis Vuitton Keepall Bandoulière 25，采用涂层帆布材质。",
     },
   },
-  "bag-prada-re-edition-nylon": {
+  "bag-lv-capucines-bb": {
     ko: {
-      name: "리에디션 2005 나일론 백",
-      description:
-        "사피아노 가죽 디테일과 탈착식 체인 스트랩이 있는 컴팩트한 나일론 숄더백.",
+      name: "루이비통 카퓌신 BB",
+      description: "루이비통 카퓌신 BB. 카프스킨 가죽 소재.",
     },
     zh: {
-      name: "Re-Edition 2005 尼龙包",
-      description: "小巧尼龙单肩包，配 Saffiano 皮革细节和可拆卸链条肩带。",
+      name: "Louis Vuitton Capucines BB",
+      description: "Louis Vuitton Capucines BB，采用小牛皮材质。",
     },
   },
-  "bag-hermes-evelyne-gold": {
+  "bag-lv-carryall-vibe-mm": {
     ko: {
-      name: "에블린 III 29",
-      description:
-        "그레인 가죽, 펀칭 H 디테일, 조절 가능한 캔버스 스트랩이 있는 여유로운 크로스백.",
+      name: "루이비통 캐리올 바이브 MM",
+      description: "루이비통 캐리올 바이브 MM. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "Evelyne III 29",
-      description: "粒面皮革休闲斜挎包，配镂空 H 细节和可调节帆布肩带。",
+      name: "Louis Vuitton CarryAll Vibe MM",
+      description: "Louis Vuitton CarryAll Vibe MM，采用涂层帆布材质。",
     },
   },
-  "bag-dior-book-tote": {
+  "bag-lv-carryall-cargo-vibe-pm": {
     ko: {
-      name: "미디엄 디올 북 토트",
-      description:
-        "일상 필수품을 담기 좋은, 구조감 있는 에디토리얼 자수 캔버스 토트.",
+      name: "루이비통 캐리올 카고 바이브PM",
+      description: "루이비통 캐리올 카고 바이브PM. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "中号 Dior Book Tote",
-      description: "刺绣帆布托特包，结构感轮廓适合收纳日常必需品。",
+      name: "Louis Vuitton CarryAll Cargo Vibe PM",
+      description: "Louis Vuitton CarryAll Cargo Vibe PM，采用涂层帆布材质。",
     },
   },
-  "bag-bottega-cassette-green": {
+  "bag-lv-all-in-bb": {
     ko: {
-      name: "패디드 카세트 백",
-      description:
-        "패디드 인트레치아토 가죽과 톤온톤 버클로 완성한 기하학적인 크로스백.",
+      name: "루이비통 올인BB",
+      description: "루이비통 올인BB. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "Padded Cassette 包",
-      description: "几何感斜挎包，采用加衬 intrecciato 编织皮革和同色搭扣。",
+      name: "Louis Vuitton All In BB",
+      description: "Louis Vuitton All In BB，采用涂层帆布材质。",
     },
   },
-  "bag-coach-tabby-ivory": {
+  "bag-lv-all-in-bb-enflamment": {
     ko: {
-      name: "태비 숄더백 26",
-      description:
-        "고급 가죽, 시그니처 하드웨어, 변형 가능한 스트랩 스타일이 돋보이는 세련된 숄더백.",
+      name: "루이비통 올인 BB 앙프랭",
+      description: "루이비통 올인 BB 앙프랭. 코팅 캔버스 소재.",
     },
     zh: {
-      name: "Tabby 26 单肩包",
-      description: "精致单肩包，采用细腻皮革、标志性五金和可转换肩带设计。",
+      name: "Louis Vuitton All In BB Enflamment",
+      description: "Louis Vuitton All In BB Enflamment，采用涂层帆布材质。",
     },
   },
+  "bag-miu-ivy-leather-mini": {
+    ko: {
+      name: "미우미우 아이비 가죽 백 미니",
+      description: "미우미우 아이비 가죽 백 미니. 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Ivy Leather Bag Mini",
+      description: "Miu Miu Ivy Leather Bag Mini，采用纳帕皮革材质。",
+    },
+  },
+  "bag-miu-pocket-top-handle-medium": {
+    ko: {
+      name: "미우미우 나파가죽 포켓 탑핸들 백 미디엄",
+      description: "미우미우 나파가죽 포켓 탑핸들 백 미디엄. 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Nappa Pocket Top-Handle Bag Medium",
+      description: "Miu Miu Nappa Pocket Top-Handle Bag Medium，采用纳帕皮革材质。",
+    },
+  },
+  "bag-miu-pocket-top-handle-small": {
+    ko: {
+      name: "미우미우 나파가죽 포켓 탑핸들 백 스몰",
+      description: "미우미우 나파가죽 포켓 탑핸들 백 스몰. 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Nappa Pocket Top-Handle Bag Small",
+      description: "Miu Miu Nappa Pocket Top-Handle Bag Small，采用纳帕皮革材质。",
+    },
+  },
+  "bag-miu-wander-hobo-medium": {
+    ko: {
+      name: "미우미우 완더 마테라쎄 나파가죽 호보 백 미디엄",
+      description: "미우미우 완더 마테라쎄 나파가죽 호보 백 미디엄. 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Wander Matelassé Nappa Hobo Medium",
+      description: "Miu Miu Wander Matelassé Nappa Hobo Medium，采用纳帕皮革材质。",
+    },
+  },
+  "bag-miu-wander-hobo-small": {
+    ko: {
+      name: "미우미우 완더 마테라쎄 나파가죽 호보 백 스몰",
+      description: "미우미우 완더 마테라쎄 나파가죽 호보 백 스몰. 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Wander Matelassé Nappa Hobo Small",
+      description: "Miu Miu Wander Matelassé Nappa Hobo Small，采用纳帕皮革材质。",
+    },
+  },
+  "bag-miu-arcadie-suede": {
+    ko: {
+      name: "미우미우 아르카디 마테라쎄(스웨이드)",
+      description: "미우미우 아르카디 마테라쎄(스웨이드). 가죽 및 스웨이드 소재.",
+    },
+    zh: {
+      name: "Miu Miu Arcadie Matelassé (Suede)",
+      description: "Miu Miu Arcadie Matelassé (Suede)，采用皮革与绒面革材质。",
+    },
+  },
+  "bag-miu-arcadie-nappa": {
+    ko: {
+      name: "미우미우 아르카디 마테라쎄(나파 가죽)",
+      description: "미우미우 아르카디 마테라쎄(나파 가죽). 나파 가죽 소재.",
+    },
+    zh: {
+      name: "Miu Miu Arcadie Matelassé (Nappa Leather)",
+      description: "Miu Miu Arcadie Matelassé (Nappa Leather)，采用纳帕皮革材质。",
+    },
+  },
+  "bag-balenciaga-le-city-moto-medium": {
+    ko: {
+      name: "발렌시아가 르시티 모토 미디엄",
+      description: "발렌시아가 르시티 모토 미디엄. 카프스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Balenciaga Le City Moto Medium",
+      description: "Balenciaga Le City Moto Medium，采用小牛皮材质。",
+    },
+  },
+  "bag-balenciaga-le-city-moto-small": {
+    ko: {
+      name: "발렌시아가 르시티 모토 스몰",
+      description: "발렌시아가 르시티 모토 스몰. 카프스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Balenciaga Le City Moto Small",
+      description: "Balenciaga Le City Moto Small，采用小牛皮材质。",
+    },
+  },
+  "bag-balenciaga-rodeo-large": {
+    ko: {
+      name: "발렌시아가 로데오 백 라지",
+      description: "발렌시아가 로데오 백 라지. 카프스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Balenciaga Rodeo Bag Large",
+      description: "Balenciaga Rodeo Bag Large，采用小牛皮材质。",
+    },
+  },
+  "bag-balenciaga-rodeo-medium": {
+    ko: {
+      name: "발렌시아가 로데오 백 미디엄",
+      description: "발렌시아가 로데오 백 미디엄. 카프스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Balenciaga Rodeo Bag Medium",
+      description: "Balenciaga Rodeo Bag Medium，采用小牛皮材质。",
+    },
+  },
+  "bag-balenciaga-rodeo-small": {
+    ko: {
+      name: "발렌시아가 로데오 백 스몰",
+      description: "발렌시아가 로데오 백 스몰. 카프스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Balenciaga Rodeo Bag Small",
+      description: "Balenciaga Rodeo Bag Small，采用小牛皮材质。",
+    },
+  },
+  "bag-hermes-garden-party-30": {
+    ko: {
+      name: "에르메스 가든파티 30",
+      description: "에르메스 가든파티 30. 클레망스 가죽 소재.",
+    },
+    zh: {
+      name: "Hermès Garden Party 30",
+      description: "Hermès Garden Party 30，采用Clemence 皮革材质。",
+    },
+  },
+  "bag-hermes-birkin-25": {
+    ko: {
+      name: "에르메스 버킨백 25",
+      description: "에르메스 버킨백 25. 클레망스 가죽 소재.",
+    },
+    zh: {
+      name: "Hermès Birkin 25",
+      description: "Hermès Birkin 25，采用Clemence 皮革材质。",
+    },
+  },
+  "bag-hermes-picotin-22": {
+    ko: {
+      name: "에르메스 피코탄 22",
+      description: "에르메스 피코탄 22. 클레망스 가죽 소재.",
+    },
+    zh: {
+      name: "Hermès Picotin 22",
+      description: "Hermès Picotin 22，采用Clemence 皮革材质。",
+    },
+  },
+  "bag-hermes-picotin-18": {
+    ko: {
+      name: "에르메스 피코탄 18",
+      description: "에르메스 피코탄 18. 클레망스 가죽 소재.",
+    },
+    zh: {
+      name: "Hermès Picotin 18",
+      description: "Hermès Picotin 18，采用Clemence 皮革材质。",
+    },
+  },
+
   "sneaker-lv-trainer-cream": {
     ko: {
       name: "모노그램 코트 트레이너",
@@ -1481,6 +1640,7 @@ const productTranslations: Record<
       description: "低帮皮革训练鞋，配层叠鞋面、缓震内衬和精致日常廓形。",
     },
   },
+
   "sneaker-golden-star-white": {
     ko: {
       name: "빈티지 스타 가죽 스니커즈",
@@ -1492,6 +1652,7 @@ const productTranslations: Record<
       description: "做旧皮革运动鞋，配绒面革点缀、撞色后跟和柔和旧化质感。",
     },
   },
+
   "sneaker-miu-runner-silver": {
     ko: {
       name: "테크니컬 메시 러너",
@@ -1503,6 +1664,7 @@ const productTranslations: Record<
       description: "轻盈混合材质跑鞋，配绒面革覆层、金属点缀和雕塑感鞋底。",
     },
   },
+
   "watch-cartier-tank-ivory": {
     ko: {
       name: "렉탱귤러 드레스 워치",
@@ -1514,6 +1676,7 @@ const productTranslations: Record<
       description: "精致正装腕表，配纤薄矩形表壳、罗马刻度和抛光皮革表带。",
     },
   },
+
   "watch-rolex-diver-black": {
     ko: {
       name: "오토매틱 다이버 워치",
@@ -1525,6 +1688,7 @@ const productTranslations: Record<
       description: "坚固自动腕表，配旋转表圈、夜光刻度和链带式轮廓。",
     },
   },
+
   "outerwear-moncler-quilted-black": {
     ko: {
       name: "퀼팅 다운 재킷",
@@ -1536,6 +1700,7 @@ const productTranslations: Record<
       description: "保暖绗缝夹克，配立体兜帽、高光泽外层和轻盈保暖填充。",
     },
   },
+
   "outerwear-prada-hooded-slate": {
     ko: {
       name: "후디드 테크니컬 파카",
@@ -1573,6 +1738,7 @@ const valueTranslations: Record<string, Partial<Record<LanguageCode, string>>> =
   "color.white": { ko: "화이트", zh: "白色" },
   "color.silver": { ko: "실버", zh: "银色" },
   "color.slate": { ko: "슬레이트", zh: "岩灰色" },
+  "color.red": { ko: "레드", zh: "红色" },
   "material.leather-and-suede": { ko: "가죽 및 스웨이드", zh: "皮革与绒面革" },
   "material.mesh-and-suede": { ko: "메시 및 스웨이드", zh: "网面与绒面革" },
   "material.stainless-steel": { ko: "스테인리스 스틸", zh: "不锈钢" },
@@ -1651,6 +1817,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
 
     function formatCurrency(amount: number): string {
+      if (amount >= 10000) {
+        if (language === "ko") {
+          return new Intl.NumberFormat("ko-KR", {
+            style: "currency",
+            currency: "KRW",
+            maximumFractionDigits: 0,
+          }).format(amount);
+        }
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        }).format(Math.round(amount / 1350));
+      }
+
       return new Intl.NumberFormat(languageOption.locale, {
         style: "currency",
         currency: "USD",

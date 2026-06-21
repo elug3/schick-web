@@ -6,6 +6,7 @@ import {
   fetchBags,
   bagImage,
   getCategoryImage,
+  productImage,
   searchProducts,
 } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
@@ -186,16 +187,16 @@ function CategoryPillars() {
 
 function BrandTiles() {
   const { t } = useLanguage();
-  const [tiles, setTiles] = useState<{ brand: string; id: string }[]>([]);
+  const [tiles, setTiles] = useState<{ brand: string; id: string; image?: string }[]>([]);
 
   useEffect(() => {
     fetchBags().then((bags) => {
       const seen = new Set<string>();
-      const unique: { brand: string; id: string }[] = [];
+      const unique: { brand: string; id: string; image?: string }[] = [];
       for (const b of bags) {
         if (!seen.has(b.brand)) {
           seen.add(b.brand);
-          unique.push({ brand: b.brand, id: b.id });
+          unique.push({ brand: b.brand, id: b.id, image: b.image });
         }
       }
       setTiles(unique);
@@ -223,11 +224,11 @@ function BrandTiles() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-          {tiles.map(({ brand, id }) => (
+          {tiles.map(({ brand, id, image }) => (
             <Link key={brand} to={`/product/${id}`} className="group relative overflow-hidden">
               <div className="relative overflow-hidden" style={{ paddingBottom: "120%" }}>
                 <img
-                  src={bagImage(brand)}
+                  src={bagImage(brand, image)}
                   alt={brand}
                   className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
@@ -305,7 +306,7 @@ function FeaturedBags() {
                     style={{ paddingBottom: "110%" }}
                   >
                     <img
-                      src={bagImage(bag.brand)}
+                      src={bagImage(bag.brand, bag.image)}
                       alt={bag.name}
                       className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
@@ -378,7 +379,11 @@ function CrossCategoryProducts() {
                 style={{ paddingBottom: "116%" }}
               >
                 <img
-                  src={getCategoryImage(product.category)}
+                  src={
+                    product.image
+                      ? productImage(product.category, String(product.details.Brand ?? ""), product.image)
+                      : getCategoryImage(product.category)
+                  }
                   alt={translateProductName(product.id, product.name)}
                   className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
