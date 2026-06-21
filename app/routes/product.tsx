@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
+import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
 import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
@@ -180,7 +181,6 @@ function ProductLayout({ product }: { product: ServerProduct }) {
 function ProductInfo({ product }: { product: ServerProduct }) {
   const {
     t,
-    formatCurrency,
     translateProductDescription,
     translateProductName,
     translateValue,
@@ -234,9 +234,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
 
       {/* Price + stock */}
       <div className="mt-5 flex items-baseline gap-3">
-        <span className="text-3xl font-semibold tracking-tight text-zinc-950">
-          {formatCurrency(product.price)}
-        </span>
+        <ProductPrice price={product.price} size="lg" />
         <span
           className={`text-[10px] font-semibold uppercase tracking-widest ${inStock ? "text-emerald-600" : "text-zinc-400"}`}
         >

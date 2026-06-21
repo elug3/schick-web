@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { type User, getMe, logout } from "~/lib/auth";
 import { type Bag, fetchBags, bagImage } from "~/lib/api";
+import { ProductPrice } from "~/components/product-price";
 import { useLanguage } from "~/lib/i18n";
 
 type Section = "wishlist" | "coupons" | "orders" | "settings" | "support";
@@ -188,7 +189,7 @@ export default function Profile() {
 // ── Wishlist ───────────────────────────────────────────────────────────────
 
 function WishlistSection() {
-  const { t, formatCurrency, translateProductName } = useLanguage();
+  const { t, translateProductName } = useLanguage();
   const [items, setItems] = useState<Bag[]>([]);
 
   function remove(id: string) {
@@ -219,7 +220,7 @@ function WishlistSection() {
                   <p className="text-xs font-medium text-zinc-950 leading-snug">
                     {translateProductName(item.id, item.name)}
                   </p>
-                  <p className="text-xs text-zinc-500">{formatCurrency(item.price)}</p>
+                  <ProductPrice price={item.price} />
                 </div>
               </Link>
               <button

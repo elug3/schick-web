@@ -13,6 +13,7 @@ import {
   isCategoryFacet,
   productMatchesFacetValue,
 } from "~/lib/catalog";
+import { ProductPrice } from "~/components/product-price";
 import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
@@ -197,7 +198,7 @@ function FacetResults({
   facet: CategoryFacet;
   value: string;
 }) {
-  const { t, formatCurrency, translateProductName } = useLanguage();
+  const { t, translateProductName } = useLanguage();
   const [products, setProducts] = useState<DisplayProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -250,9 +251,7 @@ function FacetResults({
               <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
                 {translateProductName(product.id, product.name)}
               </p>
-              <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-                {formatCurrency(product.price)}
-              </p>
+              <ProductPrice price={product.price} />
             </Link>
           ))}
         </div>
