@@ -125,17 +125,20 @@ export default function CheckoutPage() {
             total: formatCurrency(checkoutTotal),
           });
 
-  function validateFields(fields: (keyof FormState)[]): boolean {
+  function validateFields(fields: (keyof FormState)[]): keyof FormState | null {
     const next: Partial<Record<keyof FormState, string>> = {};
+    let firstInvalidField: keyof FormState | null = null;
 
     for (const field of fields) {
       if (!form[field].trim()) {
         next[field] = t("checkout.required");
+        firstInvalidField ??= field;
       }
     }
 
     if (fields.includes("email") && form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       next.email = t("checkout.validEmail");
+      firstInvalidField ??= "email";
     }
 
     setErrors((prev) => ({
@@ -143,15 +146,29 @@ export default function CheckoutPage() {
       ...Object.fromEntries(fields.map((field) => [field, undefined])),
       ...next,
     }));
-    return Object.keys(next).length === 0;
+    return firstInvalidField;
   }
 
-  function validateStep(step: CheckoutStep): boolean {
+  function validateStep(step: CheckoutStep): keyof FormState | null {
     return validateFields(stepFields[step]);
   }
 
+  function scrollToField(field: keyof FormState) {
+    requestAnimationFrame(() => {
+      const element = document.getElementById(field);
+      if (!element) return;
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.focus({ preventScroll: true });
+    });
+  }
+
   function handleNextStep() {
-    if (!nextStep || !validateStep(activeStep)) return;
+    if (!nextStep) return;
+    const firstInvalidField = validateStep(activeStep);
+    if (firstInvalidField) {
+      scrollToField(firstInvalidField);
+      return;
+    }
     setActiveStep(nextStep);
   }
 
@@ -165,7 +182,11 @@ export default function CheckoutPage() {
       handleNextStep();
       return;
     }
-    if (!validateStep("payment")) return;
+    const firstInvalidField = validateStep("payment");
+    if (firstInvalidField) {
+      scrollToField(firstInvalidField);
+      return;
+    }
 
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1200));
@@ -669,7 +690,7 @@ function Field({
         aria-required={required}
         onChange={(e) => onChange(e.target.value)}
         className={[
-          "h-12 w-full border bg-white px-4 text-sm text-zinc-950 outline-none transition",
+          "h-12 w-full scroll-mt-32 border bg-white px-4 text-sm text-zinc-950 outline-none transition",
           error
             ? "border-red-400 focus:border-red-500"
             : "border-zinc-200 focus:border-zinc-950",
