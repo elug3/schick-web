@@ -15,10 +15,10 @@ permissions:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: web
-  ECS_SERVICE: default-schick-web-d90d-service-pkkf3qyk
+  ECS_SERVICE: schick-web
   ECS_CLUSTER: production
-  ECS_TASK_DEFINITION: .aws/describe-task-definition
-  CONTAINER_NAME: Main
+  ECS_TASK_DEFINITION: .aws/task-definition.json
+  CONTAINER_NAME: web-container
 
 jobs:
   deploy:

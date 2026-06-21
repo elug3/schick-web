@@ -164,12 +164,12 @@ Merging to `master` deploys to Amazon ECS in `us-east-1`:
 
 - **ECR repository:** `web`
 - **ECS cluster:** `production`
-- **ECS service:** `default-schick-web-d90d-service-pkkf3qyk`
-- **Task definition:** [.aws/describe-task-definition](.aws/describe-task-definition)
+- **ECS service:** `schick-web`
+- **Task definition:** [.aws/task-definition.json](.aws/task-definition.json)
 
-Deployment uses GitHub OIDC to assume `arn:aws:iam::845061289093:role/github-actions-deploy-role`. Ensure that IAM role trusts this repository and has permissions for ECR push and ECS service updates.
+Deployment uses GitHub OIDC to assume `arn:aws:iam::845061289093:role/github-actions-deploy-role`. That role has ECR push and ECS deploy permissions. Ensure the role's OIDC trust policy includes this repository.
 
-The container listens on port `80` inside the task (`PORT=80`). Override backend URLs at deploy time by adding environment variables to the ECS task definition.
+The container listens on port `3000` behind the `schick-web-3000-tg` load balancer target group. Backend API calls are routed through `SCHICK_API_BASE_URL=http://proxy.schick.local`.
 
 ## Deployment Notes
 
