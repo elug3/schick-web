@@ -18,6 +18,7 @@ export interface MockProduct {
   family: string;
   status: MockProductStatus;
   image?: string;
+  images?: string[];
   createdAt: string;
 }
 
@@ -97,6 +98,7 @@ export function toProductResponse(product: MockProduct) {
     category: product.category,
     status: product.status,
     image: product.image,
+    images: product.images,
     createdAt: product.createdAt,
   };
 }

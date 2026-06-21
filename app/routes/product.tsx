@@ -94,13 +94,11 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
 
 function ProductLayout({ product }: { product: ServerProduct }) {
   const { t, translateProductName } = useLanguage();
-  const img = productImage(product.category, product.brand, product.image);
-  const images = [
-    { src: img, position: "object-center" },
-    { src: img, position: "object-top" },
-    { src: img, position: "object-bottom" },
-    { src: img, position: "object-left" },
-  ];
+  const fallback = productImage(product.category, product.brand, product.image);
+  const images = (product.images?.length ? product.images : [fallback]).map((src) => ({
+    src,
+    position: "object-center",
+  }));
 
   const [activeImg, setActiveImg] = useState(0);
 
