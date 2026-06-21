@@ -517,15 +517,15 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "announcement.discount": "30% 할인",
 
     "nav.home": "홈",
-    "nav.bag": "백",
+    "nav.bag": "장바구니",
     "nav.profile": "프로필",
-    "nav.productType": "제품 유형",
+    "nav.productType": "카테고리",
     "nav.brand": "브랜드",
     "nav.style": "스타일",
     "nav.family": "대상",
-    "nav.shoppingBag": "쇼핑백",
+    "nav.shoppingBag": "장바구니",
     "nav.main": "메인",
-    "nav.primary": "기본",
+    "nav.primary": "주요 메뉴",
 
     "category.totes": "토트백",
     "category.shoulderBags": "숄더백",
@@ -557,60 +557,60 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "footer.authenticityGuarantee": "정품 보증",
     "footer.privacyPolicy": "개인정보 처리방침",
     "footer.termsConditions": "이용 약관",
-    "footer.rights": "© 2026 Schick. 모든 권리 보유.",
-    "footer.tagline": "프리미엄 백 · 정품 인증 · 큐레이션",
+    "footer.rights": "© 2026 Schick. All rights reserved.",
+    "footer.tagline": "프리미엄 가방 · 정품 보증 · 엄선 큐레이션",
 
-    "home.metaTitle": "Schick — 엄선한 럭셔리 백",
+    "home.metaTitle": "Schick — 엄선한 럭셔리 가방",
     "home.metaDescription":
-      "세계적으로 사랑받는 브랜드의 정품 럭셔리 백.",
+      "세계적으로 사랑받는 브랜드의 정품 럭셔리 가방.",
     "home.eyebrow": "2026 새 시즌",
     "home.heroTitleLine1": "아이콘을",
-    "home.heroTitleLine2": "들다.",
+    "home.heroTitleLine2": "걸치다.",
     "home.heroDescription":
-      "타협 없는 소재, 정교한 장인정신, 그리고 세계적인 브랜드의 정품 럭셔리 백.",
-    "home.shopNow": "지금 쇼핑",
+      "타협 없는 소재와 정교한 장인정신으로 완성한, 세계 명품 브랜드의 정품 럭셔리 가방.",
+    "home.shopNow": "쇼핑하기",
     "home.styleConsult": "스타일 상담",
-    "home.heroAlt": "럭셔리 백 히어로",
-    "home.heroBadge": "새 시즌 — 엄선한 럭셔리",
-    "home.shopByBrand": "브랜드별 쇼핑",
+    "home.heroAlt": "럭셔리 가방 메인 이미지",
+    "home.heroBadge": "새 시즌 — 엄선 럭셔리",
+    "home.shopByBrand": "브랜드별 보기",
     "home.viewAll": "전체 보기",
-    "home.featuredBags": "추천 백",
-    "home.seeAll": "모두 보기",
-    "home.failedToLoadBags": "가방을 불러오지 못했습니다",
-    "home.lowStock": "재고 임박",
+    "home.featuredBags": "추천 가방",
+    "home.seeAll": "전체 보기",
+    "home.failedToLoadBags": "상품을 불러오지 못했습니다",
+    "home.lowStock": "재고 소진 임박",
     "home.limitedTime": "기간 한정",
     "home.summerEdit": "서머 에디트",
     "home.saleDescription": "선정 상품 30% 할인",
-    "home.shopSale": "세일 쇼핑",
+    "home.shopSale": "세일 상품 보기",
     "home.summerEditAlt": "서머 에디트",
     "home.categoryEyebrow": "큐레이션 카테고리",
-    "home.categoryTitle": "더 선명한 럭셔리 셀렉션.",
+    "home.categoryTitle": "더 또렷한 럭셔리 큐레이션",
     "home.categoryDescription":
-      "카테고리 중심의 한국 럭셔리 부티크 무드에서 영감을 받은 오리지널 셀렉션: 핸드백, 스니커즈, 시계, 패딩 아우터.",
+      "카테고리별로 엄선한 럭셔리 컬렉션. 핸드백, 스니커즈, 시계, 패딩 아우터를 만나보세요.",
     "home.shopCollection": "컬렉션 보기",
     "home.categoryBags": "여성 핸드백",
     "home.categoryBagsDescription":
-      "구조적인 아이콘, 부드러운 캐리올, 데일리 스테이트먼트 피스.",
+      "구조감 있는 아이콘 백부터 부드러운 토트, 데일리 포인트 아이템까지.",
     "home.categorySneakers": "남성/여성 스니커즈",
     "home.categorySneakersDescription":
-      "고급 소재와 스트리트 감각의 라인을 갖춘 세련된 트레이너.",
+      "고급 소재와 세련된 실루엣의 스니커즈.",
     "home.categoryWatches": "남성/여성 시계",
     "home.categoryWatchesDescription":
-      "일상적인 정밀함을 위한 드레스 및 스포츠 워치 프로필.",
+      "일상에 어울리는 드레스·스포츠 시계.",
     "home.categoryOuterwear": "남성/여성 패딩",
     "home.categoryOuterwearDescription":
-      "깔끔한 시티 실루엣의 테크니컬 패딩 레이어.",
-    "home.crossCategoryEyebrow": "새 카탈로그",
-    "home.crossCategoryTitle": "모든 에디트의 제품",
+      "깔끔한 실루엣의 기능성 패딩 아우터.",
+    "home.crossCategoryEyebrow": "신규 카탈로그",
+    "home.crossCategoryTitle": "카테고리별 추천 상품",
     "home.crossCategoryDescription":
-      "오리지널 제품 카피와 카테고리 이미지를 기반으로 가방을 넘어 확장한 셀렉션.",
+      "가방을 넘어 스니커즈, 시계, 아우터까지 폭넓게 준비했습니다.",
     "home.categoryLabel.bags": "핸드백",
     "home.categoryLabel.sneakers": "스니커즈",
     "home.categoryLabel.watches": "시계",
     "home.categoryLabel.outerwear": "패딩",
 
     "product.metaTitle": "제품 | Schick",
-    "product.metaDescription": "정품 럭셔리 백.",
+    "product.metaDescription": "정품 럭셔리 가방.",
     "product.signInRequired": "로그인이 필요합니다",
     "product.signInRequiredDescription":
       "제품 상세 정보를 보려면 로그인해 주세요.",
@@ -619,9 +619,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.notFound": "제품을 찾을 수 없습니다",
     "product.notFoundDescription":
       "이 제품을 찾을 수 없습니다. 품절되었거나 이동되었거나 더 이상 제공되지 않을 수 있습니다.",
-    "product.browseAllBags": "모든 백 보기",
+    "product.browseAllBags": "전체 가방 보기",
     "product.home": "홈",
-    "product.bags": "백",
+    "product.bags": "가방",
     "product.inStock": "재고 있음",
     "product.outOfStock": "품절",
     "product.brand": "브랜드",
@@ -630,7 +630,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.color": "색상",
     "product.premiumLeather": "프리미엄 가죽",
     "product.added": "추가됨",
-    "product.addToBag": "백에 담기",
+    "product.addToBag": "장바구니에 담기",
     "product.bookStyleConsult": "스타일 상담 예약",
     "product.removeWishlist": "위시리스트에서 제거",
     "product.addWishlist": "위시리스트에 추가",
@@ -651,32 +651,32 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.badgeNew": "신상품",
     "product.badgeFeatured": "추천",
 
-    "cart.metaTitle": "쇼핑백 — Schick",
+    "cart.metaTitle": "장바구니 — Schick",
     "cart.metaDescription":
-      "선택한 럭셔리 백을 확인하고 결제로 이동하세요.",
+      "담은 상품을 확인하고 결제를 진행하세요.",
     "cart.continueShopping": "쇼핑 계속하기",
-    "cart.shoppingBag": "쇼핑백",
+    "cart.shoppingBag": "장바구니",
     "cart.item": "개",
     "cart.items": "개",
-    "cart.bagItems": "백 상품",
+    "cart.bagItems": "담은 상품",
     "cart.size": "사이즈 {size}",
     "cart.each": "개당 {price}",
     "cart.remove": "삭제",
     "cart.proceedToCheckout": "결제로 이동",
-    "cart.completeTheLook": "룩 완성하기",
-    "cart.pairsWellWith": "함께 잘 어울려요",
-    "cart.mostViewed": "가장 많이 본 상품",
-    "cart.empty": "쇼핑백이 비어 있습니다.",
+    "cart.completeTheLook": "스타일링 완성하기",
+    "cart.pairsWellWith": "함께 코디하기 좋은 상품",
+    "cart.mostViewed": "인기 상품",
+    "cart.empty": "장바구니가 비어 있습니다.",
     "cart.emptyDescription":
-      "세계적으로 사랑받는 메종의 인증된 럭셔리 백 셀렉션을 만나보세요.",
-    "cart.shopBags": "백 쇼핑하기",
+      "세계 명품 브랜드의 정품 럭셔리 가방을 만나보세요.",
+    "cart.shopBags": "가방 둘러보기",
     "cart.orderSummary": "주문 요약",
     "cart.subtotal": "소계",
     "cart.promo": "프로모션 ({code})",
     "cart.shipping": "배송",
     "cart.total": "합계",
     "cart.complimentary": "무료",
-    "cart.freeShippingProgress": "무료 배송까지 {amount} 남았습니다.",
+    "cart.freeShippingProgress": "무료 배송까지 {amount} 더 담으세요.",
     "cart.promoCode": "프로모션 코드",
     "cart.apply": "적용",
     "cart.invalidPromo": "유효하지 않은 프로모션 코드",
@@ -688,7 +688,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "cart.increaseQuantity": "수량 늘리기",
     "cart.needAssistance": "도움이 필요하신가요?",
     "cart.assistanceDescription":
-      "개인 쇼핑 지원은 Schick 고객 서비스팀에 문의하세요.",
+      "퍼스널 쇼핑 상담은 Schick 고객센터로 문의해 주세요.",
 
     "checkout.metaTitle": "결제 — Schick",
     "checkout.metaDescription": "안전한 결제로 Schick 주문을 완료하세요.",
@@ -696,10 +696,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.required": "필수 항목",
     "checkout.validEmail": "유효한 이메일을 입력하세요",
     "checkout.nothingToCheckout": "결제할 상품이 없습니다",
-    "checkout.emptyBag": "쇼핑백이 비어 있습니다. 먼저 상품을 추가하세요.",
-    "checkout.backToBag": "백으로 돌아가기",
+    "checkout.emptyBag": "장바구니가 비어 있습니다. 상품을 먼저 담아 주세요.",
+    "checkout.backToBag": "장바구니로 돌아가기",
     "checkout.secureCheckout": "안전 결제",
-    "checkout.completeOrder": "주문 완료",
+    "checkout.completeOrder": "주문하기",
     "checkout.contact": "연락처",
     "checkout.email": "이메일",
     "checkout.phone": "전화번호",
@@ -727,21 +727,21 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.processing": "처리 중…",
     "checkout.placeOrder": "주문하기",
     "checkout.placeOrderWithTotal": "주문하기 — {total}",
-    "checkout.yourBag": "내 백 ({count})",
+    "checkout.yourBag": "장바구니 ({count})",
     "checkout.stepInformation": "연락처 및 배송지",
     "checkout.stepDelivery": "배송 방법",
     "checkout.stepPayment": "결제",
-    "checkout.stepCount": "{total}단계 중 {current}단계",
-    "checkout.continueToDelivery": "배송 방법으로 계속",
-    "checkout.continueToPayment": "결제로 계속",
+    "checkout.stepCount": "총 {total}단계 중 {current}단계",
+    "checkout.continueToDelivery": "배송 방법 선택",
+    "checkout.continueToPayment": "결제 정보 입력",
     "checkout.previousStep": "이전 단계",
 
     "confirmation.metaTitle": "주문 확인 — Schick",
     "confirmation.metaDescription": "Schick 주문이 성공적으로 접수되었습니다.",
     "confirmation.orderConfirmed": "주문 확인",
     "confirmation.thankYou": "감사합니다",
-    "confirmation.emailTo": "확인 이메일이 {email}(으)로 전송됩니다.",
-    "confirmation.emailShortly": "확인 이메일이 곧 전송됩니다.",
+    "confirmation.emailTo": "확인 이메일을 {email}(으)로 보내드립니다.",
+    "confirmation.emailShortly": "확인 이메일을 곧 보내드립니다.",
     "confirmation.order": "주문",
     "confirmation.total": "합계",
     "confirmation.viewOrders": "주문 보기",
@@ -767,24 +767,24 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.stepThreeEyebrow": "3단계",
     "signup.termsTitle": "회원 약관 확인",
     "signup.termsDescription":
-      "Schick 계정을 만들기 전에 라이선스 약관을 확인해 주세요.",
+      "Schick 계정을 만들기 전에 이용약관을 확인해 주세요.",
     "signup.licenseIntro":
-      "Schick에 가입하면 개인 쇼핑, 계정 관리, 주문 지원을 위해 서비스를 이용하는 데 동의합니다.",
+      "Schick 회원으로 가입하면 쇼핑, 계정 관리, 주문 관련 서비스 이용에 동의하게 됩니다.",
     "signup.licenseTermOne":
-      "정확한 계정 정보를 제공하고 최신 상태로 유지합니다.",
+      "본인의 정확한 정보를 제공하고, 변경 시 즉시 업데이트합니다.",
     "signup.licenseTermTwo":
-      "상품 탐색, 결제, 계정 서비스에 대한 Schick 약관에 동의합니다.",
+      "상품 조회, 결제, 계정 서비스 이용에 관한 Schick 이용약관에 동의합니다.",
     "signup.licenseTermThree":
-      "마케팅 메시지는 선택 사항이며 나중에 변경할 수 있음을 이해합니다.",
-    "signup.agreeTerms": "라이선스 약관 및 개인정보 처리방침에 동의합니다.",
+      "마케팅 수신은 선택 사항이며, 언제든지 변경할 수 있습니다.",
+    "signup.agreeTerms": "이용약관 및 개인정보 처리방침에 동의합니다.",
     "signup.securityTitle": "안전한 비밀번호 만들기",
     "signup.securityDescription":
       "강력한 비밀번호를 입력하고 한 번 더 확인해 주세요.",
     "signup.password": "비밀번호",
-    "signup.passwordAgain": "비밀번호 다시 입력",
+    "signup.passwordAgain": "비밀번호 확인",
     "signup.passwordSafety": "비밀번호 안전도",
     "signup.passwordWeak": "약함",
-    "signup.passwordGood": "좋음",
+    "signup.passwordGood": "보통",
     "signup.passwordStrong": "강함",
     "signup.passwordRuleLength": "8자 이상",
     "signup.passwordRuleCase": "대문자와 소문자 포함",
@@ -794,30 +794,30 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.passwordsDoNotMatch": "비밀번호가 일치하지 않습니다.",
     "signup.profileTitle": "프로필 완성",
     "signup.profileDescription":
-      "이름을 입력하고 큐레이션 상품 소식 수신 여부를 선택하세요.",
+      "이름을 입력하고 마케팅 수신 여부를 선택해 주세요.",
     "signup.name": "이름",
     "signup.namePlaceholder": "이름",
-    "signup.marketingConsent": "마케팅 업데이트 수신에 동의합니다.",
+    "signup.marketingConsent": "마케팅 정보 수신에 동의합니다.",
     "signup.marketingConsentDescription":
-      "신상품, 프라이빗 에디트, 프로모션 소식을 받아보세요. 언제든지 수신 거부할 수 있습니다.",
+      "신상품, 큐레이션 소식, 프로모션 안내를 받아보실 수 있습니다. 언제든지 수신을 거부할 수 있습니다.",
     "signup.continue": "계속",
     "signup.finishSignup": "계정 만들기",
     "signup.backToSignIn": "로그인으로 돌아가기",
-    "signup.errorTerms": "계속하려면 라이선스 약관에 동의해 주세요.",
+    "signup.errorTerms": "계속하려면 이용약관에 동의해 주세요.",
     "signup.errorPasswordWeak": "더 안전한 비밀번호를 선택해 주세요.",
     "signup.errorPasswordMatch": "두 비밀번호가 일치하는지 확인해 주세요.",
     "signup.errorName": "이름을 입력해 주세요.",
     "signup.welcomeEyebrow": "환영합니다",
     "signup.welcomeTitle": "{name}님, 환영합니다",
     "signup.welcomeDescription":
-      "Schick 계정이 준비되었습니다. 이제 프로필, 위시리스트, 쿠폰, 주문을 관리할 수 있습니다.",
+      "Schick 계정이 준비되었습니다. 프로필, 위시리스트, 쿠폰, 주문 내역을 관리할 수 있습니다.",
     "signup.goToAccount": "계정으로 이동",
 
     "profile.metaTitle": "계정 | Schick",
     "profile.metaDescription": "Schick 계정을 관리하세요.",
     "profile.signInToSchick": "Schick에 로그인",
     "profile.signInDescription":
-      "위시리스트, 주문, 개인 설정에 접근하세요.",
+      "위시리스트, 주문 내역, 계정 설정을 이용하세요.",
     "profile.signIn": "로그인",
     "profile.account": "계정",
     "profile.signOut": "로그아웃",
@@ -835,7 +835,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "profile.couponAlready": "이미 계정에 있는 쿠폰입니다.",
     "profile.invalidCoupon": "유효하지 않은 쿠폰 코드입니다. 다시 확인해 주세요.",
     "profile.noActiveCoupons": "활성 쿠폰이 없습니다.",
-    "profile.usedExpired": "사용됨 및 만료됨",
+    "profile.usedExpired": "사용·만료",
     "profile.expired": "만료됨",
     "profile.used": "사용됨",
     "profile.expires": "만료일",
@@ -853,13 +853,13 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "profile.currentPassword": "현재 비밀번호",
     "profile.newPassword": "새 비밀번호",
     "profile.confirmPassword": "새 비밀번호 확인",
-    "profile.updatePassword": "비밀번호 업데이트",
+    "profile.updatePassword": "비밀번호 변경",
     "profile.emailNotifications": "이메일 알림",
     "profile.orderUpdates": "주문 및 배송 업데이트",
     "profile.promotions": "프로모션 및 혜택",
-    "profile.wishlistDrops": "위시리스트 가격 인하",
+    "profile.wishlistDrops": "위시리스트 할인 알림",
     "profile.newArrivals": "신상품",
-    "profile.dangerZone": "위험 구역",
+    "profile.dangerZone": "주의",
     "profile.deleteAccount": "계정 삭제",
     "profile.faq": "자주 묻는 질문",
     "profile.contactUs": "문의하기",
@@ -874,7 +874,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "주문이 발송되면 추적 링크가 포함된 이메일을 받게 됩니다. 주문 섹션에서도 추적 정보를 확인할 수 있습니다.",
     "profile.faqReturnPolicy": "반품 정책은 무엇인가요?",
     "profile.faqReturnPolicyAnswer":
-      "배송 후 14일 이내 반품을 받습니다. 상품은 미사용 상태와 원래 포장이어야 하며, 반품 시작을 위해 지원팀에 문의하세요.",
+      "배송 완료 후 14일 이내 반품이 가능합니다. 상품은 미사용 상태이며 원래 포장을 유지해야 합니다. 반품은 고객센터로 문의해 주세요.",
     "profile.faqAuthenticated": "모든 상품이 정품 인증되나요?",
     "profile.faqAuthenticatedAnswer":
       "네. Schick의 모든 상품은 등록 전 엄격한 12단계 인증 과정을 거칩니다.",
@@ -897,7 +897,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
 
     "admin.newProduct": "새 제품",
     "admin.newProductDescription": "카탈로그에 제품을 추가하세요.",
-    "admin.accessDenied": "접근 거부",
+    "admin.accessDenied": "접근 권한 없음",
     "admin.accessDeniedDescription":
       "관리자와 제품 매니저만 새 제품을 추가할 수 있습니다.",
     "admin.goHome": "홈으로",
@@ -1441,7 +1441,7 @@ const productTranslations: Record<
     ko: {
       name: "미디엄 디올 북 토트",
       description:
-        "일상 필수품을 담을 수 있도록 디자인된 구조적인 에디토리얼 무드의 자수 캔버스 토트.",
+        "일상 필수품을 담기 좋은, 구조감 있는 에디토리얼 자수 캔버스 토트.",
     },
     zh: {
       name: "中号 Dior Book Tote",
@@ -1474,7 +1474,7 @@ const productTranslations: Record<
     ko: {
       name: "모노그램 코트 트레이너",
       description:
-        "레이어드 패널, 쿠션 라이닝, 세련된 데일리 실루엣이 특징인 로우 프로파일 가죽 트레이너.",
+        "레이어드 패널과 쿠션 안감, 세련된 실루엣의 로우 프로파일 가죽 스니커즈.",
     },
     zh: {
       name: "老花 Court 训练鞋",
@@ -1485,7 +1485,7 @@ const productTranslations: Record<
     ko: {
       name: "빈티지 스타 가죽 스니커즈",
       description:
-        "스웨이드 포인트, 대비되는 힐 디테일, 자연스러운 빈티지 마감의 디스트레스드 가죽 스니커즈.",
+        "스웨이드 포인트와 대비되는 힐 디테일, 자연스러운 빈티지 마감의 디스트레스드 가죽 스니커즈.",
     },
     zh: {
       name: "复古星标皮革运动鞋",
@@ -1496,7 +1496,7 @@ const productTranslations: Record<
     ko: {
       name: "테크니컬 메시 러너",
       description:
-        "스웨이드 오버레이, 메탈릭 포인트, 조각적인 솔을 갖춘 가벼운 믹스 소재 러너.",
+        "스웨이드 오버레이, 메탈릭 포인트, 입체적인 아웃솔의 가벼운 믹스 소재 러닝화.",
     },
     zh: {
       name: "技术网面跑鞋",
@@ -1507,7 +1507,7 @@ const productTranslations: Record<
     ko: {
       name: "렉탱귤러 드레스 워치",
       description:
-        "슬림한 직사각 케이스, 로마 숫자 인덱스, 폴리시드 가죽 스트랩이 돋보이는 정제된 드레스 워치.",
+        "슬림한 직사각 케이스, 로마 숫자 인덱스, 광택 가죽 스트랩의 세련된 드레스 워치.",
     },
     zh: {
       name: "矩形正装腕表",
@@ -1518,7 +1518,7 @@ const productTranslations: Record<
     ko: {
       name: "오토매틱 다이버 워치",
       description:
-        "회전 베젤, 야광 인덱스, 브레이슬릿 스타일 프로필을 갖춘 견고한 오토매틱 워치.",
+        "회전 베젤, 야광 인덱스, 브레이슬릿 스타일의 견고한 오토매틱 시계.",
     },
     zh: {
       name: "自动潜水腕表",
@@ -1529,7 +1529,7 @@ const productTranslations: Record<
     ko: {
       name: "퀼팅 다운 재킷",
       description:
-        "조형적인 후드, 은은한 광택의 셸, 가벼운 보온 충전재를 갖춘 따뜻한 퀼팅 재킷.",
+        "입체적인 후드, 은은한 광택의 아웃쉘, 가벼운 보온 충전재의 따뜻한 퀼팅 재킷.",
     },
     zh: {
       name: "绗缝羽绒夹克",
@@ -1540,7 +1540,7 @@ const productTranslations: Record<
     ko: {
       name: "후디드 테크니컬 파카",
       description:
-        "깔끔한 하드웨어, 패딩 보온성, 미니멀한 도시 실루엣을 갖춘 테크니컬 후드 파카.",
+        "깔끔한 하드웨어, 패딩 보온성, 미니멀한 실루엣의 테크니컬 후드 파카.",
     },
     zh: {
       name: "连帽技术派克大衣",
