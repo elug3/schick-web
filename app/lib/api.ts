@@ -154,6 +154,7 @@ function normalizeProduct(
     "Gender",
     "Capacity",
     "Type",
+    "Style",
   ]) {
     if (raw[k] != null) details[k] = raw[k] as string | number;
   }

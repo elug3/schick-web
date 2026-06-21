@@ -48,8 +48,10 @@ export function searchMockProducts(params: URLSearchParams): MockProduct[] {
       const normalizedValue = value.trim().toLowerCase();
       if (!normalizedValue || key === "category" || key === "query") continue;
 
+      // Structured facet filters require an exact (case-insensitive) match so
+      // that values like "Men" do not partially match "Women".
       const productValue = getSearchableValue(product, key);
-      if (!productValue.toLowerCase().includes(normalizedValue)) return false;
+      if (productValue.toLowerCase() !== normalizedValue) return false;
     }
 
     if (!query) return true;
