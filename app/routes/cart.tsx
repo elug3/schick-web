@@ -7,6 +7,7 @@ import {
   PROMO_DISCOUNT,
 } from "../lib/cart";
 import { useLanguage } from "../lib/i18n";
+import { ProductPrice } from "../components/product-price";
 import { useCart } from "../lib/useCart";
 
 export function meta() {
@@ -221,9 +222,10 @@ function Recommendations({
   subtitle: string;
   products: Bag[];
 }) {
-  const { formatCurrency, translateProductName } = useLanguage();
+  const { translateProductName } = useLanguage();
 
   if (products.length === 0) return null;
+
   return (
     <section className="mt-16 border-t border-zinc-100 pt-12 md:mt-20 md:pt-16">
       <div className="mb-8">
@@ -257,9 +259,7 @@ function Recommendations({
             <p className="mt-0.5 text-sm font-medium text-zinc-950">
               {translateProductName(product.id, product.name)}
             </p>
-            <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-              {formatCurrency(product.price)}
-            </p>
+            <ProductPrice price={product.price} />
           </Link>
         ))}
       </div>

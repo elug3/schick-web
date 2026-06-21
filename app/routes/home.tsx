@@ -10,6 +10,7 @@ import {
   searchProducts,
 } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
+import { ProductPrice } from "../components/product-price";
 
 export function meta() {
   return [
@@ -229,7 +230,7 @@ function BrandTiles() {
 // ── Featured Bags ──────────────────────────────────────────────────────────
 
 function FeaturedBags() {
-  const { t, formatCurrency, translateProductName } = useLanguage();
+  const { t, translateProductName } = useLanguage();
   const [bags, setBags] = useState<Bag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -298,9 +299,7 @@ function FeaturedBags() {
                   <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
                     {translateProductName(bag.id, bag.name)}
                   </p>
-                  <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-                    {formatCurrency(bag.price)}
-                  </p>
+                  <ProductPrice price={bag.price} />
                 </Link>
               ))}
         </div>
@@ -312,7 +311,7 @@ function FeaturedBags() {
 // ── Cross-category products ────────────────────────────────────────────────
 
 function CrossCategoryProducts() {
-  const { t, formatCurrency, translateProductName } = useLanguage();
+  const { t, translateProductName } = useLanguage();
   const [products, setProducts] = useState<DisplayProduct[]>([]);
 
   useEffect(() => {
@@ -373,9 +372,7 @@ function CrossCategoryProducts() {
               <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
                 {translateProductName(product.id, product.name)}
               </p>
-              <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-                {formatCurrency(product.price)}
-              </p>
+              <ProductPrice price={product.price} />
             </Link>
           ))}
         </div>
