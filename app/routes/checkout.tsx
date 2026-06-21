@@ -41,7 +41,7 @@ const initialForm: FormState = {
   city: "",
   state: "",
   zip: "",
-  country: "United States",
+  country: "",
   phone: "",
   delivery: "standard",
   cardName: "",
@@ -70,6 +70,7 @@ const stepFields: Record<CheckoutStep, (keyof FormState)[]> = {
 
 export default function CheckoutPage() {
   const { t, formatCurrency, translateProductName } = useLanguage();
+  const lockedCountry = t("checkout.countryValue");
   const navigate = useNavigate();
   const { items, clear, totals } = useCart();
   const [form, setForm] = useState<FormState>(initialForm);
@@ -86,6 +87,10 @@ export default function CheckoutPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, country: lockedCountry }));
+  }, [lockedCountry]);
 
   const summary = totals(promoCode);
   const expressFee = form.delivery === "express" ? 25 : 0;
@@ -361,8 +366,9 @@ export default function CheckoutPage() {
                     label={t("checkout.country")}
                     id="country"
                     value={form.country}
-                    onChange={(v) => updateField("country", v)}
+                    onChange={() => {}}
                     autoComplete="country-name"
+                    readOnly
                   />
                 </CheckoutSection>
               </div>
@@ -656,6 +662,7 @@ function Field({
   autoComplete,
   placeholder,
   required = false,
+  readOnly = false,
 }: {
   label: string;
   id: string;
@@ -666,6 +673,7 @@ function Field({
   autoComplete?: string;
   placeholder?: string;
   required?: boolean;
+  readOnly?: boolean;
 }) {
   return (
     <div>
@@ -687,13 +695,17 @@ function Field({
         autoComplete={autoComplete}
         placeholder={placeholder}
         required={required}
+        readOnly={readOnly}
         aria-required={required}
+        aria-readonly={readOnly}
         onChange={(e) => onChange(e.target.value)}
         className={[
           "h-12 w-full scroll-mt-32 border bg-white px-4 text-sm text-zinc-950 outline-none transition",
-          error
-            ? "border-red-400 focus:border-red-500"
-            : "border-zinc-200 focus:border-zinc-950",
+          readOnly
+            ? "cursor-default border-zinc-100 bg-zinc-50 text-zinc-500"
+            : error
+              ? "border-red-400 focus:border-red-500"
+              : "border-zinc-200 focus:border-zinc-950",
         ].join(" ")}
       />
       {error && <p className="mt-1.5 text-[11px] text-red-600">{error}</p>}
