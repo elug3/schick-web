@@ -5,6 +5,7 @@ import {
   type DisplayProduct,
   fetchBags,
   bagImage,
+  heroBagImage,
   getCategoryImage,
   productImage,
   searchProducts,
@@ -34,56 +35,111 @@ export default function Home() {
 
 // ── Hero ───────────────────────────────────────────────────────────────────
 
+const HERO_BAG_ID = "bag-hermes-birkin-25";
+
 function Hero() {
-  const { t } = useLanguage();
+  const { t, formatCurrency, translateProductName } = useLanguage();
+  const [heroBag, setHeroBag] = useState<Bag | null>(null);
+
+  useEffect(() => {
+    fetchBags()
+      .then((bags) => {
+        const selected =
+          bags.find((bag) => bag.id === HERO_BAG_ID) ??
+          bags.find((bag) => bag.brand === "Hermès") ??
+          bags[0] ??
+          null;
+        setHeroBag(selected);
+      })
+      .catch(() => {});
+  }, []);
+
+  const shopLink = heroBag
+    ? `/product/${heroBag.id}`
+    : "/category/product-type/handbags";
 
   return (
-    <section className="flex min-h-[88vh] flex-col md:flex-row">
-      {/* Text pane */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8 py-20 text-center md:items-start md:px-16 md:text-left">
-        <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
-          {t("home.eyebrow")}
-        </p>
-        <h1
-          className="text-6xl font-light leading-none tracking-tight text-zinc-950 md:text-8xl lg:text-[7rem]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {t("home.heroTitleLine1")}
-          <br />
-          <em className="not-italic text-zinc-400">{t("home.heroTitleLine2")}</em>
-        </h1>
-        <p className="mt-6 max-w-sm text-sm leading-loose text-zinc-400">
-          {t("home.heroDescription")}
-        </p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <Link
-            to="/"
-            className="inline-flex h-12 items-center gap-2 bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+    <section className="relative overflow-hidden bg-[#f7f3ee]">
+      <div className="mx-auto grid min-h-[92vh] max-w-7xl lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <div className="flex flex-col justify-center px-8 py-16 text-center lg:px-14 lg:py-20 lg:text-left">
+          <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
+            {t("home.eyebrow")}
+          </p>
+          <h1
+            className="text-5xl font-light leading-[0.95] tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            {t("home.shopNow")}
-          </Link>
-          <Link
-            to="/category/product-type/handbags"
-            className="inline-flex h-12 items-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
-          >
-            {t("home.styleConsult")}
-          </Link>
+            {t("home.heroTitleLine1")}
+            <br />
+            <em className="not-italic text-zinc-400">{t("home.heroTitleLine2")}</em>
+          </h1>
+          <p className="mx-auto mt-6 max-w-sm text-sm leading-loose text-zinc-500 lg:mx-0">
+            {t("home.heroDescription")}
+          </p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <Link
+              to={shopLink}
+              className="inline-flex h-12 items-center justify-center bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+            >
+              {t("home.shopNow")}
+            </Link>
+            <Link
+              to="/category/product-type/handbags"
+              className="inline-flex h-12 items-center justify-center border border-zinc-300/80 bg-white/40 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 backdrop-blur-sm transition hover:border-zinc-950 hover:text-zinc-950"
+            >
+              {t("home.styleConsult")}
+            </Link>
+          </div>
         </div>
-      </div>
 
-      {/* Image pane */}
-      <div className="relative hidden overflow-hidden md:flex md:w-[52%]">
-        <img
-          src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1000&h=1200&fit=crop"
-          alt={t("home.heroAlt")}
-          className="h-full w-full object-cover"
-        />
-        {/* Subtle editorial overlay */}
-        <div className="absolute inset-0 bg-zinc-950/5" />
-        <div className="absolute bottom-8 left-8 right-8">
-          <span className="inline-block border border-white/40 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
-            {t("home.heroBadge")}
-          </span>
+        <div className="relative flex min-h-[28rem] items-end px-6 pb-10 pt-4 sm:min-h-[34rem] lg:min-h-0 lg:items-center lg:px-10 lg:py-16">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(200,169,110,0.18),transparent_42%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.85),transparent_35%),linear-gradient(135deg,#faf6f0_0%,#efe5d9_52%,#e4d8ca_100%)]" />
+          <div className="absolute inset-y-10 left-0 hidden w-px bg-gradient-to-b from-transparent via-[#c8a96e]/60 to-transparent lg:block" />
+
+          {heroBag ? (
+            <Link
+              to={`/product/${heroBag.id}`}
+              className="group relative z-10 mx-auto flex w-full max-w-xl flex-col items-center lg:items-start"
+            >
+              <div className="mb-5 flex items-center gap-3 self-start">
+                <span className="inline-flex items-center gap-2 border border-[#c8a96e]/30 bg-white/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#9a7b45] backdrop-blur-sm">
+                  {t("home.heroFeatured")}
+                </span>
+                <span className="hidden h-px w-10 bg-[#c8a96e]/40 sm:block" />
+              </div>
+
+              <div className="relative flex w-full items-center justify-center">
+                <div className="absolute inset-x-8 bottom-2 h-16 rounded-full bg-zinc-950/10 blur-3xl transition duration-700 group-hover:bg-zinc-950/15" />
+                <img
+                  src={heroBagImage(heroBag.image, heroBag.brand)}
+                  alt={translateProductName(heroBag.id, heroBag.name)}
+                  className="relative z-10 max-h-[26rem] w-full object-contain transition duration-700 group-hover:scale-[1.02] lg:max-h-[34rem]"
+                />
+              </div>
+
+              <div className="mt-8 w-full border-t border-zinc-950/10 pt-5 text-left">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#c8a96e]">
+                  {heroBag.brand}
+                </p>
+                <h2
+                  className="mt-2 text-2xl font-light leading-tight text-zinc-950 lg:text-3xl"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {translateProductName(heroBag.id, heroBag.name)}
+                </h2>
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  <p className="text-lg font-medium tracking-tight text-zinc-950">
+                    {formatCurrency(heroBag.price)}
+                  </p>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 transition group-hover:text-zinc-950">
+                    {t("home.heroViewProduct")} →
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="relative z-10 mx-auto h-[26rem] w-full max-w-xl animate-pulse rounded-[2rem] bg-white/30" />
+          )}
         </div>
       </div>
     </section>
