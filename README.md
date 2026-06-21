@@ -129,11 +129,13 @@ http://localhost:3000
 
 ## Content Guidelines
 
+**MUST USE Korean product names.** Product titles shown in the catalog, search results, cart, and checkout must use the Korean product name (for example, `루이비통 익스프레스 MM`), not English-only alternatives.
+
 Before adding marketplace content, verify that each product has:
 
 - Lawful sourcing and sale authorization.
 - Original or licensed imagery.
-- Accurate product names and descriptions.
+- Accurate product names and descriptions in Korean.
 - No misleading affiliation with third-party luxury brands.
 - No unauthorized logos, monograms, protected patterns, or brand identifiers.
 - Clear pricing, shipping, returns, and customer-service information.
