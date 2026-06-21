@@ -63,7 +63,7 @@ function Hero() {
             {t("home.shopNow")}
           </Link>
           <Link
-            to="/product/c1"
+            to="/category/product-type/handbags"
             className="inline-flex h-12 items-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
           >
             {t("home.styleConsult")}
@@ -99,7 +99,7 @@ const categoryPillars = [
     descriptionKey: "home.categoryBagsDescription",
     image:
       "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&h=1100&fit=crop",
-    to: "/category/product-type/totes",
+    to: "/category/product-type/handbags",
   },
 ];
 
@@ -254,7 +254,7 @@ function FeaturedBags() {
             {t("home.featuredBags")}
           </h2>
           <Link
-            to="/"
+            to="/category/product-type/handbags"
             className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 transition hover:text-zinc-950"
           >
             {t("home.seeAll")}

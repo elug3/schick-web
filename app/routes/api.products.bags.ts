@@ -12,7 +12,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       const productValue = product[key as keyof typeof product];
       if (
         productValue == null ||
-        !String(productValue).toLowerCase().includes(normalizedValue)
+        String(productValue).toLowerCase() !== normalizedValue
       ) {
         return false;
       }

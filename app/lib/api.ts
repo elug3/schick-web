@@ -52,8 +52,9 @@ export async function fetchBags(filters?: {
 // ── Single product — requires auth ────────────────────────────────────────
 
 export async function fetchProduct(id: string): Promise<ServerProduct> {
-  const res = await authedFetch(`/api/products/${id}`);
-  if (!res.ok) throw new Error(`Product not found: ${id}`);
+  const res = await fetch(`/api/products/${id}`);
+  if (res.status === 404) throw new Error(`Product not found: ${id}`);
+  if (!res.ok) throw new Error(`Product fetch failed: ${res.status}`);
   return res.json() as Promise<ServerProduct>;
 }
 
@@ -153,6 +154,7 @@ function normalizeProduct(
     "Gender",
     "Capacity",
     "Type",
+    "Style",
   ]) {
     if (raw[k] != null) details[k] = raw[k] as string | number;
   }
