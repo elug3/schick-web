@@ -1,3 +1,5 @@
+import { REFERENCE_BAGS } from "./reference-bags";
+
 export type MockProductStatus = "new" | "featured" | "standard";
 
 export interface MockProduct {
@@ -15,154 +17,12 @@ export interface MockProduct {
   style: string;
   family: string;
   status: MockProductStatus;
+  image?: string;
   createdAt: string;
 }
 
 export const MOCK_PRODUCTS: MockProduct[] = [
-  {
-    id: "bag-gucci-jackie-black",
-    name: "Jackie 1961 Small Shoulder Bag",
-    description:
-      "A structured shoulder bag with a curved silhouette, piston hardware, and smooth leather finish.",
-    price: 2850,
-    brand: "Gucci",
-    color: "Black",
-    material: "Calfskin Leather",
-    capacity: "6L",
-    stock: 8,
-    category: "bags",
-    productType: "Shoulder Bags",
-    style: "Evening",
-    family: "Women",
-    status: "featured",
-    createdAt: "2026-05-01T10:00:00.000Z",
-  },
-  {
-    id: "bag-lv-neverfull-monogram",
-    name: "Neverfull MM Tote",
-    description:
-      "A lightweight monogram canvas tote with natural cowhide trim and a removable pouch.",
-    price: 2030,
-    brand: "Louis Vuitton",
-    color: "Brown",
-    material: "Coated Canvas",
-    capacity: "16L",
-    stock: 4,
-    category: "bags",
-    productType: "Totes",
-    style: "Weekend",
-    family: "Women",
-    status: "new",
-    createdAt: "2026-05-08T10:00:00.000Z",
-  },
-  {
-    id: "bag-chanel-classic-flap",
-    name: "Classic Medium Flap Bag",
-    description:
-      "Quilted lambskin bag with chain strap, double flap construction, and signature turn-lock closure.",
-    price: 10200,
-    brand: "Chanel",
-    color: "Beige",
-    material: "Lambskin Leather",
-    capacity: "4L",
-    stock: 2,
-    category: "bags",
-    productType: "Shoulder Bags",
-    style: "Statement",
-    family: "Women",
-    status: "featured",
-    createdAt: "2026-05-12T10:00:00.000Z",
-  },
-  {
-    id: "bag-prada-re-edition-nylon",
-    name: "Re-Edition 2005 Nylon Bag",
-    description:
-      "A compact nylon shoulder bag with Saffiano leather details and detachable chain strap.",
-    price: 1950,
-    brand: "Prada",
-    color: "Black",
-    material: "Re-Nylon",
-    capacity: "3L",
-    stock: 12,
-    category: "bags",
-    productType: "Mini Bags",
-    style: "Casual",
-    family: "Women",
-    status: "standard",
-    createdAt: "2026-05-14T10:00:00.000Z",
-  },
-  {
-    id: "bag-hermes-evelyne-gold",
-    name: "Evelyne III 29",
-    description:
-      "A relaxed crossbody bag in grained leather with perforated H detail and adjustable canvas strap.",
-    price: 3800,
-    brand: "Hermès",
-    color: "Gold",
-    material: "Clemence Leather",
-    capacity: "8L",
-    stock: 1,
-    category: "bags",
-    productType: "Crossbody",
-    style: "Casual",
-    family: "Unisex",
-    status: "new",
-    createdAt: "2026-05-18T10:00:00.000Z",
-  },
-  {
-    id: "bag-dior-book-tote",
-    name: "Medium Dior Book Tote",
-    description:
-      "An embroidered canvas tote designed to carry daily essentials with a structured editorial profile.",
-    price: 3500,
-    brand: "Dior",
-    color: "Blue",
-    material: "Embroidered Canvas",
-    capacity: "14L",
-    stock: 6,
-    category: "bags",
-    productType: "Totes",
-    style: "Business",
-    family: "Women",
-    status: "standard",
-    createdAt: "2026-05-20T10:00:00.000Z",
-  },
-  {
-    id: "bag-bottega-cassette-green",
-    name: "Padded Cassette Bag",
-    description:
-      "A geometric crossbody bag crafted with padded intrecciato leather and a tonal buckle.",
-    price: 4200,
-    brand: "Bottega Veneta",
-    color: "Green",
-    material: "Nappa Leather",
-    capacity: "5L",
-    stock: 5,
-    category: "bags",
-    productType: "Crossbody",
-    style: "Statement",
-    family: "Women",
-    status: "featured",
-    createdAt: "2026-05-22T10:00:00.000Z",
-  },
-  {
-    id: "bag-coach-tabby-ivory",
-    name: "Tabby Shoulder Bag 26",
-    description:
-      "A polished shoulder bag with refined leather, signature hardware, and convertible strap styling.",
-    price: 450,
-    brand: "Coach",
-    color: "Ivory",
-    material: "Pebbled Leather",
-    capacity: "5L",
-    stock: 15,
-    category: "bags",
-    productType: "Shoulder Bags",
-    style: "Business",
-    family: "Women",
-    status: "standard",
-    createdAt: "2026-05-24T10:00:00.000Z",
-  },
+  ...(REFERENCE_BAGS as MockProduct[]),
   {
     id: "sneaker-lv-trainer-cream",
     name: "Monogram Court Trainer",
@@ -346,6 +206,7 @@ export function toBagResponse(product: MockProduct) {
     material: product.material,
     capacity: product.capacity,
     stock: product.stock,
+    image: product.image,
   };
 }
 
@@ -361,6 +222,7 @@ export function toProductResponse(product: MockProduct) {
     stock: product.stock,
     category: product.category,
     status: product.status,
+    image: product.image,
     createdAt: product.createdAt,
   };
 }
@@ -381,6 +243,7 @@ export function toSearchResult(product: MockProduct) {
     Style: product.style,
     Gender: product.family,
     Status: product.status,
+    Image: product.image,
   };
 }
 

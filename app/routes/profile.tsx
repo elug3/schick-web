@@ -207,7 +207,7 @@ function WishlistSection() {
               <Link to={`/product/${item.id}`}>
                 <div className="overflow-hidden bg-zinc-50">
                   <img
-                    src={bagImage(item.brand)}
+                    src={bagImage(item.brand, item.image)}
                     alt={translateProductName(item.id, item.name)}
                     className="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
                   />

@@ -12,6 +12,7 @@ export interface Bag {
   material: string;
   capacity: string;
   stock: number;
+  image?: string;
 }
 
 export interface ServerProduct {
@@ -25,6 +26,7 @@ export interface ServerProduct {
   stock: number;
   category: string;
   status: string;
+  image?: string;
   createdAt: string;
 }
 
@@ -66,9 +68,12 @@ const BRAND_IMAGES: Record<string, string> = {
   "Hermès": "https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=600&h=720&fit=crop",
   Dior: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=720&fit=crop",
   "Bottega Veneta": "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=720&fit=crop",
+  "Miu Miu": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=720&fit=crop",
+  Balenciaga: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop",
 };
 
-export function bagImage(brand: string): string {
+export function bagImage(brand: string, image?: string): string {
+  if (image) return image;
   return (
     BRAND_IMAGES[brand] ??
     "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop"
@@ -82,7 +87,12 @@ const PRODUCT_IMAGES: Record<string, string> = {
   outerwear: "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=600&h=720&fit=crop",
 };
 
-export function productImage(category: string, brand: string): string {
+export function productImage(
+  category: string,
+  brand: string,
+  image?: string
+): string {
+  if (image) return image;
   if (category.toLowerCase() === "bags") return bagImage(brand);
   return PRODUCT_IMAGES[category.toLowerCase()] ?? bagImage(brand);
 }
@@ -94,6 +104,7 @@ export interface DisplayProduct {
   description: string;
   category: string;
   stock?: number;
+  image?: string;
   details: Record<string, string | number>;
 }
 
@@ -152,6 +163,7 @@ function normalizeProduct(
     description: String(raw.Description),
     category: String(raw.Category ?? category).toLowerCase(),
     stock: raw.Stock != null ? Number(raw.Stock) : undefined,
+    image: raw.Image != null ? String(raw.Image) : undefined,
     details,
   };
 }

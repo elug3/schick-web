@@ -246,7 +246,7 @@ function Recommendations({
               style={{ paddingBottom: "120%" }}
             >
               <img
-                src={bagImage(product.brand)}
+                src={bagImage(product.brand, product.image)}
                 alt={translateProductName(product.id, product.name)}
                 className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
               />
