@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
 import { TELEGRAM_URL } from "../lib/contact";
+import { brandToSlug } from "../lib/catalog";
 import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
@@ -17,16 +18,13 @@ export default function ProductPage() {
   const { t } = useLanguage();
   const { id } = useParams();
   const [product, setProduct] = useState<ServerProduct | null>(null);
-  const [status, setStatus] = useState<"loading" | "unauth" | "error" | "ok">("loading");
+  const [status, setStatus] = useState<"loading" | "error" | "ok">("loading");
 
   useEffect(() => {
     if (!id) { setStatus("error"); return; }
     fetchProduct(id)
       .then((p) => { setProduct(p); setStatus("ok"); })
-      .catch((e: unknown) => {
-        const msg = e instanceof Error ? e.message : "";
-        setStatus(msg === "Not authenticated" ? "unauth" : "error");
-      });
+      .catch(() => setStatus("error"));
   }, [id]);
 
   if (status === "loading") {
@@ -40,23 +38,6 @@ export default function ProductPage() {
             <div className="h-8 w-32 rounded bg-zinc-100" />
           </div>
         </div>
-      </main>
-    );
-  }
-
-  if (status === "unauth") {
-    return (
-      <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-5xl font-light text-zinc-300" style={{ fontFamily: "var(--font-display)" }}>
-          {t("product.signInRequired")}
-        </p>
-        <p className="text-sm text-zinc-400">{t("product.signInRequiredDescription")}</p>
-        <Link
-          to="/login"
-          className="mt-4 inline-flex h-12 items-center bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
-        >
-          {t("product.signIn")}
-        </Link>
       </main>
     );
   }
@@ -84,6 +65,7 @@ export default function ProductPage() {
 
 function Breadcrumb({ product }: { product: ServerProduct }) {
   const { t, translateProductName } = useLanguage();
+  const brandSlug = brandToSlug(product.brand);
 
   return (
     <div className="border-b border-zinc-100 px-4 py-3 md:px-8">
@@ -91,10 +73,10 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-400">
           <Link to="/" className="transition hover:text-zinc-950">{t("product.home")}</Link>
           <ChevronIcon />
-          <Link to="/" className="transition hover:text-zinc-950">{t("product.bags")}</Link>
+          <Link to="/category/product-type/handbags" className="transition hover:text-zinc-950">{t("product.bags")}</Link>
           <ChevronIcon />
           <Link
-            to="/"
+            to={brandSlug ? `/category/brand/${brandSlug}` : "/category/product-type/handbags"}
             className="transition hover:text-zinc-950"
           >
             {product.brand}
@@ -208,6 +190,10 @@ function ProductInfo({ product }: { product: ServerProduct }) {
   const [added, setAdded] = useState(false);
   const [wishlist, setWishlist] = useState(false);
   const inStock = product.stock > 0;
+  const brandSlug = brandToSlug(product.brand);
+  const brandLink = brandSlug
+    ? `/category/brand/${brandSlug}`
+    : "/category/product-type/handbags";
 
   function handleAddToBag() {
     add({
@@ -232,7 +218,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
 
       {/* Brand */}
       <Link
-        to="/"
+        to={brandLink}
         className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#c8a96e] transition hover:opacity-70"
       >
         {product.brand}

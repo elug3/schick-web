@@ -448,6 +448,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "notFound.title": "Page not found",
     "notFound.description":
       "The page you are looking for does not exist or has been moved.",
+    "category.empty": "No products match this category yet. Browse the full collection instead.",
 
     "history.metaTitle": "History | Schick",
     "history.metaDescription": "View recent browsing history.",
@@ -894,6 +895,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "notFound.title": "페이지를 찾을 수 없습니다",
     "notFound.description":
       "찾고 있는 페이지가 존재하지 않거나 이동되었습니다.",
+    "category.empty": "이 카테고리에 해당하는 상품이 없습니다. 전체 컬렉션을 둘러보세요.",
 
     "history.metaTitle": "내역 | Schick",
     "history.metaDescription": "최근 탐색 내역을 확인하세요.",
@@ -1324,6 +1326,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "notFound.metaDescription": "无法找到请求的 Schick 页面。",
     "notFound.title": "页面未找到",
     "notFound.description": "您查找的页面不存在或已被移动。",
+    "category.empty": "此分类暂无商品，请浏览全部系列。",
 
     "history.metaTitle": "历史 | Schick",
     "history.metaDescription": "查看最近浏览历史。",
