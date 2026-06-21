@@ -101,30 +101,6 @@ const categoryPillars = [
       "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&h=1100&fit=crop",
     to: "/category/product-type/totes",
   },
-  {
-    key: "sneakers",
-    titleKey: "home.categorySneakers",
-    descriptionKey: "home.categorySneakersDescription",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&h=1100&fit=crop",
-    to: "/category/product-type/sneakers",
-  },
-  {
-    key: "watches",
-    titleKey: "home.categoryWatches",
-    descriptionKey: "home.categoryWatchesDescription",
-    image:
-      "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=900&h=1100&fit=crop",
-    to: "/category/product-type/watches",
-  },
-  {
-    key: "outerwear",
-    titleKey: "home.categoryOuterwear",
-    descriptionKey: "home.categoryOuterwearDescription",
-    image:
-      "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=900&h=1100&fit=crop",
-    to: "/category/product-type/outerwear",
-  },
 ];
 
 function CategoryPillars() {
@@ -148,7 +124,7 @@ function CategoryPillars() {
           </p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-1">
           {categoryPillars.map((category) => (
             <Link
               key={category.key}
@@ -341,8 +317,8 @@ function CrossCategoryProducts() {
 
   useEffect(() => {
     Promise.all(
-      ["bags", "sneakers", "watches", "outerwear"].map((category) =>
-        searchProducts(category).then((data) => data.results.slice(0, 2))
+      ["bags"].map((category) =>
+        searchProducts(category).then((data) => data.results.slice(0, 8))
       )
     )
       .then((groups) => setProducts(groups.flat()))

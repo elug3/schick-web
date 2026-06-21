@@ -32,7 +32,7 @@ export const REFERENCE_BAGS = [
     style: "Casual",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_92fef9116e5044e99c9f2c7e14859c8d~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_92fef9116e5044e99c9f2c7e14859c8d~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_33749c42345e45f0bec17fcf76ba6e7f~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_33749c42345e45f0bec17fcf76ba6e7f~mv2.jpg",
     createdAt: "2026-05-02T10:00:00.000Z",
   },
   {
@@ -50,7 +50,7 @@ export const REFERENCE_BAGS = [
     style: "Weekend",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_4b811fcdefd4408d947441b7f97caee3~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_4b811fcdefd4408d947441b7f97caee3~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_0e9a2db6f04b4d149f35d585622466e0~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_0e9a2db6f04b4d149f35d585622466e0~mv2.webp",
     createdAt: "2026-05-03T10:00:00.000Z",
   },
   {
@@ -68,7 +68,7 @@ export const REFERENCE_BAGS = [
     style: "Statement",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_124e2c7a58fb4e2486cbd7857c71b9ec~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_124e2c7a58fb4e2486cbd7857c71b9ec~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_fe0c56de28d74454b6a0ec8a966327a0~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_fe0c56de28d74454b6a0ec8a966327a0~mv2.webp",
     createdAt: "2026-05-04T10:00:00.000Z",
   },
   {
@@ -86,7 +86,7 @@ export const REFERENCE_BAGS = [
     style: "Evening",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_72493cbf254c4b359470cdd69f7797f2~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_72493cbf254c4b359470cdd69f7797f2~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_333c4655f8fd4fbc98519dbdcc99728e~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_333c4655f8fd4fbc98519dbdcc99728e~mv2.webp",
     createdAt: "2026-05-05T10:00:00.000Z",
   },
   {
@@ -104,7 +104,7 @@ export const REFERENCE_BAGS = [
     style: "Business",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_cba9605ae4294532acc5f0178fd4f11c~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_cba9605ae4294532acc5f0178fd4f11c~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_d5f2c598b7964f50b61a2fc3b336b2c3~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_d5f2c598b7964f50b61a2fc3b336b2c3~mv2.webp",
     createdAt: "2026-05-06T10:00:00.000Z",
   },
   {
@@ -122,7 +122,7 @@ export const REFERENCE_BAGS = [
     style: "Casual",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_3b3dd8b569d44038affc18dfd9e601fb~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_3b3dd8b569d44038affc18dfd9e601fb~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_c99b1df4d8ca4c4391325ac057a8f7b5~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_c99b1df4d8ca4c4391325ac057a8f7b5~mv2.jpg",
     createdAt: "2026-05-07T10:00:00.000Z",
   },
   {
@@ -140,7 +140,7 @@ export const REFERENCE_BAGS = [
     style: "Weekend",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_2bd98ad5165c4b3b9f975c0908a4fa92~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_2bd98ad5165c4b3b9f975c0908a4fa92~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_e96a83282dde4672b96536e28debfb52~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_e96a83282dde4672b96536e28debfb52~mv2.jpg",
     createdAt: "2026-05-08T10:00:00.000Z",
   },
   {
@@ -176,7 +176,7 @@ export const REFERENCE_BAGS = [
     style: "Evening",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_3a6292e952754992851ae9b07eff647a~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_3a6292e952754992851ae9b07eff647a~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_0c67e318169147b2abd46939bc4b2fc8~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_0c67e318169147b2abd46939bc4b2fc8~mv2.avif",
     createdAt: "2026-05-10T10:00:00.000Z",
   },
   {
@@ -194,7 +194,7 @@ export const REFERENCE_BAGS = [
     style: "Business",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_f4c96a57cc4a4728aceebb86461e07f0~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_f4c96a57cc4a4728aceebb86461e07f0~mv2.avif",
+    image: "https://static.wixstatic.com/media/e947e9_82cd7cda1c67474499c7bca12c035726~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_82cd7cda1c67474499c7bca12c035726~mv2.avif",
     createdAt: "2026-05-11T10:00:00.000Z",
   },
   {
@@ -212,7 +212,7 @@ export const REFERENCE_BAGS = [
     style: "Casual",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_7b12a94d11274cb48d385c744d820315~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_7b12a94d11274cb48d385c744d820315~mv2.avif",
+    image: "https://static.wixstatic.com/media/e947e9_2b179cac3f32406eabd20c634487b080~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_2b179cac3f32406eabd20c634487b080~mv2.jpg",
     createdAt: "2026-05-12T10:00:00.000Z",
   },
   {
@@ -230,7 +230,7 @@ export const REFERENCE_BAGS = [
     style: "Weekend",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_90714790794444b4bb4e88c249fdac17~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_90714790794444b4bb4e88c249fdac17~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_844d12478db942adb89c6938358f11b0~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_844d12478db942adb89c6938358f11b0~mv2.jpg",
     createdAt: "2026-05-13T10:00:00.000Z",
   },
   {
@@ -248,7 +248,7 @@ export const REFERENCE_BAGS = [
     style: "Statement",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_f15eb1b95e044102b81556a5fc646000~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_f15eb1b95e044102b81556a5fc646000~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_01dd1f6c3ec5450ca14286b9d0b395d8~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_01dd1f6c3ec5450ca14286b9d0b395d8~mv2.avif",
     createdAt: "2026-05-14T10:00:00.000Z",
   },
   {
@@ -266,7 +266,7 @@ export const REFERENCE_BAGS = [
     style: "Evening",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_4de954d32fd54977bebe1c23ce16f21d~mv2.avif/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_4de954d32fd54977bebe1c23ce16f21d~mv2.avif",
+    image: "https://static.wixstatic.com/media/e947e9_65f977cb268849baadbdc1cd7d87aa01~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_65f977cb268849baadbdc1cd7d87aa01~mv2.jpg",
     createdAt: "2026-05-15T10:00:00.000Z",
   },
   {
@@ -302,7 +302,7 @@ export const REFERENCE_BAGS = [
     style: "Casual",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_5d0a38e2f1ea4096b4a2804d9eeeead7~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_5d0a38e2f1ea4096b4a2804d9eeeead7~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_d7b0ca8596184673b14aaa8122727e41~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_d7b0ca8596184673b14aaa8122727e41~mv2.jpg",
     createdAt: "2026-05-17T10:00:00.000Z",
   },
   {
@@ -320,7 +320,7 @@ export const REFERENCE_BAGS = [
     style: "Weekend",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_4def6ebb558749feacf1c4c596e71397~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_4def6ebb558749feacf1c4c596e71397~mv2.jpg",
+    image: "https://static.wixstatic.com/media/e947e9_f4b11eea10f64c70be748fe0be2eb939~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_f4b11eea10f64c70be748fe0be2eb939~mv2.webp",
     createdAt: "2026-05-18T10:00:00.000Z",
   },
   {
@@ -338,7 +338,7 @@ export const REFERENCE_BAGS = [
     style: "Statement",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_502efdfd3aa14800932d4b5fd796917e~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_502efdfd3aa14800932d4b5fd796917e~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_8a23ec279c4e4c93a7ddd9134e5f1151~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_8a23ec279c4e4c93a7ddd9134e5f1151~mv2.jpg",
     createdAt: "2026-05-19T10:00:00.000Z",
   },
   {
@@ -356,7 +356,7 @@ export const REFERENCE_BAGS = [
     style: "Evening",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_062acf5c61a94b9a83f994d795c44581~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_062acf5c61a94b9a83f994d795c44581~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_e051fa4a60da447fb5eeb7ecbdb1dea9~mv2.jpg/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_e051fa4a60da447fb5eeb7ecbdb1dea9~mv2.jpg",
     createdAt: "2026-05-20T10:00:00.000Z",
   },
   {
@@ -392,7 +392,7 @@ export const REFERENCE_BAGS = [
     style: "Casual",
     family: "Women",
     status: "featured",
-    image: "https://static.wixstatic.com/media/e947e9_780e8b240300406ebda1397220b5a212~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_780e8b240300406ebda1397220b5a212~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_5c7044b26cfe4495be8737e553b0037e~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_5c7044b26cfe4495be8737e553b0037e~mv2.webp",
     createdAt: "2026-05-22T10:00:00.000Z",
   },
   {
@@ -410,7 +410,7 @@ export const REFERENCE_BAGS = [
     style: "Weekend",
     family: "Women",
     status: "new",
-    image: "https://static.wixstatic.com/media/e947e9_4936c92749624a3ea4b7672bd2831785~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_4936c92749624a3ea4b7672bd2831785~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_aa9f17b2a7464ce6aaf2cb1cbb1f375d~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_aa9f17b2a7464ce6aaf2cb1cbb1f375d~mv2.webp",
     createdAt: "2026-05-23T10:00:00.000Z",
   },
   {
@@ -428,7 +428,7 @@ export const REFERENCE_BAGS = [
     style: "Statement",
     family: "Women",
     status: "standard",
-    image: "https://static.wixstatic.com/media/e947e9_5864d2a52ed140e4a4ef86418adc9ca6~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_5864d2a52ed140e4a4ef86418adc9ca6~mv2.webp",
+    image: "https://static.wixstatic.com/media/e947e9_4031667095ba4ea08330184c193522ad~mv2.webp/v1/fill/w_600,h_720,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e947e9_4031667095ba4ea08330184c193522ad~mv2.webp",
     createdAt: "2026-05-24T10:00:00.000Z",
   },
 ];
