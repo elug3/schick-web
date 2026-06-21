@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { formatPrice } from "../lib/cart";
+import { useLanguage } from "../lib/i18n";
 
 interface ConfirmationState {
   orderNumber?: string;
@@ -18,6 +18,7 @@ export function meta() {
 }
 
 export default function CheckoutConfirmationPage() {
+  const { t, formatCurrency } = useLanguage();
   const location = useLocation();
   const state = (location.state ?? {}) as ConfirmationState;
 
@@ -29,33 +30,33 @@ export default function CheckoutConfirmationPage() {
         </div>
 
         <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#c8a96e]">
-          Order Confirmed
+          {t("confirmation.orderConfirmed")}
         </p>
         <h1
           className="mt-4 text-4xl font-light text-zinc-950 md:text-5xl"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Thank You
+          {t("confirmation.thankYou")}
         </h1>
         <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-zinc-400">
           {state.email
-            ? `A confirmation email will be sent to ${state.email}.`
-            : "A confirmation email will be sent shortly."}
+            ? t("confirmation.emailTo", { email: state.email })
+            : t("confirmation.emailShortly")}
         </p>
 
         {(state.orderNumber || state.total != null) && (
           <dl className="mx-auto mt-10 inline-grid gap-4 border border-zinc-100 bg-zinc-50/50 px-8 py-6 text-left text-sm md:min-w-[320px]">
             {state.orderNumber && (
               <div className="flex justify-between gap-8">
-                <dt className="text-zinc-400">Order</dt>
+                <dt className="text-zinc-400">{t("confirmation.order")}</dt>
                 <dd className="font-medium text-zinc-950">{state.orderNumber}</dd>
               </div>
             )}
             {state.total != null && (
               <div className="flex justify-between gap-8">
-                <dt className="text-zinc-400">Total</dt>
+                <dt className="text-zinc-400">{t("confirmation.total")}</dt>
                 <dd className="font-semibold text-zinc-950">
-                  {formatPrice(state.total)}
+                  {formatCurrency(state.total)}
                 </dd>
               </div>
             )}
@@ -67,13 +68,13 @@ export default function CheckoutConfirmationPage() {
             to="/"
             className="inline-flex h-12 min-w-[200px] items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
           >
-            Continue Shopping
+            {t("cart.continueShopping")}
           </Link>
           <Link
             to="/history"
             className="inline-flex h-12 min-w-[200px] items-center justify-center border border-zinc-200 px-8 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
           >
-            View Orders
+            {t("confirmation.viewOrders")}
           </Link>
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
 
 import "./app.css";
 import { NotFoundPage } from "./components/not-found";
+import { LanguageProvider, useLanguage, type LanguageCode } from "./lib/i18n";
 import { useCart } from "./lib/useCart";
 
 export const links = () => [
@@ -22,7 +23,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap",
   },
 ];
 
@@ -46,53 +47,59 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
-      <AnnouncementBar />
-      <TopNav />
-      {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
-      <div className="pt-[5.5rem] md:pt-[7.75rem]">
-        <Outlet />
+    <LanguageProvider>
+      <div className="min-h-screen bg-white pb-20 text-zinc-950 md:pb-0">
+        <AnnouncementBar />
+        <TopNav />
+        {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
+        <div className="pt-[5.5rem] md:pt-[7.75rem]">
+          <Outlet />
+        </div>
+        <Footer />
+        <BottomNav />
       </div>
-      <Footer />
-      <BottomNav />
-    </div>
+    </LanguageProvider>
   );
 }
 
 function AnnouncementBar() {
+  const { t } = useLanguage();
+
   return (
     <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-center bg-zinc-950 px-4 py-2">
       <p className="text-center text-[10px] tracking-[0.18em] text-white/70 uppercase">
-        Free shipping on orders over $100&ensp;·&ensp;Code&ensp;
+        {t("announcement.freeShipping")}&ensp;·&ensp;{t("announcement.code")}&ensp;
         <span className="font-medium text-[#c8a96e] tracking-widest">SUMMER30</span>
-        &ensp;—&ensp;30% off
+        &ensp;—&ensp;{t("announcement.discount")}
       </p>
     </div>
   );
 }
 
 const navItems = [
-  { label: "Home", to: "/", icon: HomeIcon },
-  { label: "Bag", to: "/cart", icon: BagIcon },
-  { label: "Profile", to: "/profile", icon: ProfileIcon },
+  { labelKey: "nav.home", to: "/", icon: HomeIcon },
+  { labelKey: "nav.bag", to: "/cart", icon: BagIcon },
+  { labelKey: "nav.profile", to: "/profile", icon: ProfileIcon },
 ];
 
 const desktopNavLinks = [
   {
-    label: "Product Type",
+    id: "productType",
+    labelKey: "nav.productType",
     to: "/category/product-type",
     items: [
-      { label: "Totes", to: "/category/product-type/totes" },
-      { label: "Shoulder Bags", to: "/category/product-type/shoulder-bags" },
-      { label: "Crossbody", to: "/category/product-type/crossbody" },
-      { label: "Clutches", to: "/category/product-type/clutches" },
-      { label: "Mini Bags", to: "/category/product-type/mini-bags" },
-      { label: "Backpacks", to: "/category/product-type/backpacks" },
-      { label: "Wallets", to: "/category/product-type/wallets" },
+      { labelKey: "category.totes", to: "/category/product-type/totes" },
+      { labelKey: "category.shoulderBags", to: "/category/product-type/shoulder-bags" },
+      { labelKey: "category.crossbody", to: "/category/product-type/crossbody" },
+      { labelKey: "category.clutches", to: "/category/product-type/clutches" },
+      { labelKey: "category.miniBags", to: "/category/product-type/mini-bags" },
+      { labelKey: "category.backpacks", to: "/category/product-type/backpacks" },
+      { labelKey: "category.wallets", to: "/category/product-type/wallets" },
     ],
   },
   {
-    label: "Brand",
+    id: "brand",
+    labelKey: "nav.brand",
     to: "/category/brand",
     items: [
       { label: "Gucci", to: "/category/brand/gucci", image: "/brands/gucci.svg" },
@@ -106,29 +113,32 @@ const desktopNavLinks = [
     ],
   },
   {
-    label: "Style",
+    id: "style",
+    labelKey: "nav.style",
     to: "/category/style",
     items: [
-      { label: "Casual", to: "/category/style/casual" },
-      { label: "Evening", to: "/category/style/evening" },
-      { label: "Business", to: "/category/style/business" },
-      { label: "Weekend", to: "/category/style/weekend" },
-      { label: "Statement", to: "/category/style/statement" },
+      { labelKey: "category.casual", to: "/category/style/casual" },
+      { labelKey: "category.evening", to: "/category/style/evening" },
+      { labelKey: "category.business", to: "/category/style/business" },
+      { labelKey: "category.weekend", to: "/category/style/weekend" },
+      { labelKey: "category.statement", to: "/category/style/statement" },
     ],
   },
   {
-    label: "Family",
+    id: "family",
+    labelKey: "nav.family",
     to: "/category/family",
     items: [
-      { label: "Women", to: "/category/family/women" },
-      { label: "Men", to: "/category/family/men" },
-      { label: "Kids", to: "/category/family/kids" },
-      { label: "Unisex", to: "/category/family/unisex" },
+      { labelKey: "category.women", to: "/category/family/women" },
+      { labelKey: "category.men", to: "/category/family/men" },
+      { labelKey: "category.kids", to: "/category/family/kids" },
+      { labelKey: "category.unisex", to: "/category/family/unisex" },
     ],
   },
 ];
 
 function TopNav() {
+  const { t } = useLanguage();
   const { count } = useCart();
   const [activeNav, setActiveNav] = useState<string | null>(null);
 
@@ -150,9 +160,10 @@ function TopNav() {
         </NavLink>
 
         <div className="flex justify-end gap-0.5">
+          <LanguageSelector />
           <NavLink
             to="/cart"
-            aria-label="Shopping bag"
+            aria-label={t("nav.shoppingBag")}
             className="relative rounded p-2 text-zinc-400 transition hover:text-zinc-950"
           >
             <BagIcon />
@@ -164,7 +175,7 @@ function TopNav() {
           </NavLink>
           <NavLink
             to="/profile"
-            aria-label="Profile"
+            aria-label={t("nav.profile")}
             className="rounded p-2 text-zinc-400 transition hover:text-zinc-950"
           >
             <ProfileIcon />
@@ -174,63 +185,66 @@ function TopNav() {
 
       {/* Row 2 — Nav links below logo (desktop only) */}
       <nav
-        aria-label="Main"
+        aria-label={t("nav.main")}
         className="hidden border-b border-zinc-100 md:flex items-center justify-center gap-7 pb-3"
       >
-        {desktopNavLinks.map(({ label, to }) => (
+        {desktopNavLinks.map(({ id, labelKey, to }) => (
           <NavLink
-            key={label}
+            key={id}
             to={to}
-            onMouseEnter={() => setActiveNav(label)}
+            onMouseEnter={() => setActiveNav(id)}
             className={({ isActive }) =>
               [
                 "whitespace-nowrap text-[11px] uppercase tracking-[0.15em] transition-colors",
-                isActive || activeNav === label ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-950",
+                isActive || activeNav === id ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-950",
               ].join(" ")
             }
           >
-            {label}
+            {t(labelKey)}
           </NavLink>
         ))}
       </nav>
 
       {/* Mega dropdown — half viewport width, centered */}
       {activeNav && (() => {
-        const activeGroup = desktopNavLinks.find((n) => n.label === activeNav);
-        const isBrand = activeNav === "Brand";
+        const activeGroup = desktopNavLinks.find((n) => n.id === activeNav);
+        const isBrand = activeNav === "brand";
         return (
           <div className="absolute inset-x-0 flex justify-center border-b border-zinc-100 bg-white shadow-md">
             <div className="w-[50vw] px-10 py-8">
               <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-300">
-                {activeNav}
+                {activeGroup ? t(activeGroup.labelKey) : ""}
               </p>
               <div className={isBrand ? "grid grid-cols-4 gap-4" : "grid grid-cols-4 gap-x-6 gap-y-3"}>
-                {activeGroup?.items.map((item) =>
+                {activeGroup?.items.map((item) => {
+                  const label = "labelKey" in item ? t(item.labelKey) : item.label;
+                  return (
                   isBrand && "image" in item ? (
                     <NavLink
-                      key={item.label}
+                      key={label}
                       to={item.to}
                       onClick={() => setActiveNav(null)}
-                      aria-label={item.label}
+                      aria-label={label}
                       className="group flex items-center justify-center border border-zinc-100 bg-zinc-50 p-4 transition hover:border-zinc-300"
                     >
                       <img
                         src={(item as { image: string }).image}
-                        alt={item.label}
+                        alt={label}
                         className="h-7 w-auto object-contain opacity-60 transition group-hover:opacity-100"
                       />
                     </NavLink>
                   ) : (
                     <NavLink
-                      key={item.label}
+                      key={label}
                       to={item.to}
                       onClick={() => setActiveNav(null)}
                       className="text-[11px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950 py-1"
                     >
-                      {item.label}
+                      {label}
                     </NavLink>
                   )
-                )}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -240,7 +254,32 @@ function TopNav() {
   );
 }
 
+function LanguageSelector() {
+  const { language, languages, setLanguage, t } = useLanguage();
+
+  return (
+    <label className="mr-1 hidden items-center gap-1 rounded p-1 text-zinc-400 transition hover:text-zinc-950 sm:flex">
+      <span className="sr-only">{t("language.label")}</span>
+      <GlobeIcon />
+      <select
+        value={language}
+        onChange={(event) => setLanguage(event.target.value as LanguageCode)}
+        aria-label={t("language.label")}
+        className="cursor-pointer bg-transparent text-[10px] font-semibold uppercase tracking-[0.12em] outline-none"
+      >
+        {languages.map((option) => (
+          <option key={option.code} value={option.code}>
+            {option.nativeLabel}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="hidden border-t border-zinc-100 bg-white px-4 py-16 md:block md:px-8">
       <div className="mx-auto max-w-7xl">
@@ -254,23 +293,23 @@ function Footer() {
               Schick
             </p>
             <p className="text-xs leading-relaxed text-zinc-400">
-              Authentic luxury bags from the world's most coveted brands, curated for the modern wardrobe.
+              {t("footer.description")}
             </p>
           </div>
 
           {/* Shop */}
           <div>
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
-              Shop
+              {t("footer.shop")}
             </p>
             <ul className="space-y-2">
-              {desktopNavLinks.map(({ label, to }) => (
-                <li key={label}>
+              {desktopNavLinks.map(({ id, labelKey, to }) => (
+                <li key={id}>
                   <NavLink
                     to={to}
                     className="text-xs text-zinc-400 transition hover:text-zinc-950"
                   >
-                    {label}
+                    {t(labelKey)}
                   </NavLink>
                 </li>
               ))}
@@ -280,32 +319,32 @@ function Footer() {
           {/* Services */}
           <div>
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
-              Services
+              {t("footer.services")}
             </p>
             <ul className="space-y-2 text-xs text-zinc-400">
-              <li><NavLink to="/product/c1" className="hover:text-zinc-950 transition">Style Consultation</NavLink></li>
-              <li><NavLink to="/history" className="hover:text-zinc-950 transition">Order History</NavLink></li>
-              <li><NavLink to="/profile" className="hover:text-zinc-950 transition">My Account</NavLink></li>
+              <li><NavLink to="/product/c1" className="hover:text-zinc-950 transition">{t("footer.styleConsultation")}</NavLink></li>
+              <li><NavLink to="/history" className="hover:text-zinc-950 transition">{t("footer.orderHistory")}</NavLink></li>
+              <li><NavLink to="/profile" className="hover:text-zinc-950 transition">{t("footer.myAccount")}</NavLink></li>
             </ul>
           </div>
 
           {/* Info */}
           <div>
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-950">
-              Info
+              {t("footer.info")}
             </p>
             <ul className="space-y-2 text-xs text-zinc-400">
-              <li>Shipping &amp; Returns</li>
-              <li>Authenticity Guarantee</li>
-              <li>Privacy Policy</li>
-              <li>Terms &amp; Conditions</li>
+              <li>{t("footer.shippingReturns")}</li>
+              <li>{t("footer.authenticityGuarantee")}</li>
+              <li>{t("footer.privacyPolicy")}</li>
+              <li>{t("footer.termsConditions")}</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 flex items-center justify-between border-t border-zinc-100 pt-8">
-          <p className="text-[11px] text-zinc-300">© 2026 Schick. All rights reserved.</p>
-          <p className="text-[11px] text-zinc-300">Premium Bags · Authenticated · Curated</p>
+          <p className="text-[11px] text-zinc-300">{t("footer.rights")}</p>
+          <p className="text-[11px] text-zinc-300">{t("footer.tagline")}</p>
         </div>
       </div>
     </footer>
@@ -313,13 +352,15 @@ function Footer() {
 }
 
 function BottomNav() {
+  const { t } = useLanguage();
+
   return (
     <nav
-      aria-label="Primary"
+      aria-label={t("nav.primary")}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-100 bg-white px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
-        {navItems.map(({ label, to, icon: Icon }) => (
+        {navItems.map(({ labelKey, to, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -331,7 +372,7 @@ function BottomNav() {
             }
           >
             <Icon />
-            <span>{label}</span>
+            <span>{t(labelKey)}</span>
           </NavLink>
         ))}
       </div>
@@ -382,7 +423,17 @@ function BagIcon() {
   );
 }
 
+function GlobeIcon() {
+  return (
+    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+      <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.25 2.45 3.35 5.45 3.35 9S14.25 18.55 12 21c-2.25-2.45-3.35-5.45-3.35-9S9.75 5.45 12 3Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function ErrorBoundary({ error }: { error: unknown }) {
+  const { t } = useLanguage();
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
@@ -393,7 +444,7 @@ export function ErrorBoundary({ error }: { error: unknown }) {
     }
 
     message = error.status === 404 ? "404" : "Error";
-    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+    details = error.status === 404 ? t("notFound.description") : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

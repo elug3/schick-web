@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { type User, getMe, logout } from "~/lib/auth";
 import { type Bag, fetchBags, bagImage } from "~/lib/api";
+import { useLanguage } from "~/lib/i18n";
 
 type Section = "wishlist" | "coupons" | "orders" | "settings" | "support";
 
@@ -19,33 +20,33 @@ const COUPONS: Coupon[] = [];
 
 const FAQ_ITEMS = [
   {
-    q: "How do I track my order?",
-    a: "Once your order ships, you'll receive an email with a tracking link. You can also view tracking in the Orders section.",
+    qKey: "profile.faqTrackOrder",
+    aKey: "profile.faqTrackOrderAnswer",
   },
   {
-    q: "What is your return policy?",
-    a: "We accept returns within 14 days of delivery. Items must be unused and in original packaging. Contact support to initiate a return.",
+    qKey: "profile.faqReturnPolicy",
+    aKey: "profile.faqReturnPolicyAnswer",
   },
   {
-    q: "Are all items authenticated?",
-    a: "Yes. Every item on Schick undergoes our rigorous 12-point authentication process before listing.",
+    qKey: "profile.faqAuthenticated",
+    aKey: "profile.faqAuthenticatedAnswer",
   },
   {
-    q: "How do I apply a coupon?",
-    a: "Enter your coupon code at checkout in the promo code field. Only one code may be applied per order.",
+    qKey: "profile.faqApplyCoupon",
+    aKey: "profile.faqApplyCouponAnswer",
   },
   {
-    q: "Can I cancel or modify an order?",
-    a: "Orders can be cancelled within 1 hour of placement. After that, please contact our support team and we'll do our best to assist.",
+    qKey: "profile.faqCancelOrder",
+    aKey: "profile.faqCancelOrderAnswer",
   },
 ];
 
-const NAV_ITEMS: { id: Section; label: string; icon: React.FC }[] = [
-  { id: "wishlist", label: "Wishlist", icon: HeartIcon },
-  { id: "coupons", label: "Coupons", icon: TagIcon },
-  { id: "orders", label: "Orders", icon: BoxIcon },
-  { id: "settings", label: "Account Settings", icon: SettingsIcon },
-  { id: "support", label: "Support", icon: SupportIcon },
+const NAV_ITEMS: { id: Section; labelKey: string; icon: React.FC }[] = [
+  { id: "wishlist", labelKey: "profile.wishlist", icon: HeartIcon },
+  { id: "coupons", labelKey: "profile.coupons", icon: TagIcon },
+  { id: "orders", labelKey: "profile.orders", icon: BoxIcon },
+  { id: "settings", labelKey: "profile.accountSettings", icon: SettingsIcon },
+  { id: "support", labelKey: "profile.support", icon: SupportIcon },
 ];
 
 export function meta() {
@@ -56,6 +57,7 @@ export function meta() {
 }
 
 export default function Profile() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [section, setSection] = useState<Section>("wishlist");
@@ -89,15 +91,15 @@ export default function Profile() {
             <ProfileIcon className="size-8 text-zinc-400" />
           </span>
         </div>
-        <h1 className="text-xl font-semibold text-zinc-950">Sign in to Schick</h1>
+        <h1 className="text-xl font-semibold text-zinc-950">{t("profile.signInToSchick")}</h1>
         <p className="mt-2 text-sm text-zinc-500">
-          Access your wishlist, orders, and personal settings.
+          {t("profile.signInDescription")}
         </p>
         <Link
           to="/login"
           className="mt-6 inline-flex h-12 items-center bg-zinc-950 px-8 text-sm font-semibold text-white transition hover:bg-zinc-800"
         >
-          Sign in
+          {t("profile.signIn")}
         </Link>
       </main>
     );
@@ -108,7 +110,7 @@ export default function Profile() {
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-400">Account</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-400">{t("profile.account")}</p>
           <h1 className="mt-0.5 text-2xl font-light tracking-wide text-zinc-950">
             {user.email}
           </h1>
@@ -117,7 +119,7 @@ export default function Profile() {
           onClick={handleLogout}
           className="text-[11px] uppercase tracking-[0.15em] text-zinc-400 transition hover:text-zinc-950"
         >
-          Sign out
+          {t("profile.signOut")}
         </button>
       </div>
 
@@ -125,7 +127,7 @@ export default function Profile() {
         {/* Sidebar — desktop */}
         <aside className="hidden w-52 shrink-0 md:block">
           <nav className="space-y-0.5">
-            {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+            {NAV_ITEMS.map(({ id, labelKey, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setSection(id)}
@@ -137,7 +139,7 @@ export default function Profile() {
                 ].join(" ")}
               >
                 <Icon />
-                {label}
+                {t(labelKey)}
               </button>
             ))}
           </nav>
@@ -147,14 +149,14 @@ export default function Profile() {
               className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-[11px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950"
             >
               <SignOutIcon />
-              Sign out
+              {t("profile.signOut")}
             </button>
           </div>
         </aside>
 
         {/* Mobile tab bar */}
         <div className="flex gap-1 overflow-x-auto pb-1 md:hidden">
-          {NAV_ITEMS.map(({ id, label }) => (
+          {NAV_ITEMS.map(({ id, labelKey }) => (
             <button
               key={id}
               onClick={() => setSection(id)}
@@ -165,7 +167,7 @@ export default function Profile() {
                   : "border border-zinc-200 text-zinc-500",
               ].join(" ")}
             >
-              {label}
+              {t(labelKey)}
             </button>
           ))}
         </div>
@@ -186,6 +188,7 @@ export default function Profile() {
 // ── Wishlist ───────────────────────────────────────────────────────────────
 
 function WishlistSection() {
+  const { t, formatCurrency, translateProductName } = useLanguage();
   const [items, setItems] = useState<Bag[]>([]);
 
   function remove(id: string) {
@@ -194,9 +197,9 @@ function WishlistSection() {
 
   return (
     <section>
-      <SectionHeader title="Wishlist" count={items.length} />
+      <SectionHeader title={t("profile.wishlist")} count={items.length} />
       {items.length === 0 ? (
-        <EmptyState message="Your wishlist is empty." />
+        <EmptyState message={t("profile.emptyWishlist")} />
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((item) => (
@@ -205,7 +208,7 @@ function WishlistSection() {
                 <div className="overflow-hidden bg-zinc-50">
                   <img
                     src={bagImage(item.brand)}
-                    alt={item.name}
+                    alt={translateProductName(item.id, item.name)}
                     className="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -213,13 +216,15 @@ function WishlistSection() {
                   <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-400">
                     {item.brand}
                   </p>
-                  <p className="text-xs font-medium text-zinc-950 leading-snug">{item.name}</p>
-                  <p className="text-xs text-zinc-500">${item.price.toLocaleString()}</p>
+                  <p className="text-xs font-medium text-zinc-950 leading-snug">
+                    {translateProductName(item.id, item.name)}
+                  </p>
+                  <p className="text-xs text-zinc-500">{formatCurrency(item.price)}</p>
                 </div>
               </Link>
               <button
                 onClick={() => remove(item.id)}
-                aria-label="Remove from wishlist"
+                aria-label={t("profile.removeWishlist")}
                 className="absolute right-2 top-2 flex size-7 items-center justify-center bg-white/80 text-zinc-400 opacity-0 transition hover:text-red-500 group-hover:opacity-100"
               >
                 <HeartFilledIcon />
@@ -235,6 +240,7 @@ function WishlistSection() {
 // ── Coupons ────────────────────────────────────────────────────────────────
 
 function CouponsSection() {
+  const { t } = useLanguage();
   const [coupons, setCoupons] = useState<Coupon[]>(COUPONS);
   const [copied, setCopied] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -301,12 +307,12 @@ function CouponsSection() {
 
   return (
     <section>
-      <SectionHeader title="Coupons" count={`${active.length} active`} />
+      <SectionHeader title={t("profile.coupons")} count={t("profile.active", { count: active.length })} />
 
       {/* Redeem form */}
       <div className="mb-8 border border-zinc-100 p-5">
         <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Redeem a code
+          {t("profile.redeemCode")}
         </p>
         <form onSubmit={redeem} className="flex gap-2">
           <input
@@ -319,23 +325,23 @@ function CouponsSection() {
             type="submit"
             className="bg-zinc-950 px-5 py-2.5 text-[11px] uppercase tracking-[0.15em] text-white transition hover:bg-zinc-800"
           >
-            Redeem
+            {t("profile.redeem")}
           </button>
         </form>
         {redeemStatus === "success" && (
-          <p className="mt-2 text-[11px] text-emerald-600">Coupon added successfully.</p>
+          <p className="mt-2 text-[11px] text-emerald-600">{t("profile.couponAdded")}</p>
         )}
         {redeemStatus === "already" && (
-          <p className="mt-2 text-[11px] text-zinc-500">This coupon is already in your account.</p>
+          <p className="mt-2 text-[11px] text-zinc-500">{t("profile.couponAlready")}</p>
         )}
         {redeemStatus === "invalid" && (
-          <p className="mt-2 text-[11px] text-red-500">Invalid coupon code. Please check and try again.</p>
+          <p className="mt-2 text-[11px] text-red-500">{t("profile.invalidCoupon")}</p>
         )}
       </div>
 
       {/* Active coupons */}
       {active.length === 0 ? (
-        <EmptyState message="No active coupons." />
+        <EmptyState message={t("profile.noActiveCoupons")} />
       ) : (
         <div className="space-y-3">
           {active.map((c) => (
@@ -347,7 +353,7 @@ function CouponsSection() {
       {/* Used / expired */}
       {inactive.length > 0 && (
         <>
-          <p className="mt-8 mb-3 text-[10px] uppercase tracking-[0.2em] text-zinc-300">Used & Expired</p>
+          <p className="mt-8 mb-3 text-[10px] uppercase tracking-[0.2em] text-zinc-300">{t("profile.usedExpired")}</p>
           <div className="space-y-3 opacity-50">
             {inactive.map((c) => (
               <CouponCard key={c.code} coupon={c} copied={false} onCopy={() => {}} disabled />
@@ -370,6 +376,8 @@ function CouponCard({
   onCopy: () => void;
   disabled?: boolean;
 }) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex items-center justify-between border border-zinc-100 px-5 py-4">
       <div className="flex items-center gap-4">
@@ -384,7 +392,7 @@ function CouponCard({
         <div>
           <p className="text-xs text-zinc-600">{coupon.description}</p>
           <p className="mt-0.5 text-[10px] text-zinc-400">
-            {coupon.status === "expired" ? "Expired" : coupon.status === "used" ? "Used" : "Expires"}{" "}
+            {coupon.status === "expired" ? t("profile.expired") : coupon.status === "used" ? t("profile.used") : t("profile.expires")}{" "}
             {coupon.expires}
           </p>
         </div>
@@ -394,7 +402,7 @@ function CouponCard({
           onClick={onCopy}
           className="ml-4 shrink-0 text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950"
         >
-          {copied ? "Copied!" : "Copy"}
+          {copied ? t("profile.copied") : t("profile.copy")}
         </button>
       )}
     </div>
@@ -404,10 +412,12 @@ function CouponCard({
 // ── Orders ─────────────────────────────────────────────────────────────────
 
 function OrdersSection() {
+  const { t } = useLanguage();
+
   return (
     <section>
-      <SectionHeader title="Orders" count={0} />
-      <EmptyState message="You haven't placed any orders yet." />
+      <SectionHeader title={t("profile.orders")} count={0} />
+      <EmptyState message={t("profile.noOrders")} />
     </section>
   );
 }
@@ -415,6 +425,7 @@ function OrdersSection() {
 // ── Account Settings ───────────────────────────────────────────────────────
 
 function SettingsSection({ user }: { user: User }) {
+  const { t } = useLanguage();
   const [saved, setSaved] = useState(false);
   const [notifications, setNotifications] = useState({
     orders: true,
@@ -431,26 +442,26 @@ function SettingsSection({ user }: { user: User }) {
 
   return (
     <section className="space-y-10">
-      <SectionHeader title="Account Settings" />
+      <SectionHeader title={t("profile.accountSettings")} />
 
       {/* Profile info */}
       <div>
         <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Profile
+          {t("profile.profile")}
         </p>
         <form onSubmit={handleSave} className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="First name" defaultValue="" placeholder="—" />
-            <Field label="Last name" defaultValue="" placeholder="—" />
+            <Field label={t("profile.firstName")} defaultValue="" placeholder="—" />
+            <Field label={t("profile.lastName")} defaultValue="" placeholder="—" />
           </div>
-          <Field label="Email" defaultValue={user.email} type="email" />
-          <Field label="Phone" defaultValue="" placeholder="+1 (000) 000-0000" type="tel" />
+          <Field label={t("profile.email")} defaultValue={user.email} type="email" />
+          <Field label={t("profile.phone")} defaultValue="" placeholder="+1 (000) 000-0000" type="tel" />
           <div className="pt-1">
             <button
               type="submit"
               className="bg-zinc-950 px-6 py-2.5 text-[11px] uppercase tracking-[0.15em] text-white transition hover:bg-zinc-800"
             >
-              {saved ? "Saved!" : "Save changes"}
+              {saved ? t("profile.saved") : t("profile.saveChanges")}
             </button>
           </div>
         </form>
@@ -459,20 +470,20 @@ function SettingsSection({ user }: { user: User }) {
       {/* Change password */}
       <div>
         <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Password
+          {t("profile.password")}
         </p>
         <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-          <Field label="Current password" type="password" placeholder="••••••••" />
+          <Field label={t("profile.currentPassword")} type="password" placeholder="••••••••" />
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="New password" type="password" placeholder="••••••••" />
-            <Field label="Confirm new password" type="password" placeholder="••••••••" />
+            <Field label={t("profile.newPassword")} type="password" placeholder="••••••••" />
+            <Field label={t("profile.confirmPassword")} type="password" placeholder="••••••••" />
           </div>
           <div className="pt-1">
             <button
               type="submit"
               className="border border-zinc-200 px-6 py-2.5 text-[11px] uppercase tracking-[0.15em] text-zinc-700 transition hover:bg-zinc-50"
             >
-              Update password
+              {t("profile.updatePassword")}
             </button>
           </div>
         </form>
@@ -481,15 +492,15 @@ function SettingsSection({ user }: { user: User }) {
       {/* Notifications */}
       <div>
         <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Email Notifications
+          {t("profile.emailNotifications")}
         </p>
         <div className="space-y-3">
           {(
             [
-              { key: "orders", label: "Order updates & shipping" },
-              { key: "promotions", label: "Promotions & offers" },
-              { key: "wishlist", label: "Wishlist price drops" },
-              { key: "newArrivals", label: "New arrivals" },
+              { key: "orders", label: t("profile.orderUpdates") },
+              { key: "promotions", label: t("profile.promotions") },
+              { key: "wishlist", label: t("profile.wishlistDrops") },
+              { key: "newArrivals", label: t("profile.newArrivals") },
             ] as { key: keyof typeof notifications; label: string }[]
           ).map(({ key, label }) => (
             <label key={key} className="flex items-center justify-between border border-zinc-100 px-4 py-3">
@@ -505,9 +516,9 @@ function SettingsSection({ user }: { user: User }) {
 
       {/* Danger zone */}
       <div className="border-t border-zinc-100 pt-8">
-        <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">Danger Zone</p>
+        <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">{t("profile.dangerZone")}</p>
         <button className="text-[11px] uppercase tracking-[0.12em] text-red-500 transition hover:text-red-700">
-          Delete account
+          {t("profile.deleteAccount")}
         </button>
       </div>
     </section>
@@ -563,6 +574,7 @@ function Toggle({ enabled, onChange }: { enabled: boolean; onChange: (v: boolean
 // ── Support ────────────────────────────────────────────────────────────────
 
 function SupportSection() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -574,12 +586,12 @@ function SupportSection() {
 
   return (
     <section className="space-y-10">
-      <SectionHeader title="Support" />
+      <SectionHeader title={t("profile.support")} />
 
       {/* FAQ */}
       <div>
         <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Frequently Asked Questions
+          {t("profile.faq")}
         </p>
         <div className="divide-y divide-zinc-100 border-t border-zinc-100">
           {FAQ_ITEMS.map((item, i) => (
@@ -588,7 +600,7 @@ function SupportSection() {
                 onClick={() => setOpen(open === i ? null : i)}
                 className="flex w-full items-center justify-between py-4 text-left"
               >
-                <span className="text-sm text-zinc-950">{item.q}</span>
+                <span className="text-sm text-zinc-950">{t(item.qKey)}</span>
                 <ChevronIcon
                   className={[
                     "ml-4 size-4 shrink-0 text-zinc-400 transition-transform",
@@ -597,7 +609,7 @@ function SupportSection() {
                 />
               </button>
               {open === i && (
-                <p className="pb-4 text-sm leading-relaxed text-zinc-500">{item.a}</p>
+                <p className="pb-4 text-sm leading-relaxed text-zinc-500">{t(item.aKey)}</p>
               )}
             </div>
           ))}
@@ -607,20 +619,20 @@ function SupportSection() {
       {/* Contact form */}
       <div>
         <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-          Contact Us
+          {t("profile.contactUs")}
         </p>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Subject" placeholder="e.g. Return request" />
-            <Field label="Order ID (optional)" placeholder="SCK-2026-XXXX" />
+            <Field label={t("profile.subject")} placeholder="e.g. Return request" />
+            <Field label={t("profile.orderId")} placeholder="SCK-2026-XXXX" />
           </div>
           <div>
             <label className="mb-1 block text-[10px] uppercase tracking-[0.15em] text-zinc-400">
-              Message
+              {t("profile.message")}
             </label>
             <textarea
               rows={5}
-              placeholder="Describe your issue…"
+              placeholder={t("profile.messagePlaceholder")}
               className="w-full border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-950 outline-none transition focus:border-zinc-400 placeholder:text-zinc-300 resize-none"
             />
           </div>
@@ -629,7 +641,7 @@ function SupportSection() {
               type="submit"
               className="bg-zinc-950 px-6 py-2.5 text-[11px] uppercase tracking-[0.15em] text-white transition hover:bg-zinc-800"
             >
-              {submitted ? "Message sent!" : "Send message"}
+              {submitted ? t("profile.messageSent") : t("profile.sendMessage")}
             </button>
           </div>
         </form>

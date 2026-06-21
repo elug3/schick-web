@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { type Bag, fetchBags, bagImage } from "../lib/api";
+import { useLanguage } from "../lib/i18n";
 
 export function meta() {
   return [
@@ -24,37 +25,38 @@ export default function Home() {
 // ── Hero ───────────────────────────────────────────────────────────────────
 
 function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="flex min-h-[88vh] flex-col md:flex-row">
       {/* Text pane */}
       <div className="flex flex-1 flex-col items-center justify-center px-8 py-20 text-center md:items-start md:px-16 md:text-left">
         <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
-          New Season 2026
+          {t("home.eyebrow")}
         </p>
         <h1
           className="text-6xl font-light leading-none tracking-tight text-zinc-950 md:text-8xl lg:text-[7rem]"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Carry
+          {t("home.heroTitleLine1")}
           <br />
-          <em className="not-italic text-zinc-400">the Icon.</em>
+          <em className="not-italic text-zinc-400">{t("home.heroTitleLine2")}</em>
         </h1>
         <p className="mt-6 max-w-sm text-sm leading-loose text-zinc-400">
-          Uncompromising materials. Meticulous craftsmanship. Authentic luxury
-          bags from the world's most coveted brands.
+          {t("home.heroDescription")}
         </p>
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           <Link
             to="/"
             className="inline-flex h-12 items-center gap-2 bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
           >
-            Shop Now
+            {t("home.shopNow")}
           </Link>
           <Link
             to="/product/c1"
             className="inline-flex h-12 items-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
           >
-            Style Consult
+            {t("home.styleConsult")}
           </Link>
         </div>
       </div>
@@ -63,14 +65,14 @@ function Hero() {
       <div className="relative hidden overflow-hidden md:flex md:w-[52%]">
         <img
           src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1000&h=1200&fit=crop"
-          alt="Luxury bag hero"
+          alt={t("home.heroAlt")}
           className="h-full w-full object-cover"
         />
         {/* Subtle editorial overlay */}
         <div className="absolute inset-0 bg-zinc-950/5" />
         <div className="absolute bottom-8 left-8 right-8">
           <span className="inline-block border border-white/40 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
-            New Season — Curated Luxury
+            {t("home.heroBadge")}
           </span>
         </div>
       </div>
@@ -81,6 +83,7 @@ function Hero() {
 // ── Brand Tiles ────────────────────────────────────────────────────────────
 
 function BrandTiles() {
+  const { t } = useLanguage();
   const [tiles, setTiles] = useState<{ brand: string; id: string }[]>([]);
 
   useEffect(() => {
@@ -107,13 +110,13 @@ function BrandTiles() {
             className="text-3xl font-light tracking-tight text-zinc-950 md:text-4xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Shop by Brand
+            {t("home.shopByBrand")}
           </h2>
           <Link
             to="/category/brand"
             className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 transition hover:text-zinc-950"
           >
-            View All
+            {t("home.viewAll")}
           </Link>
         </div>
 
@@ -147,6 +150,7 @@ function BrandTiles() {
 // ── Featured Bags ──────────────────────────────────────────────────────────
 
 function FeaturedBags() {
+  const { t, formatCurrency, translateProductName } = useLanguage();
   const [bags, setBags] = useState<Bag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -155,10 +159,10 @@ function FeaturedBags() {
     fetchBags()
       .then(setBags)
       .catch((e: unknown) =>
-        setError(e instanceof Error ? e.message : "Failed to load bags")
+        setError(e instanceof Error ? e.message : t("home.failedToLoadBags"))
       )
       .finally(() => setLoading(false));
-  }, []);
+  }, [t]);
 
   return (
     <section className="border-t border-zinc-100 px-4 py-12 md:px-8 md:py-16">
@@ -168,13 +172,13 @@ function FeaturedBags() {
             className="text-3xl font-light tracking-tight text-zinc-950 md:text-4xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Featured Bags
+            {t("home.featuredBags")}
           </h2>
           <Link
             to="/"
             className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 transition hover:text-zinc-950"
           >
-            See All
+            {t("home.seeAll")}
           </Link>
         </div>
 
@@ -205,7 +209,7 @@ function FeaturedBags() {
                     />
                     {bag.stock <= 5 && bag.stock > 0 && (
                       <span className="absolute left-3 top-3 bg-zinc-950 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
-                        Low Stock
+                        {t("home.lowStock")}
                       </span>
                     )}
                   </div>
@@ -213,10 +217,10 @@ function FeaturedBags() {
                     {bag.brand}
                   </p>
                   <p className="mt-0.5 text-sm font-medium leading-snug text-zinc-950">
-                    {bag.name}
+                    {translateProductName(bag.id, bag.name)}
                   </p>
                   <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-                    ${bag.price.toLocaleString()}
+                    {formatCurrency(bag.price)}
                   </p>
                 </Link>
               ))}
@@ -229,29 +233,31 @@ function FeaturedBags() {
 // ── Editorial Banner ───────────────────────────────────────────────────────
 
 function EditorialBanner() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative overflow-hidden">
       <img
         src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?w=1600&h=600&fit=crop"
-        alt="Summer Edit"
+        alt={t("home.summerEditAlt")}
         className="h-64 w-full object-cover md:h-96"
       />
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/50 text-center text-white">
         <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">
-          Limited Time
+          {t("home.limitedTime")}
         </p>
         <h3
           className="text-4xl font-light md:text-6xl"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Summer Edit
+          {t("home.summerEdit")}
         </h3>
-        <p className="mt-2 text-sm tracking-widest text-white/70">30% off selected bags</p>
+        <p className="mt-2 text-sm tracking-widest text-white/70">{t("home.saleDescription")}</p>
         <Link
           to="/"
           className="mt-6 inline-flex h-11 items-center border border-white px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-white hover:text-zinc-950"
         >
-          Shop Sale
+          {t("home.shopSale")}
         </Link>
       </div>
     </section>

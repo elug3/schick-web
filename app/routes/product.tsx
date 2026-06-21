@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
 import { type ServerProduct, fetchProduct, bagImage } from "../lib/api";
+import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
 
 export function meta() {
@@ -12,6 +13,7 @@ export function meta() {
 }
 
 export default function ProductPage() {
+  const { t } = useLanguage();
   const { id } = useParams();
   const [product, setProduct] = useState<ServerProduct | null>(null);
   const [status, setStatus] = useState<"loading" | "unauth" | "error" | "ok">("loading");
@@ -45,14 +47,14 @@ export default function ProductPage() {
     return (
       <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
         <p className="text-5xl font-light text-zinc-300" style={{ fontFamily: "var(--font-display)" }}>
-          Sign In Required
+          {t("product.signInRequired")}
         </p>
-        <p className="text-sm text-zinc-400">Please sign in to view product details.</p>
+        <p className="text-sm text-zinc-400">{t("product.signInRequiredDescription")}</p>
         <Link
           to="/login"
           className="mt-4 inline-flex h-12 items-center bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
         >
-          Sign In
+          {t("product.signIn")}
         </Link>
       </main>
     );
@@ -61,10 +63,10 @@ export default function ProductPage() {
   if (status === "error" || !product) {
     return (
       <NotFoundPage
-        eyebrow="No product"
-        title="Product not found"
-        description="We could not find this product. It may have sold out, moved, or no longer be available."
-        primaryAction={{ label: "Browse all bags", to: "/" }}
+        eyebrow={t("product.noProduct")}
+        title={t("product.notFound")}
+        description={t("product.notFoundDescription")}
+        primaryAction={{ label: t("product.browseAllBags"), to: "/" }}
       />
     );
   }
@@ -80,13 +82,15 @@ export default function ProductPage() {
 // ── Breadcrumb ─────────────────────────────────────────────────────────────
 
 function Breadcrumb({ product }: { product: ServerProduct }) {
+  const { t, translateProductName } = useLanguage();
+
   return (
     <div className="border-b border-zinc-100 px-4 py-3 md:px-8">
       <div className="mx-auto max-w-7xl">
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-400">
-          <Link to="/" className="transition hover:text-zinc-950">Home</Link>
+          <Link to="/" className="transition hover:text-zinc-950">{t("product.home")}</Link>
           <ChevronIcon />
-          <Link to="/" className="transition hover:text-zinc-950">Bags</Link>
+          <Link to="/" className="transition hover:text-zinc-950">{t("product.bags")}</Link>
           <ChevronIcon />
           <Link
             to="/"
@@ -95,7 +99,7 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
             {product.brand}
           </Link>
           <ChevronIcon />
-          <span className="text-zinc-600">{product.name}</span>
+          <span className="text-zinc-600">{translateProductName(product.id, product.name)}</span>
         </nav>
       </div>
     </div>
@@ -105,6 +109,7 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
 // ── Main product layout ────────────────────────────────────────────────────
 
 function ProductLayout({ product }: { product: ServerProduct }) {
+  const { t, translateProductName } = useLanguage();
   const img = bagImage(product.brand);
   const images = [
     { src: img, position: "object-center" },
@@ -150,13 +155,13 @@ function ProductLayout({ product }: { product: ServerProduct }) {
             <div className="relative" style={{ paddingBottom: "120%" }}>
               <img
                 src={images[activeImg].src}
-                alt={product.name}
+                alt={translateProductName(product.id, product.name)}
                 className={`absolute inset-0 h-full w-full object-cover transition duration-500 ${images[activeImg].position}`}
               />
               {/* Badge */}
               {(() => { const b = getBadge(product); return b && (
                 <span className={`absolute left-4 top-4 px-3 py-1 text-[9px] font-semibold uppercase tracking-wider ${b.style}`}>
-                  {b.label}
+                  {t(b.labelKey)}
                 </span>
               ); })()}
             </div>
@@ -190,6 +195,13 @@ function ProductLayout({ product }: { product: ServerProduct }) {
 // ── Product Info ───────────────────────────────────────────────────────────
 
 function ProductInfo({ product }: { product: ServerProduct }) {
+  const {
+    t,
+    formatCurrency,
+    translateProductDescription,
+    translateProductName,
+    translateValue,
+  } = useLanguage();
   const { add } = useCart();
   const [added, setAdded] = useState(false);
   const [wishlist, setWishlist] = useState(false);
@@ -223,33 +235,35 @@ function ProductInfo({ product }: { product: ServerProduct }) {
         className="mt-2 text-4xl font-light leading-tight text-zinc-950 md:text-5xl"
         style={{ fontFamily: "var(--font-display)" }}
       >
-        {product.name}
+        {translateProductName(product.id, product.name)}
       </h1>
 
       {/* Price + stock */}
       <div className="mt-5 flex items-baseline gap-3">
         <span className="text-3xl font-semibold tracking-tight text-zinc-950">
-          ${product.price.toLocaleString()}
+          {formatCurrency(product.price)}
         </span>
         <span
           className={`text-[10px] font-semibold uppercase tracking-widest ${inStock ? "text-emerald-600" : "text-zinc-400"}`}
         >
-          {inStock ? "In Stock" : "Out of Stock"}
+          {inStock ? t("product.inStock") : t("product.outOfStock")}
         </span>
       </div>
 
       <div className="my-6 h-px bg-zinc-100" />
 
       {/* Description */}
-      <p className="text-sm leading-relaxed text-zinc-500">{product.description}</p>
+      <p className="text-sm leading-relaxed text-zinc-500">
+        {translateProductDescription(product.id, product.description)}
+      </p>
 
       {/* Details */}
       <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-xs">
         {[
-          ["Brand", product.brand],
-          ["Category", product.category || "Bags"],
-          ["Material", product.material || "Premium Leather"],
-          ["Color", product.color || "—"],
+          [t("product.brand"), product.brand],
+          [t("product.category"), translateValue("category", product.category || "Bags")],
+          [t("product.material"), product.material ? translateValue("material", product.material) : t("product.premiumLeather")],
+          [t("product.color"), product.color ? translateValue("color", product.color) : "—"],
         ].map(([dt, dd]) => (
           <div key={dt}>
             <dt className="font-semibold uppercase tracking-widest text-zinc-400">{dt}</dt>
@@ -276,18 +290,18 @@ function ProductInfo({ product }: { product: ServerProduct }) {
           ].join(" ")}
         >
           {added ? (
-            <><CheckIcon /> Added</>
+            <><CheckIcon /> {t("product.added")}</>
           ) : inStock ? (
-            "Add to Bag"
+            t("product.addToBag")
           ) : (
-            "Out of Stock"
+            t("product.outOfStock")
           )}
         </button>
 
         <button
           type="button"
           onClick={() => setWishlist((v) => !v)}
-          aria-label={wishlist ? "Remove from wishlist" : "Add to wishlist"}
+          aria-label={wishlist ? t("product.removeWishlist") : t("product.addWishlist")}
           className="flex h-14 w-14 items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950"
         >
           <HeartIcon filled={wishlist} />
@@ -298,15 +312,15 @@ function ProductInfo({ product }: { product: ServerProduct }) {
         to="/product/c1"
         className="mt-3 flex h-12 w-full items-center justify-center border border-zinc-200 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
       >
-        Book Style Consult
+        {t("product.bookStyleConsult")}
       </Link>
 
       {/* Trust signals */}
       <div className="mt-8 grid grid-cols-3 gap-3 border-t border-zinc-100 pt-6">
         {[
-          { icon: ShieldIcon, label: "Authenticity", sub: "Guaranteed" },
-          { icon: TruckIcon, label: "Free Shipping", sub: "Over $100" },
-          { icon: ReturnIcon, label: "Easy Returns", sub: "30 Days" },
+          { icon: ShieldIcon, label: t("product.authenticity"), sub: t("product.guaranteed") },
+          { icon: TruckIcon, label: t("product.freeShipping"), sub: t("product.over100") },
+          { icon: ReturnIcon, label: t("product.easyReturns"), sub: t("product.days30") },
         ].map(({ icon: Icon, label, sub }) => (
           <div key={label} className="flex flex-col items-center gap-1.5 text-center">
             <Icon />
@@ -320,16 +334,16 @@ function ProductInfo({ product }: { product: ServerProduct }) {
       <div className="mt-8 space-y-0 border-t border-zinc-100">
         {[
           {
-            title: "Product Details",
-            body: "Crafted with the finest materials and meticulous attention to detail. Each piece is individually inspected to ensure the highest quality standards.",
+            title: t("product.productDetails"),
+            body: t("product.productDetailsBody"),
           },
           {
-            title: "Shipping & Returns",
-            body: "Free standard shipping on orders over $100. Express and overnight options available at checkout. Returns accepted within 30 days of delivery.",
+            title: t("product.shippingReturns"),
+            body: t("product.shippingReturnsBody"),
           },
           {
-            title: "Authenticity",
-            body: "Every item sold by Schick comes with a certificate of authenticity. We partner directly with authorized retailers to guarantee genuine products.",
+            title: t("product.authenticity"),
+            body: t("product.authenticityBody"),
           },
         ].map((item) => (
           <AccordionItem key={item.title} title={item.title} body={item.body} />
@@ -365,8 +379,8 @@ function AccordionItem({ title, body }: { title: string; body: string }) {
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function getBadge(product: ServerProduct) {
-  if (product.status === "new") return { label: "New", style: "bg-white text-zinc-950 border border-zinc-200" };
-  if (product.status === "featured") return { label: "Featured", style: "bg-[#c8a96e] text-white" };
+  if (product.status === "new") return { labelKey: "product.badgeNew", style: "bg-white text-zinc-950 border border-zinc-200" };
+  if (product.status === "featured") return { labelKey: "product.badgeFeatured", style: "bg-[#c8a96e] text-white" };
   return null;
 }
 

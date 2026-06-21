@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { getMe, type User } from "~/lib/auth";
 import { createProduct, getCategories, getUploadUrl, uploadToS3 } from "~/lib/api";
+import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
@@ -73,11 +74,37 @@ const DISPLAY_NAMES: Record<string, string> = {
   clocks: "Watches",
 };
 
+const FIELD_LABEL_KEYS: Record<string, string> = {
+  Name: "field.name",
+  Brand: "product.brand",
+  Price: "field.price",
+  Stock: "field.stock",
+  Description: "field.description",
+  Color: "field.color",
+  Material: "field.material",
+  Title: "field.title",
+  Status: "field.status",
+  Duration: "field.duration",
+  Size: "field.size",
+  Gender: "field.gender",
+  Capacity: "field.capacity",
+  Type: "field.type",
+};
+
+const FIELD_PLACEHOLDER_KEYS: Record<string, string> = {
+  "Product name": "field.productName",
+  "Brand name": "field.brandName",
+  "Product description…": "field.productDescription",
+  "Consultation name": "field.consultationName",
+  "Describe the consultation…": "field.consultationDescription",
+};
+
 function canManageProducts(user: User): boolean {
   return user.role === "admin" || user.role === "product_manager";
 }
 
 export default function ProductNew() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [categories, setCategories] = useState<string[]>(Object.keys(CATEGORY_FIELDS));
@@ -115,15 +142,15 @@ export default function ProductNew() {
             <LockIcon className="size-8 text-red-400" />
           </span>
         </div>
-        <h1 className="text-xl font-semibold text-zinc-950">Access denied</h1>
+        <h1 className="text-xl font-semibold text-zinc-950">{t("admin.accessDenied")}</h1>
         <p className="mt-2 text-sm text-zinc-500">
-          Only admins and product managers can add new products.
+          {t("admin.accessDeniedDescription")}
         </p>
         <Link
           to="/"
           className="mt-6 inline-flex h-12 items-center rounded-xl bg-zinc-950 px-8 text-sm font-semibold text-white transition hover:bg-zinc-800"
         >
-          Go home
+          {t("admin.goHome")}
         </Link>
       </main>
     );
@@ -137,9 +164,9 @@ export default function ProductNew() {
             <CheckIcon className="size-8 text-green-500" />
           </span>
         </div>
-        <h1 className="text-xl font-semibold text-zinc-950">Product added!</h1>
+        <h1 className="text-xl font-semibold text-zinc-950">{t("admin.productAdded")}</h1>
         <p className="mt-2 text-sm text-zinc-500">
-          The product has been successfully registered.
+          {t("admin.productAddedDescription")}
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <button
@@ -151,13 +178,13 @@ export default function ProductNew() {
             }}
             className="inline-flex h-12 items-center justify-center rounded-xl bg-zinc-950 px-8 text-sm font-semibold text-white transition hover:bg-zinc-800"
           >
-            Add another
+            {t("admin.addAnother")}
           </button>
           <Link
             to="/"
             className="inline-flex h-12 items-center justify-center rounded-xl border border-zinc-200 bg-white px-8 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
           >
-            View products
+            {t("admin.viewProducts")}
           </Link>
         </div>
       </main>
@@ -199,7 +226,7 @@ export default function ProductNew() {
       await createProduct(category, data, imageUrl);
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("login.somethingWentWrong"));
       setUploadingImage(false);
     } finally {
       setSubmitting(false);
@@ -209,13 +236,13 @@ export default function ProductNew() {
   return (
     <main className="mx-auto max-w-md px-4 py-5 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950">New product</h1>
-        <p className="mt-1 text-sm text-zinc-500">Add a product to the catalogue.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950">{t("admin.newProduct")}</h1>
+        <p className="mt-1 text-sm text-zinc-500">{t("admin.newProductDescription")}</p>
       </div>
 
       {/* Category selector */}
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold text-zinc-950">Category</h2>
+        <h2 className="text-sm font-semibold text-zinc-950">{t("admin.category")}</h2>
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
           {categories.map((cat) => (
             <button
@@ -233,7 +260,7 @@ export default function ProductNew() {
                   : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400",
               ].join(" ")}
             >
-              {DISPLAY_NAMES[cat] ?? cat}
+              {t(`admin.category.${cat}`) === `admin.category.${cat}` ? DISPLAY_NAMES[cat] ?? cat : t(`admin.category.${cat}`)}
             </button>
           ))}
         </div>
@@ -267,12 +294,12 @@ export default function ProductNew() {
             disabled={submitting}
             className="h-12 w-full rounded-xl bg-zinc-950 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
           >
-            {submitting ? (uploadingImage ? "Uploading image…" : "Saving…") : "Save product"}
+            {submitting ? (uploadingImage ? t("admin.uploadingImage") : t("admin.saving")) : t("admin.saveProduct")}
           </button>
         </form>
       ) : (
         <p className="py-8 text-center text-sm text-zinc-500">
-          Select a category above to continue.
+          {t("admin.selectCategory")}
         </p>
       )}
     </main>
@@ -286,13 +313,21 @@ interface FieldInputProps {
 }
 
 function FieldInput({ field, value, onChange }: FieldInputProps) {
+  const { t, translateValue } = useLanguage();
   const base =
     "w-full rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium outline-none ring-zinc-950 transition focus:border-zinc-400 focus:ring-2";
+  const label = FIELD_LABEL_KEYS[field.key]
+    ? t(FIELD_LABEL_KEYS[field.key])
+    : field.label;
+  const placeholder =
+    field.placeholder && FIELD_PLACEHOLDER_KEYS[field.placeholder]
+      ? t(FIELD_PLACEHOLDER_KEYS[field.placeholder])
+      : field.placeholder;
 
   return (
     <label className="block space-y-1">
       <span className="text-xs font-medium text-zinc-600">
-        {field.label}
+        {label}
         {field.required && <span className="ml-0.5 text-red-500">*</span>}
       </span>
 
@@ -301,7 +336,7 @@ function FieldInput({ field, value, onChange }: FieldInputProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={field.required}
-          placeholder={field.placeholder}
+          placeholder={placeholder}
           rows={3}
           className={`${base} py-3`}
         />
@@ -312,10 +347,10 @@ function FieldInput({ field, value, onChange }: FieldInputProps) {
           required={field.required}
           className={`${base} h-11`}
         >
-          <option value="">Select…</option>
+          <option value="">{t("admin.select")}</option>
           {field.options?.map((opt) => (
             <option key={opt} value={opt}>
-              {opt}
+              {translateValue("value", opt)}
             </option>
           ))}
         </select>
@@ -325,7 +360,7 @@ function FieldInput({ field, value, onChange }: FieldInputProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={field.required}
-          placeholder={field.placeholder}
+          placeholder={placeholder}
           min={field.type === "number" ? 0 : undefined}
           step={field.key === "Price" ? "0.01" : undefined}
           className={`${base} h-11`}
@@ -341,6 +376,7 @@ interface ImagePickerProps {
 }
 
 function ImagePicker({ preview, onChange }: ImagePickerProps) {
+  const { t } = useLanguage();
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleFile(file: File | undefined) {
@@ -351,7 +387,7 @@ function ImagePicker({ preview, onChange }: ImagePickerProps) {
 
   return (
     <label className="block space-y-1">
-      <span className="text-xs font-medium text-zinc-600">Product image</span>
+      <span className="text-xs font-medium text-zinc-600">{t("admin.productImage")}</span>
       <div
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
@@ -363,7 +399,7 @@ function ImagePicker({ preview, onChange }: ImagePickerProps) {
       >
         {preview ? (
           <>
-            <img src={preview} alt="Preview" className="h-36 w-full object-cover" />
+            <img src={preview} alt={t("admin.preview")} className="h-36 w-full object-cover" />
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onChange(null); }}
@@ -380,7 +416,7 @@ function ImagePicker({ preview, onChange }: ImagePickerProps) {
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <p className="text-xs font-medium text-zinc-500">
-              Click or drag an image here
+              {t("admin.imageHint")}
             </p>
           </div>
         )}
