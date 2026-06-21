@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
+import { TELEGRAM_URL } from "../lib/contact";
 import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
@@ -203,6 +204,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     translateValue,
   } = useLanguage();
   const { add } = useCart();
+  const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const [wishlist, setWishlist] = useState(false);
   const inStock = product.stock > 0;
@@ -217,6 +219,12 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  }
+
+  function handleBuy() {
+    if (!inStock) return;
+    handleAddToBag();
+    navigate("/checkout");
   }
 
   return (
@@ -279,41 +287,53 @@ function ProductInfo({ product }: { product: ServerProduct }) {
         <button
           type="button"
           disabled={!inStock}
-          onClick={handleAddToBag}
+          onClick={handleBuy}
           className={[
-            "flex h-14 flex-1 items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest transition",
+            "flex h-14 flex-1 items-center justify-center text-xs font-semibold uppercase tracking-widest transition",
             inStock
-              ? added
-                ? "bg-zinc-600 text-white"
-                : "bg-zinc-950 text-white hover:bg-zinc-800"
+              ? "bg-zinc-950 text-white hover:bg-zinc-800"
               : "cursor-not-allowed bg-zinc-100 text-zinc-400",
           ].join(" ")}
         >
-          {added ? (
-            <><CheckIcon /> {t("product.added")}</>
-          ) : inStock ? (
-            t("product.addToBag")
-          ) : (
-            t("product.outOfStock")
-          )}
+          {inStock ? t("product.buy") : t("product.outOfStock")}
+        </button>
+
+        <button
+          type="button"
+          disabled={!inStock}
+          onClick={handleAddToBag}
+          aria-label={added ? t("product.added") : t("product.addToBag")}
+          className={[
+            "flex h-14 w-14 shrink-0 items-center justify-center border transition",
+            inStock
+              ? added
+                ? "border-zinc-950 bg-zinc-950 text-white"
+                : "border-zinc-200 text-zinc-600 hover:border-zinc-950 hover:text-zinc-950"
+              : "cursor-not-allowed border-zinc-100 text-zinc-300",
+          ].join(" ")}
+        >
+          {added ? <CheckIcon /> : <BagIcon />}
         </button>
 
         <button
           type="button"
           onClick={() => setWishlist((v) => !v)}
           aria-label={wishlist ? t("product.removeWishlist") : t("product.addWishlist")}
-          className="flex h-14 w-14 items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950"
+          className="flex h-14 w-14 shrink-0 items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950"
         >
           <HeartIcon filled={wishlist} />
         </button>
       </div>
 
-      <Link
-        to="/product/c1"
-        className="mt-3 flex h-12 w-full items-center justify-center border border-zinc-200 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+      <a
+        href={TELEGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 flex h-12 w-full items-center justify-center gap-2 border border-zinc-200 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
       >
-        {t("product.bookStyleConsult")}
-      </Link>
+        <TelegramIcon />
+        {t("product.contactUsTelegram")}
+      </a>
 
       {/* Trust signals */}
       <div className="mt-8 grid grid-cols-3 gap-3 border-t border-zinc-100 pt-6">
@@ -406,6 +426,35 @@ function CheckIcon() {
   return (
     <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
       <path d="M20 7 10 17l-5-5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function BagIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M6 7h15l-1.5 11H7.5L6 7Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M9 7V5a3 3 0 0 1 6 0v2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  );
+}
+
+function TelegramIcon() {
+  return (
+    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M9.04 15.29 8.7 19c.43 0 .62-.18.84-.4l2.02-1.93 4.18 3.06c.77.42 1.31.2 1.5-.72l2.72-12.76h.01c.24-1.12-.4-1.56-1.12-1.3L2.6 9.44c-1.08.42-1.06 1.02-.18 1.29l4.9 1.53L18.6 7.1c.45-.28.86-.13.52.19" />
     </svg>
   );
 }
