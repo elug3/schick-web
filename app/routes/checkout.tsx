@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { formatPrice } from "../lib/cart";
+import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
 import { OrderSummary } from "./cart";
 
@@ -51,6 +51,7 @@ const initialForm: FormState = {
 };
 
 export default function CheckoutPage() {
+  const { t, formatCurrency, translateProductName } = useLanguage();
   const navigate = useNavigate();
   const { items, clear, totals } = useCart();
   const [form, setForm] = useState<FormState>(initialForm);
@@ -78,7 +79,7 @@ export default function CheckoutPage() {
       setPromoError("");
     } else {
       setPromoCode("");
-      setPromoError("Invalid promo code");
+      setPromoError(t("checkout.invalidPromo"));
     }
   }
 
@@ -106,12 +107,12 @@ export default function CheckoutPage() {
 
     for (const field of required) {
       if (!form[field].trim()) {
-        next[field] = "Required";
+        next[field] = t("checkout.required");
       }
     }
 
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      next.email = "Enter a valid email";
+      next.email = t("checkout.validEmail");
     }
 
     setErrors(next);
@@ -151,16 +152,16 @@ export default function CheckoutPage() {
           className="text-3xl font-light text-zinc-950"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Nothing to checkout
+          {t("checkout.nothingToCheckout")}
         </p>
         <p className="text-sm text-zinc-400">
-          Your bag is empty. Add items before proceeding.
+          {t("checkout.emptyBag")}
         </p>
         <Link
           to="/"
           className="mt-2 inline-flex h-12 items-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
         >
-          Continue Shopping
+          {t("cart.continueShopping")}
         </Link>
       </main>
     );
@@ -174,18 +175,18 @@ export default function CheckoutPage() {
           className="mb-8 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 transition hover:text-zinc-950"
         >
           <BackIcon />
-          Back to Bag
+          {t("checkout.backToBag")}
         </Link>
 
         <div className="mb-10 md:mb-14">
           <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
-            Secure Checkout
+            {t("checkout.secureCheckout")}
           </p>
           <h1
             className="mt-2 text-4xl font-light tracking-tight text-zinc-950 md:text-5xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Complete Your Order
+            {t("checkout.completeOrder")}
           </h1>
         </div>
 
@@ -194,9 +195,9 @@ export default function CheckoutPage() {
           className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16"
         >
           <div className="space-y-12">
-            <CheckoutSection step="01" title="Contact">
+            <CheckoutSection step="01" title={t("checkout.contact")}>
               <Field
-                label="Email"
+                label={t("checkout.email")}
                 id="email"
                 type="email"
                 value={form.email}
@@ -205,7 +206,7 @@ export default function CheckoutPage() {
                 autoComplete="email"
               />
               <Field
-                label="Phone"
+                label={t("checkout.phone")}
                 id="phone"
                 type="tel"
                 value={form.phone}
@@ -215,10 +216,10 @@ export default function CheckoutPage() {
               />
             </CheckoutSection>
 
-            <CheckoutSection step="02" title="Shipping">
+            <CheckoutSection step="02" title={t("checkout.shipping")}>
               <div className="grid gap-4 md:grid-cols-2">
                 <Field
-                  label="First Name"
+                  label={t("checkout.firstName")}
                   id="firstName"
                   value={form.firstName}
                   error={errors.firstName}
@@ -226,7 +227,7 @@ export default function CheckoutPage() {
                   autoComplete="given-name"
                 />
                 <Field
-                  label="Last Name"
+                  label={t("checkout.lastName")}
                   id="lastName"
                   value={form.lastName}
                   error={errors.lastName}
@@ -235,7 +236,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <Field
-                label="Address"
+                label={t("checkout.address")}
                 id="address"
                 value={form.address}
                 error={errors.address}
@@ -243,7 +244,7 @@ export default function CheckoutPage() {
                 autoComplete="street-address"
               />
               <Field
-                label="Apartment, suite, etc. (optional)"
+                label={t("checkout.apartment")}
                 id="apartment"
                 value={form.apartment}
                 onChange={(v) => updateField("apartment", v)}
@@ -251,7 +252,7 @@ export default function CheckoutPage() {
               />
               <div className="grid gap-4 md:grid-cols-3">
                 <Field
-                  label="City"
+                  label={t("checkout.city")}
                   id="city"
                   value={form.city}
                   error={errors.city}
@@ -259,7 +260,7 @@ export default function CheckoutPage() {
                   autoComplete="address-level2"
                 />
                 <Field
-                  label="State"
+                  label={t("checkout.state")}
                   id="state"
                   value={form.state}
                   error={errors.state}
@@ -267,7 +268,7 @@ export default function CheckoutPage() {
                   autoComplete="address-level1"
                 />
                 <Field
-                  label="ZIP Code"
+                  label={t("checkout.zip")}
                   id="zip"
                   value={form.zip}
                   error={errors.zip}
@@ -276,7 +277,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <Field
-                label="Country"
+                label={t("checkout.country")}
                 id="country"
                 value={form.country}
                 onChange={(v) => updateField("country", v)}
@@ -284,18 +285,18 @@ export default function CheckoutPage() {
               />
             </CheckoutSection>
 
-            <CheckoutSection step="03" title="Delivery">
+            <CheckoutSection step="03" title={t("checkout.delivery")}>
               <div className="space-y-3">
                 <DeliveryOption
                   name="delivery"
                   value="standard"
                   checked={form.delivery === "standard"}
-                  title="Standard Delivery"
-                  subtitle="5–7 business days"
+                  title={t("checkout.standardDelivery")}
+                  subtitle={t("checkout.standardDeliveryTime")}
                   price={
                     summary.shipping === 0
-                      ? "Complimentary"
-                      : formatPrice(summary.shipping)
+                      ? t("cart.complimentary")
+                      : formatCurrency(summary.shipping)
                   }
                   onChange={() => updateField("delivery", "standard")}
                 />
@@ -303,17 +304,17 @@ export default function CheckoutPage() {
                   name="delivery"
                   value="express"
                   checked={form.delivery === "express"}
-                  title="Express Delivery"
-                  subtitle="2–3 business days"
-                  price={formatPrice(25)}
+                  title={t("checkout.expressDelivery")}
+                  subtitle={t("checkout.expressDeliveryTime")}
+                  price={formatCurrency(25)}
                   onChange={() => updateField("delivery", "express")}
                 />
               </div>
             </CheckoutSection>
 
-            <CheckoutSection step="04" title="Payment">
+            <CheckoutSection step="04" title={t("checkout.payment")}>
               <Field
-                label="Name on Card"
+                label={t("checkout.cardName")}
                 id="cardName"
                 value={form.cardName}
                 error={errors.cardName}
@@ -321,7 +322,7 @@ export default function CheckoutPage() {
                 autoComplete="cc-name"
               />
               <Field
-                label="Card Number"
+                label={t("checkout.cardNumber")}
                 id="cardNumber"
                 value={form.cardNumber}
                 error={errors.cardNumber}
@@ -331,7 +332,7 @@ export default function CheckoutPage() {
               />
               <div className="grid gap-4 md:grid-cols-2">
                 <Field
-                  label="Expiry"
+                  label={t("checkout.expiry")}
                   id="expiry"
                   value={form.expiry}
                   error={errors.expiry}
@@ -340,7 +341,7 @@ export default function CheckoutPage() {
                   placeholder="MM / YY"
                 />
                 <Field
-                  label="CVC"
+                  label={t("checkout.cvc")}
                   id="cvc"
                   value={form.cvc}
                   error={errors.cvc}
@@ -350,8 +351,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <p className="text-[11px] leading-relaxed text-zinc-400">
-                Your payment details are encrypted. This is a demo checkout —
-                no charges will be made.
+                {t("checkout.paymentNote")}
               </p>
             </CheckoutSection>
 
@@ -364,7 +364,7 @@ export default function CheckoutPage() {
               disabled={submitting}
               className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
             >
-              {submitting ? "Processing…" : `Place Order — ${formatPrice(checkoutTotal)}`}
+              {submitting ? t("checkout.processing") : t("checkout.placeOrderWithTotal", { total: formatCurrency(checkoutTotal) })}
             </button>
           </div>
 
@@ -378,7 +378,7 @@ export default function CheckoutPage() {
                   <div className="relative h-20 w-16 shrink-0 overflow-hidden bg-zinc-50">
                     <img
                       src={item.image}
-                      alt={item.name}
+                      alt={translateProductName(item.productId, item.name)}
                       className="h-full w-full object-cover"
                     />
                     <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center bg-zinc-950 text-[10px] text-white">
@@ -389,9 +389,9 @@ export default function CheckoutPage() {
                     <p className="text-[10px] uppercase tracking-widest text-zinc-400">
                       {item.brand}
                     </p>
-                    <p className="truncate text-sm text-zinc-950">{item.name}</p>
+                    <p className="truncate text-sm text-zinc-950">{translateProductName(item.productId, item.name)}</p>
                     <p className="mt-1 text-sm font-medium text-zinc-950">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatCurrency(item.price * item.quantity)}
                     </p>
                   </div>
                 </div>
@@ -410,7 +410,7 @@ export default function CheckoutPage() {
               onApplyPromo={applyPromo}
               checkoutHref="#"
               checkoutLabel={
-                submitting ? "Processing…" : `Place Order — ${formatPrice(checkoutTotal)}`
+                submitting ? t("checkout.processing") : t("checkout.placeOrderWithTotal", { total: formatCurrency(checkoutTotal) })
               }
               disabled
             />
@@ -420,7 +420,7 @@ export default function CheckoutPage() {
               disabled={submitting}
               className="mt-4 flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
             >
-              {submitting ? "Processing…" : "Place Order"}
+              {submitting ? t("checkout.processing") : t("checkout.placeOrder")}
             </button>
           </aside>
         </form>
@@ -554,10 +554,12 @@ function MiniBag({
   items: ReturnType<typeof useCart>["items"];
   total: number;
 }) {
+  const { t, formatCurrency, translateProductName } = useLanguage();
+
   return (
     <div className="border border-zinc-100 bg-zinc-50/50 p-4">
       <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-950">
-        Your Bag ({items.length})
+        {t("checkout.yourBag", { count: items.length })}
       </p>
       <ul className="mt-3 space-y-3">
         {items.map((item) => (
@@ -566,17 +568,17 @@ function MiniBag({
             className="flex justify-between gap-3 text-sm"
           >
             <span className="truncate text-zinc-600">
-              {item.name} × {item.quantity}
+              {translateProductName(item.productId, item.name)} × {item.quantity}
             </span>
             <span className="shrink-0 font-medium text-zinc-950">
-              {formatPrice(item.price * item.quantity)}
+              {formatCurrency(item.price * item.quantity)}
             </span>
           </li>
         ))}
       </ul>
       <div className="mt-4 flex justify-between border-t border-zinc-200 pt-4 text-sm font-semibold text-zinc-950">
-        <span>Total</span>
-        <span>{formatPrice(total)}</span>
+        <span>{t("cart.total")}</span>
+        <span>{formatCurrency(total)}</span>
       </div>
     </div>
   );

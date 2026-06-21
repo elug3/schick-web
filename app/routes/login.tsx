@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { login, register } from "~/lib/auth";
+import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
@@ -10,6 +11,7 @@ export function meta() {
 }
 
 export default function Login() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
@@ -30,7 +32,7 @@ export default function Login() {
       }
       navigate("/profile", { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("login.somethingWentWrong"));
     } finally {
       setLoading(false);
     }
@@ -43,7 +45,7 @@ export default function Login() {
           Schick
         </h1>
         <p className="mt-2 text-sm text-zinc-500">
-          {mode === "login" ? "Welcome back" : "Create your account"}
+          {mode === "login" ? t("login.welcomeBack") : t("login.createYourAccount")}
         </p>
       </div>
 
@@ -56,7 +58,7 @@ export default function Login() {
             htmlFor="email"
             className="block text-xs font-medium text-zinc-600"
           >
-            Email
+            {t("login.email")}
           </label>
           <input
             id="email"
@@ -75,7 +77,7 @@ export default function Login() {
             htmlFor="password"
             className="block text-xs font-medium text-zinc-600"
           >
-            Password
+            {t("login.password")}
           </label>
           <input
             id="password"
@@ -101,15 +103,15 @@ export default function Login() {
           className="w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
         >
           {loading
-            ? "Please wait…"
+            ? t("login.pleaseWait")
             : mode === "login"
-            ? "Sign in"
-            : "Create account"}
+            ? t("login.signIn")
+            : t("login.createAccount")}
         </button>
       </form>
 
       <p className="mt-5 text-center text-sm text-zinc-500">
-        {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+        {mode === "login" ? t("login.noAccount") : t("login.hasAccount")}{" "}
         <button
           type="button"
           onClick={() => {
@@ -118,7 +120,7 @@ export default function Login() {
           }}
           className="font-semibold text-zinc-950 underline-offset-2 hover:underline"
         >
-          {mode === "login" ? "Sign up" : "Sign in"}
+          {mode === "login" ? t("login.signUp") : t("login.signIn")}
         </button>
       </p>
     </main>

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { type Bag, fetchBags, bagImage } from "../lib/api";
 import {
-  formatPrice,
   FREE_SHIPPING_THRESHOLD,
   PROMO_CODE,
   PROMO_DISCOUNT,
 } from "../lib/cart";
+import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
 
 export function meta() {
@@ -20,6 +20,7 @@ export function meta() {
 }
 
 export default function CartPage() {
+  const { t, formatCurrency, translateProductName } = useLanguage();
   const { items, setQuantity, remove, totals } = useCart();
   const [promoCode, setPromoCode] = useState("");
   const [promoInput, setPromoInput] = useState("");
@@ -39,7 +40,7 @@ export default function CartPage() {
       setPromoError("");
     } else {
       setPromoCode("");
-      setPromoError("Invalid promo code");
+      setPromoError(t("cart.invalidPromo"));
     }
   }
 
@@ -51,7 +52,7 @@ export default function CartPage() {
           className="mb-8 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 transition hover:text-zinc-950"
         >
           <BackIcon />
-          Continue Shopping
+          {t("cart.continueShopping")}
         </Link>
 
         <div className="mb-10 flex flex-col gap-2 md:mb-14 md:flex-row md:items-end md:justify-between">
@@ -59,11 +60,11 @@ export default function CartPage() {
             className="text-4xl font-light tracking-tight text-zinc-950 md:text-5xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Shopping Bag
+            {t("cart.shoppingBag")}
           </h1>
           {items.length > 0 && (
             <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
-              {summary.itemCount} {summary.itemCount === 1 ? "item" : "items"}
+              {summary.itemCount} {summary.itemCount === 1 ? t("cart.item") : t("cart.items")}
             </p>
           )}
         </div>
@@ -72,7 +73,7 @@ export default function CartPage() {
           <EmptyBag recommendations={recommendations} />
         ) : (
           <div className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
-            <section aria-label="Bag items" className="space-y-0">
+            <section aria-label={t("cart.bagItems")} className="space-y-0">
               {items.map((item) => (
                 <article
                   key={`${item.productId}:${item.size ?? ""}`}
@@ -85,7 +86,7 @@ export default function CartPage() {
                     <div className="relative" style={{ paddingBottom: "125%" }}>
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={translateProductName(item.productId, item.name)}
                         className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105"
                       />
                     </div>
@@ -100,11 +101,11 @@ export default function CartPage() {
                         to={`/product/${item.productId}`}
                         className="mt-1 block text-lg font-medium leading-snug text-zinc-950 transition hover:opacity-70 md:text-xl"
                       >
-                        {item.name}
+                        {translateProductName(item.productId, item.name)}
                       </Link>
                       {item.size && (
                         <p className="mt-2 text-[11px] uppercase tracking-widest text-zinc-400">
-                          Size {item.size}
+                          {t("cart.size", { size: item.size })}
                         </p>
                       )}
                     </div>
@@ -130,11 +131,11 @@ export default function CartPage() {
 
                       <div className="text-right">
                         <p className="text-base font-semibold text-zinc-950">
-                          {formatPrice(item.price * item.quantity)}
+                          {formatCurrency(item.price * item.quantity)}
                         </p>
                         {item.quantity > 1 && (
                           <p className="mt-0.5 text-[11px] text-zinc-400">
-                            {formatPrice(item.price)} each
+                            {t("cart.each", { price: formatCurrency(item.price) })}
                           </p>
                         )}
                         <button
@@ -142,7 +143,7 @@ export default function CartPage() {
                           onClick={() => remove(item.productId, item.size)}
                           className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-400 underline-offset-4 transition hover:text-zinc-950 hover:underline"
                         >
-                          Remove
+                          {t("cart.remove")}
                         </button>
                       </div>
                     </div>
@@ -159,7 +160,7 @@ export default function CartPage() {
                 onPromoInputChange={setPromoInput}
                 onApplyPromo={applyPromo}
                 checkoutHref="/checkout"
-                checkoutLabel="Proceed to Checkout"
+                checkoutLabel={t("cart.proceedToCheckout")}
               />
             </aside>
           </div>
@@ -167,8 +168,8 @@ export default function CartPage() {
 
         {items.length > 0 && (
           <Recommendations
-            title="Complete the Look"
-            subtitle="Most Viewed"
+            title={t("cart.completeTheLook")}
+            subtitle={t("cart.mostViewed")}
             products={recommendations.slice(0, 4)}
           />
         )}
@@ -180,6 +181,8 @@ export default function CartPage() {
 }
 
 function EmptyBag({ recommendations }: { recommendations: Bag[] }) {
+  const { t } = useLanguage();
+
   return (
     <>
       <div className="border-b border-zinc-100 py-16 text-center md:py-24">
@@ -187,23 +190,22 @@ function EmptyBag({ recommendations }: { recommendations: Bag[] }) {
           className="text-3xl font-light text-zinc-950 md:text-4xl"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Your bag is empty.
+          {t("cart.empty")}
         </p>
         <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-zinc-400">
-          Discover our curated selection of authenticated luxury bags from the
-          world&apos;s most coveted maisons.
+          {t("cart.emptyDescription")}
         </p>
         <Link
           to="/"
           className="mt-8 inline-flex h-12 items-center bg-zinc-950 px-10 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
         >
-          Shop Bags
+          {t("cart.shopBags")}
         </Link>
       </div>
 
       <Recommendations
-        title="Pairs Well With"
-        subtitle="Most Viewed"
+        title={t("cart.pairsWellWith")}
+        subtitle={t("cart.mostViewed")}
         products={recommendations}
       />
     </>
@@ -219,6 +221,8 @@ function Recommendations({
   subtitle: string;
   products: Bag[];
 }) {
+  const { formatCurrency, translateProductName } = useLanguage();
+
   if (products.length === 0) return null;
   return (
     <section className="mt-16 border-t border-zinc-100 pt-12 md:mt-20 md:pt-16">
@@ -243,7 +247,7 @@ function Recommendations({
             >
               <img
                 src={bagImage(product.brand)}
-                alt={product.name}
+                alt={translateProductName(product.id, product.name)}
                 className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
               />
             </div>
@@ -251,10 +255,10 @@ function Recommendations({
               {product.brand}
             </p>
             <p className="mt-0.5 text-sm font-medium text-zinc-950">
-              {product.name}
+              {translateProductName(product.id, product.name)}
             </p>
             <p className="mt-1.5 text-sm font-semibold text-zinc-950">
-              {formatPrice(product.price)}
+              {formatCurrency(product.price)}
             </p>
           </Link>
         ))}
@@ -282,6 +286,7 @@ export function OrderSummary({
   checkoutLabel: string;
   disabled?: boolean;
 }) {
+  const { t, formatCurrency } = useLanguage();
   const amountToFreeShipping = Math.max(
     0,
     FREE_SHIPPING_THRESHOLD - (summary.subtotal - summary.discount)
@@ -290,44 +295,43 @@ export function OrderSummary({
   return (
     <div className="border border-zinc-100 bg-zinc-50/50 p-6 md:p-8">
       <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-950">
-        Order Summary
+        {t("cart.orderSummary")}
       </h2>
 
       <dl className="mt-6 space-y-4 text-sm">
         <div className="flex justify-between text-zinc-600">
-          <dt>Subtotal</dt>
+          <dt>{t("cart.subtotal")}</dt>
           <dd className="font-medium text-zinc-950">
-            {formatPrice(summary.subtotal)}
+            {formatCurrency(summary.subtotal)}
           </dd>
         </div>
         {summary.promoApplied && (
           <div className="flex justify-between text-emerald-700">
-            <dt>Promo ({PROMO_CODE})</dt>
+            <dt>{t("cart.promo", { code: PROMO_CODE })}</dt>
             <dd className="font-medium">
-              −{formatPrice(summary.discount)}
+              −{formatCurrency(summary.discount)}
             </dd>
           </div>
         )}
         <div className="flex justify-between text-zinc-600">
-          <dt>Shipping</dt>
+          <dt>{t("cart.shipping")}</dt>
           <dd className="font-medium text-zinc-950">
-            {summary.shipping === 0 ? "Complimentary" : formatPrice(summary.shipping)}
+            {summary.shipping === 0 ? t("cart.complimentary") : formatCurrency(summary.shipping)}
           </dd>
         </div>
         <div className="flex justify-between border-t border-zinc-200 pt-4 text-base">
           <dt className="font-semibold uppercase tracking-widest text-zinc-950">
-            Total
+            {t("cart.total")}
           </dt>
           <dd className="text-xl font-semibold text-zinc-950">
-            {formatPrice(summary.total)}
+            {formatCurrency(summary.total)}
           </dd>
         </div>
       </dl>
 
       {summary.itemCount > 0 && amountToFreeShipping > 0 && (
         <p className="mt-4 text-[11px] leading-relaxed text-zinc-400">
-          Add {formatPrice(amountToFreeShipping)} more for complimentary
-          shipping.
+          {t("cart.freeShippingProgress", { amount: formatCurrency(amountToFreeShipping) })}
         </p>
       )}
 
@@ -336,7 +340,7 @@ export function OrderSummary({
           htmlFor="promo-code"
           className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600"
         >
-          Promo Code
+          {t("cart.promoCode")}
         </label>
         <div className="mt-2 flex gap-2">
           <input
@@ -352,7 +356,7 @@ export function OrderSummary({
             onClick={onApplyPromo}
             className="h-11 border border-zinc-950 px-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-950 transition hover:bg-zinc-950 hover:text-white"
           >
-            Apply
+            {t("cart.apply")}
           </button>
         </div>
         {promoError && (
@@ -360,7 +364,7 @@ export function OrderSummary({
         )}
         {summary.promoApplied && (
           <p className="mt-2 text-[11px] text-emerald-700">
-            {Math.round(PROMO_DISCOUNT * 100)}% off applied.
+            {t("cart.discountApplied", { discount: Math.round(PROMO_DISCOUNT * 100) })}
           </p>
         )}
       </div>
@@ -385,15 +389,15 @@ export function OrderSummary({
       <ul className="mt-6 space-y-2 border-t border-zinc-200 pt-6 text-[11px] text-zinc-400">
         <li className="flex items-center gap-2">
           <ShieldIcon />
-          Authenticity guaranteed on every order
+          {t("cart.authenticityGuaranteed")}
         </li>
         <li className="flex items-center gap-2">
           <TruckIcon />
-          Complimentary shipping over {formatPrice(FREE_SHIPPING_THRESHOLD)}
+          {t("cart.complimentaryShippingOver", { amount: formatCurrency(FREE_SHIPPING_THRESHOLD) })}
         </li>
         <li className="flex items-center gap-2">
           <ReturnIcon />
-          30-day returns on eligible items
+          {t("cart.returns")}
         </li>
       </ul>
     </div>
@@ -409,12 +413,14 @@ function QuantityControl({
   onDecrease: () => void;
   onIncrease: () => void;
 }) {
+  const { t } = useLanguage();
+
   return (
     <div className="inline-flex items-center border border-zinc-200">
       <button
         type="button"
         onClick={onDecrease}
-        aria-label="Decrease quantity"
+        aria-label={t("cart.decreaseQuantity")}
         className="flex h-10 w-10 items-center justify-center text-zinc-500 transition hover:text-zinc-950"
       >
         <MinusIcon />
@@ -425,7 +431,7 @@ function QuantityControl({
       <button
         type="button"
         onClick={onIncrease}
-        aria-label="Increase quantity"
+        aria-label={t("cart.increaseQuantity")}
         className="flex h-10 w-10 items-center justify-center text-zinc-500 transition hover:text-zinc-950"
       >
         <PlusIcon />
@@ -435,6 +441,8 @@ function QuantityControl({
 }
 
 function HelpBar() {
+  const { t } = useLanguage();
+
   return (
     <section className="mt-16 border-t border-zinc-100 bg-zinc-50 px-4 py-12 md:mt-20 md:px-10">
       <div className="mx-auto max-w-7xl text-center">
@@ -442,10 +450,10 @@ function HelpBar() {
           className="text-xl font-light text-zinc-950 md:text-2xl"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Need assistance?
+          {t("cart.needAssistance")}
         </p>
         <p className="mt-2 text-sm text-zinc-400">
-          Contact the Schick Client Services team for personal shopping support.
+          {t("cart.assistanceDescription")}
         </p>
         <a
           href="mailto:concierge@schick.com"
