@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   NavLink,
@@ -86,27 +87,24 @@ const desktopNavLinks = [
   {
     id: "productType",
     labelKey: "nav.productType",
-    to: "/category/product-type",
+    to: "/category/product-type/handbags",
     items: [
       { labelKey: "home.categoryBags", to: "/category/product-type/handbags" },
-      { labelKey: "home.categorySneakers", to: "/category/product-type/sneakers" },
-      { labelKey: "home.categoryWatches", to: "/category/product-type/watches" },
-      { labelKey: "home.categoryOuterwear", to: "/category/product-type/outerwear" },
+      { labelKey: "category.totes", to: "/category/product-type/totes" },
+      { labelKey: "category.shoulderBags", to: "/category/product-type/shoulder-bags" },
+      { labelKey: "category.crossbody", to: "/category/product-type/crossbody" },
+      { labelKey: "category.miniBags", to: "/category/product-type/mini-bags" },
     ],
   },
   {
     id: "brand",
     labelKey: "nav.brand",
-    to: "/category/brand",
+    to: "/category/brand/louis-vuitton",
     items: [
-      { label: "Gucci", to: "/category/brand/gucci", image: "/brands/gucci.svg" },
       { label: "Louis Vuitton", to: "/category/brand/louis-vuitton", image: "/brands/louis-vuitton.svg" },
-      { label: "Chanel", to: "/category/brand/chanel", image: "/brands/chanel.svg" },
-      { label: "Prada", to: "/category/brand/prada", image: "/brands/prada.svg" },
+      { label: "Miu Miu", to: "/category/brand/miu-miu", image: "/brands/prada.svg" },
+      { label: "Balenciaga", to: "/category/brand/balenciaga", image: "/brands/gucci.svg" },
       { label: "Hermès", to: "/category/brand/hermes", image: "/brands/hermes.svg" },
-      { label: "Dior", to: "/category/brand/dior", image: "/brands/dior.svg" },
-      { label: "Bottega Veneta", to: "/category/brand/bottega-veneta", image: "/brands/bottega-veneta.svg" },
-      { label: "Coach", to: "/category/brand/coach", image: "/brands/coach.svg" },
     ],
   },
   {
@@ -332,7 +330,7 @@ function Footer() {
               {t("footer.services")}
             </p>
             <ul className="space-y-2 text-xs text-zinc-400">
-              <li><NavLink to="/product/c1" className="hover:text-zinc-950 transition">{t("footer.styleConsultation")}</NavLink></li>
+              <li><Link to="/category/product-type/handbags" className="hover:text-zinc-950 transition">{t("footer.styleConsultation")}</Link></li>
               <li><NavLink to="/history" className="hover:text-zinc-950 transition">{t("footer.orderHistory")}</NavLink></li>
               <li><NavLink to="/profile" className="hover:text-zinc-950 transition">{t("footer.myAccount")}</NavLink></li>
             </ul>
