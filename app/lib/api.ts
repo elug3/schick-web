@@ -27,6 +27,7 @@ export interface ServerProduct {
   category: string;
   status: string;
   image?: string;
+  images?: string[];
   createdAt: string;
 }
 
