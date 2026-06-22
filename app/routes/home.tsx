@@ -60,33 +60,15 @@ function Hero() {
     : "/category/product-type/handbags";
 
   return (
-    <section className="flex min-h-[88vh] flex-col md:flex-row">
-      {/* Text pane */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8 py-20 text-center md:items-start md:px-16 md:text-left">
-        <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
-          {t("home.eyebrow")}
-        </p>
-        <h1
-          className="text-6xl font-light leading-none tracking-tight text-zinc-950 md:text-8xl lg:text-[7rem]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {t("home.heroTitleLine1")}
-          <br />
-          <em className="not-italic text-zinc-400">{t("home.heroTitleLine2")}</em>
-        </h1>
-        <p className="mt-6 max-w-sm text-sm leading-loose text-zinc-400">
-          {t("home.heroDescription")}
-        </p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <Link
-            to="/"
-            className="inline-flex h-12 items-center gap-2 bg-zinc-950 px-8 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
-          >
-            {t("home.shopNow")}
-          </Link>
-          <Link
-            to="/category/product-type/handbags"
-            className="inline-flex h-12 items-center gap-2 border border-zinc-200 px-8 text-xs font-semibold uppercase tracking-widest text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+    <section className="relative overflow-hidden bg-[#f7f3ee]">
+      <div className="mx-auto grid min-h-[92vh] max-w-7xl lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <div className="flex flex-col justify-center px-8 py-16 text-center lg:px-14 lg:py-20 lg:text-left">
+          <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
+            {t("home.eyebrow")}
+          </p>
+          <h1
+            className="text-5xl font-light leading-[0.95] tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
+            style={{ fontFamily: "var(--font-display)" }}
           >
             {t("home.heroTitleLine1")}
             <br />
