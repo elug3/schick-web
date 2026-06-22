@@ -2,9 +2,14 @@ const KEY = "schick_cart";
 export const FREE_SHIPPING_THRESHOLD = 100;
 export const PROMO_CODE = "SUMMER30";
 export const PROMO_DISCOUNT = 0.3;
+export const ORIGINAL_PRICE_MULTIPLIER = 3;
 
 export function getSalePrice(price: number): number {
   return Math.round(price * (1 - PROMO_DISCOUNT));
+}
+
+export function getOriginalPrice(price: number): number {
+  return Math.round(price * ORIGINAL_PRICE_MULTIPLIER);
 }
 
 // Memoize getCart so useSyncExternalStore gets a stable reference when data hasn't changed
