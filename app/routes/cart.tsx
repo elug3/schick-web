@@ -7,8 +7,10 @@ import {
   PROMO_DISCOUNT,
 } from "../lib/cart";
 import { useLanguage } from "../lib/i18n";
+import { CartLineControls } from "../components/cart-line-controls";
 import { ProductPrice } from "../components/product-price";
 import { useCart } from "../lib/useCart";
+import { useCartMutation } from "../lib/useCartMutation";
 
 export function meta() {
   return [
@@ -22,7 +24,8 @@ export function meta() {
 
 export default function CartPage() {
   const { t, formatCurrency, translateProductName } = useLanguage();
-  const { items, setQuantity, remove, totals } = useCart();
+  const { items, totals } = useCart();
+  const mutation = useCartMutation();
   const [promoCode, setPromoCode] = useState("");
   const [promoInput, setPromoInput] = useState("");
   const [promoError, setPromoError] = useState("");
@@ -111,43 +114,13 @@ export default function CartPage() {
                       )}
                     </div>
 
-                    <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
-                      <QuantityControl
-                        quantity={item.quantity}
-                        onDecrease={() =>
-                          setQuantity(
-                            item.productId,
-                            item.size,
-                            item.quantity - 1
-                          )
-                        }
-                        onIncrease={() =>
-                          setQuantity(
-                            item.productId,
-                            item.size,
-                            item.quantity + 1
-                          )
-                        }
-                      />
-
-                      <div className="text-right">
-                        <p className="text-base font-semibold text-zinc-950">
-                          {formatCurrency(item.price * item.quantity)}
-                        </p>
-                        {item.quantity > 1 && (
-                          <p className="mt-0.5 text-[11px] text-zinc-400">
-                            {t("cart.each", { price: formatCurrency(item.price) })}
-                          </p>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => remove(item.productId, item.size)}
-                          className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-400 underline-offset-4 transition hover:text-zinc-950 hover:underline"
-                        >
-                          {t("cart.remove")}
-                        </button>
-                      </div>
-                    </div>
+                    <CartLineControls
+                      productId={item.productId}
+                      size={item.size}
+                      quantity={item.quantity}
+                      price={item.price}
+                      mutation={mutation}
+                    />
                   </div>
                 </article>
               ))}
@@ -162,6 +135,7 @@ export default function CartPage() {
                 onApplyPromo={applyPromo}
                 checkoutHref="/checkout"
                 checkoutLabel={t("cart.proceedToCheckout")}
+                disabled={mutation.pendingKey !== null}
               />
             </aside>
           </div>
@@ -404,42 +378,6 @@ export function OrderSummary({
   );
 }
 
-function QuantityControl({
-  quantity,
-  onDecrease,
-  onIncrease,
-}: {
-  quantity: number;
-  onDecrease: () => void;
-  onIncrease: () => void;
-}) {
-  const { t } = useLanguage();
-
-  return (
-    <div className="inline-flex items-center border border-zinc-200">
-      <button
-        type="button"
-        onClick={onDecrease}
-        aria-label={t("cart.decreaseQuantity")}
-        className="flex h-10 w-10 items-center justify-center text-zinc-500 transition hover:text-zinc-950"
-      >
-        <MinusIcon />
-      </button>
-      <span className="flex h-10 w-10 items-center justify-center text-sm font-medium text-zinc-950">
-        {quantity}
-      </span>
-      <button
-        type="button"
-        onClick={onIncrease}
-        aria-label={t("cart.increaseQuantity")}
-        className="flex h-10 w-10 items-center justify-center text-zinc-500 transition hover:text-zinc-950"
-      >
-        <PlusIcon />
-      </button>
-    </div>
-  );
-}
-
 function HelpBar() {
   const { t } = useLanguage();
 
@@ -470,22 +408,6 @@ function BackIcon() {
   return (
     <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none">
       <path d="m15 18-6-6 6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function MinusIcon() {
-  return (
-    <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none">
-      <path d="M5 12h14" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none">
-      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }

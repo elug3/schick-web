@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { CartLineControls } from "../components/cart-line-controls";
+import { LoadingBadge } from "../components/loading-badge";
 import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
+import { useCartMutation } from "../lib/useCartMutation";
 import { OrderSummary } from "./cart";
 
 export function meta() {
@@ -73,6 +76,7 @@ export default function CheckoutPage() {
   const lockedCountry = t("checkout.countryValue");
   const navigate = useNavigate();
   const { items, clear, totals } = useCart();
+  const mutation = useCartMutation();
   const [form, setForm] = useState<FormState>(initialForm);
   const [promoCode, setPromoCode] = useState("");
   const [promoInput, setPromoInput] = useState("");
@@ -95,6 +99,7 @@ export default function CheckoutPage() {
   const summary = totals(promoCode);
   const expressFee = form.delivery === "express" ? 25 : 0;
   const checkoutTotal = summary.total + expressFee;
+  const cartBusy = mutation.pendingKey !== null;
 
   function applyPromo() {
     const code = promoInput.trim().toUpperCase();
@@ -453,7 +458,7 @@ export default function CheckoutPage() {
             )}
 
             <div className="lg:hidden">
-              <MiniBag items={items} total={checkoutTotal} />
+              <MiniBag items={items} total={checkoutTotal} mutation={mutation} />
             </div>
 
             <div className="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -471,7 +476,7 @@ export default function CheckoutPage() {
               {isPaymentStep ? (
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || cartBusy}
                   className="flex h-14 items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70 sm:min-w-64"
                 >
                   {submitting ? t("checkout.processing") : primaryActionLabel}
@@ -480,7 +485,8 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="flex h-14 items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 sm:min-w-64"
+                  disabled={cartBusy}
+                  className="flex h-14 items-center justify-center bg-zinc-950 px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70 sm:min-w-64"
                 >
                   {primaryActionLabel}
                 </button>
@@ -489,31 +495,36 @@ export default function CheckoutPage() {
           </div>
 
           <aside className="hidden lg:block lg:sticky lg:top-28 lg:self-start">
-            <div className="mb-6 space-y-4 border-b border-zinc-100 pb-6">
+            <div className="mb-6 space-y-6 border-b border-zinc-100 pb-6">
               {items.map((item) => (
-                <div
-                  key={`${item.productId}:${item.size ?? ""}`}
-                  className="flex gap-4"
-                >
-                  <div className="relative h-20 w-16 shrink-0 overflow-hidden bg-zinc-50">
-                    <img
-                      src={item.image}
-                      alt={translateProductName(item.productId, item.name)}
-                      className="h-full w-full object-cover"
-                    />
-                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center bg-zinc-950 text-[10px] text-white">
-                      {item.quantity}
-                    </span>
+                <div key={`${item.productId}:${item.size ?? ""}`}>
+                  <div className="flex gap-4">
+                    <div className="relative h-20 w-16 shrink-0 overflow-hidden bg-zinc-50">
+                      <img
+                        src={item.image}
+                        alt={translateProductName(item.productId, item.name)}
+                        className="h-full w-full object-cover"
+                      />
+                      <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center bg-zinc-950 text-[10px] text-white">
+                        {item.quantity}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] uppercase tracking-widest text-zinc-400">
+                        {item.brand}
+                      </p>
+                      <p className="truncate text-sm text-zinc-950">
+                        {translateProductName(item.productId, item.name)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[10px] uppercase tracking-widest text-zinc-400">
-                      {item.brand}
-                    </p>
-                    <p className="truncate text-sm text-zinc-950">{translateProductName(item.productId, item.name)}</p>
-                    <p className="mt-1 text-sm font-medium text-zinc-950">
-                      {formatCurrency(item.price * item.quantity)}
-                    </p>
-                  </div>
+                  <CartLineControls
+                    productId={item.productId}
+                    size={item.size}
+                    quantity={item.quantity}
+                    price={item.price}
+                    mutation={mutation}
+                  />
                 </div>
               ))}
             </div>
@@ -539,7 +550,7 @@ export default function CheckoutPage() {
               {isPaymentStep ? (
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || cartBusy}
                   className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
                 >
                   {submitting ? t("checkout.processing") : t("checkout.placeOrder")}
@@ -548,7 +559,8 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800"
+                  disabled={cartBusy}
+                  className="flex h-14 w-full items-center justify-center bg-zinc-950 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-zinc-800 disabled:cursor-wait disabled:opacity-70"
                 >
                   {primaryActionLabel}
                 </button>
@@ -761,9 +773,11 @@ function DeliveryOption({
 function MiniBag({
   items,
   total,
+  mutation,
 }: {
   items: ReturnType<typeof useCart>["items"];
   total: number;
+  mutation: ReturnType<typeof useCartMutation>;
 }) {
   const { t, formatCurrency, translateProductName } = useLanguage();
 
@@ -772,25 +786,116 @@ function MiniBag({
       <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-950">
         {t("checkout.yourBag", { count: items.length })}
       </p>
-      <ul className="mt-3 space-y-3">
-        {items.map((item) => (
-          <li
-            key={`${item.productId}:${item.size ?? ""}`}
-            className="flex justify-between gap-3 text-sm"
-          >
-            <span className="truncate text-zinc-600">
-              {translateProductName(item.productId, item.name)} × {item.quantity}
-            </span>
-            <span className="shrink-0 font-medium text-zinc-950">
-              {formatCurrency(item.price * item.quantity)}
-            </span>
-          </li>
-        ))}
+      <ul className="mt-3 space-y-4">
+        {items.map((item) => {
+          const pending = mutation.isPending(item.productId, item.size);
+          const action = mutation.getAction(item.productId, item.size);
+
+          return (
+            <li
+              key={`${item.productId}:${item.size ?? ""}`}
+              className="border-b border-zinc-100 pb-4 last:border-0 last:pb-0"
+            >
+              <div className="flex justify-between gap-3 text-sm">
+                <span className="truncate text-zinc-600">
+                  {translateProductName(item.productId, item.name)}
+                </span>
+                <span className="shrink-0 font-medium text-zinc-950">
+                  {formatCurrency(item.price * item.quantity)}
+                </span>
+              </div>
+              {pending && action === "remove" ? (
+                <div className="mt-2">
+                  <LoadingBadge label={t("cart.removing")} />
+                </div>
+              ) : (
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <div className="relative">
+                    {pending &&
+                      (action === "increase" || action === "decrease") && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-50/90">
+                          <LoadingBadge label={t("cart.updating")} />
+                        </div>
+                      )}
+                    <MiniQuantityControl
+                      quantity={item.quantity}
+                      disabled={pending}
+                      onDecrease={() =>
+                        mutation.decreaseQuantity(
+                          item.productId,
+                          item.size,
+                          item.quantity
+                        )
+                      }
+                      onIncrease={() =>
+                        mutation.increaseQuantity(
+                          item.productId,
+                          item.size,
+                          item.quantity
+                        )
+                      }
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() =>
+                      mutation.removeItem(item.productId, item.size)
+                    }
+                    className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 transition hover:text-zinc-950 disabled:cursor-wait disabled:opacity-50"
+                  >
+                    {t("cart.remove")}
+                  </button>
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
       <div className="mt-4 flex justify-between border-t border-zinc-200 pt-4 text-sm font-semibold text-zinc-950">
         <span>{t("cart.total")}</span>
         <span>{formatCurrency(total)}</span>
       </div>
+    </div>
+  );
+}
+
+function MiniQuantityControl({
+  quantity,
+  onDecrease,
+  onIncrease,
+  disabled = false,
+}: {
+  quantity: number;
+  onDecrease: () => void;
+  onIncrease: () => void;
+  disabled?: boolean;
+}) {
+  const { t } = useLanguage();
+
+  return (
+    <div className="inline-flex items-center border border-zinc-200 bg-white">
+      <button
+        type="button"
+        onClick={onDecrease}
+        disabled={disabled}
+        aria-label={t("cart.decreaseQuantity")}
+        className="flex h-8 w-8 items-center justify-center text-zinc-500 transition hover:text-zinc-950 disabled:cursor-wait disabled:opacity-50"
+      >
+        <span aria-hidden="true">−</span>
+      </button>
+      <span className="flex h-8 w-8 items-center justify-center text-xs font-medium text-zinc-950">
+        {quantity}
+      </span>
+      <button
+        type="button"
+        onClick={onIncrease}
+        disabled={disabled}
+        aria-label={t("cart.increaseQuantity")}
+        className="flex h-8 w-8 items-center justify-center text-zinc-500 transition hover:text-zinc-950 disabled:cursor-wait disabled:opacity-50"
+      >
+        <span aria-hidden="true">+</span>
+      </button>
     </div>
   );
 }
