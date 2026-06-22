@@ -5,6 +5,7 @@ import {
   type DisplayProduct,
   fetchBags,
   bagImage,
+  bannerBagImage,
   heroBagImage,
   getCategoryImage,
   productImage,
@@ -37,6 +38,7 @@ export default function Home() {
 // ── Hero ───────────────────────────────────────────────────────────────────
 
 const HERO_BAG_ID = "bag-hermes-birkin-25";
+const SUMMER_EDIT_BAG_ID = "bag-hermes-garden-party-30";
 
 function Hero() {
   const { t, translateProductName } = useLanguage();
@@ -439,14 +441,36 @@ function CrossCategoryProducts() {
 
 function EditorialBanner() {
   const { t } = useLanguage();
+  const [summerBag, setSummerBag] = useState<Bag | null>(null);
+
+  useEffect(() => {
+    fetchBags()
+      .then((bags) => {
+        const selected =
+          bags.find((bag) => bag.id === SUMMER_EDIT_BAG_ID) ??
+          bags.find((bag) => bag.brand === "Hermès") ??
+          bags[0] ??
+          null;
+        setSummerBag(selected);
+      })
+      .catch(() => {});
+  }, []);
+
+  const shopLink = summerBag
+    ? `/product/${summerBag.id}`
+    : "/category/product-type/handbags";
 
   return (
     <section className="relative overflow-hidden">
-      <img
-        src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?w=1600&h=600&fit=crop"
-        alt={t("home.summerEditAlt")}
-        className="h-64 w-full object-cover md:h-96"
-      />
+      {summerBag ? (
+        <img
+          src={bannerBagImage(summerBag.image, summerBag.brand)}
+          alt={t("home.summerEditAlt")}
+          className="h-64 w-full object-cover md:h-96"
+        />
+      ) : (
+        <div className="h-64 w-full animate-pulse bg-zinc-100 md:h-96" />
+      )}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/50 text-center text-white">
         <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">
           {t("home.limitedTime")}
@@ -459,7 +483,7 @@ function EditorialBanner() {
         </h3>
         <p className="mt-2 text-sm tracking-widest text-white/70">{t("home.saleDescription")}</p>
         <Link
-          to="/"
+          to={shopLink}
           className="mt-6 inline-flex h-11 items-center border border-white px-8 text-[10px] font-semibold uppercase tracking-widest text-white transition hover:bg-white hover:text-zinc-950"
         >
           {t("home.shopSale")}
