@@ -370,7 +370,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
             body: t("product.shippingReturnsBody"),
           },
           {
-            title: t("product.authenticity"),
+            title: t("product.qualityAssurance"),
             body: t("product.authenticityBody"),
           },
         ].map((item) => (
