@@ -27,6 +27,7 @@ export interface ServerProduct {
   category: string;
   status: string;
   image?: string;
+  images?: string[];
   createdAt: string;
 }
 
@@ -159,6 +160,7 @@ function normalizeProduct(
     "Gender",
     "Capacity",
     "Type",
+    "Style",
   ]) {
     if (raw[k] != null) details[k] = raw[k] as string | number;
   }

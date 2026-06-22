@@ -206,6 +206,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Every item sold by Schick comes with a certificate of authenticity. We partner directly with authorized retailers to guarantee genuine products.",
     "product.badgeNew": "New",
     "product.badgeFeatured": "Featured",
+    "product.priceLoading": "Loading",
 
     "cart.metaTitle": "Shopping Bag — Schick",
     "cart.metaDescription":
@@ -271,6 +272,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.state": "State",
     "checkout.zip": "ZIP Code",
     "checkout.country": "Country",
+    "checkout.countryValue": "Republic of Korea",
     "checkout.delivery": "Delivery",
     "checkout.standardDelivery": "Standard Delivery",
     "checkout.standardDeliveryTime": "5–7 business days",
@@ -659,6 +661,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Schick에서 판매되는 모든 제품에는 정품 인증서가 제공됩니다. 정품 보장을 위해 공식 리테일러와 직접 협력합니다.",
     "product.badgeNew": "신상품",
     "product.badgeFeatured": "추천",
+    "product.priceLoading": "불러오는 중",
 
     "cart.metaTitle": "장바구니 — Schick",
     "cart.metaDescription":
@@ -721,6 +724,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.state": "주/도",
     "checkout.zip": "우편번호",
     "checkout.country": "국가",
+    "checkout.countryValue": "대한민국",
     "checkout.delivery": "배송 방법",
     "checkout.standardDelivery": "일반 배송",
     "checkout.standardDeliveryTime": "영업일 기준 5–7일",
@@ -1101,6 +1105,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "Schick 售出的每件商品都附带正品证书。我们直接与授权零售商合作，保证商品真实可靠。",
     "product.badgeNew": "新品",
     "product.badgeFeatured": "精选",
+    "product.priceLoading": "加载中",
 
     "cart.metaTitle": "购物袋 — Schick",
     "cart.metaDescription": "查看已选奢华包袋并继续结账。",
@@ -1160,6 +1165,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.state": "州/省",
     "checkout.zip": "邮编",
     "checkout.country": "国家",
+    "checkout.countryValue": "大韩民国",
     "checkout.delivery": "配送方式",
     "checkout.standardDelivery": "标准配送",
     "checkout.standardDeliveryTime": "5–7 个工作日",

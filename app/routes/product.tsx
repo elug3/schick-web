@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
+import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
 import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
@@ -93,13 +94,11 @@ function Breadcrumb({ product }: { product: ServerProduct }) {
 
 function ProductLayout({ product }: { product: ServerProduct }) {
   const { t, translateProductName } = useLanguage();
-  const img = productImage(product.category, product.brand, product.image);
-  const images = [
-    { src: img, position: "object-center" },
-    { src: img, position: "object-top" },
-    { src: img, position: "object-bottom" },
-    { src: img, position: "object-left" },
-  ];
+  const fallback = productImage(product.category, product.brand, product.image);
+  const images = (product.images?.length ? product.images : [fallback]).map((src) => ({
+    src,
+    position: "object-center",
+  }));
 
   const [activeImg, setActiveImg] = useState(0);
 
@@ -180,7 +179,6 @@ function ProductLayout({ product }: { product: ServerProduct }) {
 function ProductInfo({ product }: { product: ServerProduct }) {
   const {
     t,
-    formatCurrency,
     translateProductDescription,
     translateProductName,
     translateValue,
@@ -234,9 +232,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
 
       {/* Price + stock */}
       <div className="mt-5 flex items-baseline gap-3">
-        <span className="text-3xl font-semibold tracking-tight text-zinc-950">
-          {formatCurrency(product.price)}
-        </span>
+        <ProductPrice price={product.price} size="lg" />
         <span
           className={`text-[10px] font-semibold uppercase tracking-widest ${inStock ? "text-emerald-600" : "text-zinc-400"}`}
         >

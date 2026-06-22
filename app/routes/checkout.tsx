@@ -41,7 +41,7 @@ const initialForm: FormState = {
   city: "",
   state: "",
   zip: "",
-  country: "United States",
+  country: "",
   phone: "",
   delivery: "standard",
   cardName: "",
@@ -70,6 +70,7 @@ const stepFields: Record<CheckoutStep, (keyof FormState)[]> = {
 
 export default function CheckoutPage() {
   const { t, formatCurrency, translateProductName } = useLanguage();
+  const lockedCountry = t("checkout.countryValue");
   const navigate = useNavigate();
   const { items, clear, totals } = useCart();
   const [form, setForm] = useState<FormState>(initialForm);
@@ -86,6 +87,10 @@ export default function CheckoutPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, country: lockedCountry }));
+  }, [lockedCountry]);
 
   const summary = totals(promoCode);
   const expressFee = form.delivery === "express" ? 25 : 0;
@@ -125,17 +130,20 @@ export default function CheckoutPage() {
             total: formatCurrency(checkoutTotal),
           });
 
-  function validateFields(fields: (keyof FormState)[]): boolean {
+  function validateFields(fields: (keyof FormState)[]): keyof FormState | null {
     const next: Partial<Record<keyof FormState, string>> = {};
+    let firstInvalidField: keyof FormState | null = null;
 
     for (const field of fields) {
       if (!form[field].trim()) {
         next[field] = t("checkout.required");
+        firstInvalidField ??= field;
       }
     }
 
     if (fields.includes("email") && form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       next.email = t("checkout.validEmail");
+      firstInvalidField ??= "email";
     }
 
     setErrors((prev) => ({
@@ -143,15 +151,29 @@ export default function CheckoutPage() {
       ...Object.fromEntries(fields.map((field) => [field, undefined])),
       ...next,
     }));
-    return Object.keys(next).length === 0;
+    return firstInvalidField;
   }
 
-  function validateStep(step: CheckoutStep): boolean {
+  function validateStep(step: CheckoutStep): keyof FormState | null {
     return validateFields(stepFields[step]);
   }
 
+  function scrollToField(field: keyof FormState) {
+    requestAnimationFrame(() => {
+      const element = document.getElementById(field);
+      if (!element) return;
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.focus({ preventScroll: true });
+    });
+  }
+
   function handleNextStep() {
-    if (!nextStep || !validateStep(activeStep)) return;
+    if (!nextStep) return;
+    const firstInvalidField = validateStep(activeStep);
+    if (firstInvalidField) {
+      scrollToField(firstInvalidField);
+      return;
+    }
     setActiveStep(nextStep);
   }
 
@@ -165,7 +187,11 @@ export default function CheckoutPage() {
       handleNextStep();
       return;
     }
-    if (!validateStep("payment")) return;
+    const firstInvalidField = validateStep("payment");
+    if (firstInvalidField) {
+      scrollToField(firstInvalidField);
+      return;
+    }
 
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1200));
@@ -256,6 +282,7 @@ export default function CheckoutPage() {
                     error={errors.email}
                     onChange={(v) => updateField("email", v)}
                     autoComplete="email"
+                    required
                   />
                   <Field
                     label={t("checkout.phone")}
@@ -265,6 +292,7 @@ export default function CheckoutPage() {
                     error={errors.phone}
                     onChange={(v) => updateField("phone", v)}
                     autoComplete="tel"
+                    required
                   />
                 </CheckoutSection>
 
@@ -277,6 +305,7 @@ export default function CheckoutPage() {
                       error={errors.firstName}
                       onChange={(v) => updateField("firstName", v)}
                       autoComplete="given-name"
+                      required
                     />
                     <Field
                       label={t("checkout.lastName")}
@@ -285,6 +314,7 @@ export default function CheckoutPage() {
                       error={errors.lastName}
                       onChange={(v) => updateField("lastName", v)}
                       autoComplete="family-name"
+                      required
                     />
                   </div>
                   <Field
@@ -294,6 +324,7 @@ export default function CheckoutPage() {
                     error={errors.address}
                     onChange={(v) => updateField("address", v)}
                     autoComplete="street-address"
+                    required
                   />
                   <Field
                     label={t("checkout.apartment")}
@@ -310,6 +341,7 @@ export default function CheckoutPage() {
                       error={errors.city}
                       onChange={(v) => updateField("city", v)}
                       autoComplete="address-level2"
+                      required
                     />
                     <Field
                       label={t("checkout.state")}
@@ -318,6 +350,7 @@ export default function CheckoutPage() {
                       error={errors.state}
                       onChange={(v) => updateField("state", v)}
                       autoComplete="address-level1"
+                      required
                     />
                     <Field
                       label={t("checkout.zip")}
@@ -326,14 +359,16 @@ export default function CheckoutPage() {
                       error={errors.zip}
                       onChange={(v) => updateField("zip", v)}
                       autoComplete="postal-code"
+                      required
                     />
                   </div>
                   <Field
                     label={t("checkout.country")}
                     id="country"
                     value={form.country}
-                    onChange={(v) => updateField("country", v)}
+                    onChange={() => {}}
                     autoComplete="country-name"
+                    readOnly
                   />
                 </CheckoutSection>
               </div>
@@ -377,6 +412,7 @@ export default function CheckoutPage() {
                   error={errors.cardName}
                   onChange={(v) => updateField("cardName", v)}
                   autoComplete="cc-name"
+                  required
                 />
                 <Field
                   label={t("checkout.cardNumber")}
@@ -386,6 +422,7 @@ export default function CheckoutPage() {
                   onChange={(v) => updateField("cardNumber", v)}
                   autoComplete="cc-number"
                   placeholder="4242 4242 4242 4242"
+                  required
                 />
                 <div className="grid gap-4 md:grid-cols-2">
                   <Field
@@ -396,6 +433,7 @@ export default function CheckoutPage() {
                     onChange={(v) => updateField("expiry", v)}
                     autoComplete="cc-exp"
                     placeholder="MM / YY"
+                    required
                   />
                   <Field
                     label={t("checkout.cvc")}
@@ -405,6 +443,7 @@ export default function CheckoutPage() {
                     onChange={(v) => updateField("cvc", v)}
                     autoComplete="cc-csc"
                     placeholder="123"
+                    required
                   />
                 </div>
                 <p className="text-[11px] leading-relaxed text-zinc-400">
@@ -622,6 +661,8 @@ function Field({
   type = "text",
   autoComplete,
   placeholder,
+  required = false,
+  readOnly = false,
 }: {
   label: string;
   id: string;
@@ -631,6 +672,8 @@ function Field({
   type?: string;
   autoComplete?: string;
   placeholder?: string;
+  required?: boolean;
+  readOnly?: boolean;
 }) {
   return (
     <div>
@@ -639,6 +682,11 @@ function Field({
         className="mb-2 block text-[10px] font-semibold uppercase tracking-widest text-zinc-600"
       >
         {label}
+        {required && (
+          <span className="ml-0.5 text-red-500" aria-hidden="true">
+            *
+          </span>
+        )}
       </label>
       <input
         id={id}
@@ -646,12 +694,18 @@ function Field({
         value={value}
         autoComplete={autoComplete}
         placeholder={placeholder}
+        required={required}
+        readOnly={readOnly}
+        aria-required={required}
+        aria-readonly={readOnly}
         onChange={(e) => onChange(e.target.value)}
         className={[
-          "h-12 w-full border bg-white px-4 text-sm text-zinc-950 outline-none transition",
-          error
-            ? "border-red-400 focus:border-red-500"
-            : "border-zinc-200 focus:border-zinc-950",
+          "h-12 w-full scroll-mt-32 border bg-white px-4 text-sm text-zinc-950 outline-none transition",
+          readOnly
+            ? "cursor-default border-zinc-100 bg-zinc-50 text-zinc-500"
+            : error
+              ? "border-red-400 focus:border-red-500"
+              : "border-zinc-200 focus:border-zinc-950",
         ].join(" ")}
       />
       {error && <p className="mt-1.5 text-[11px] text-red-600">{error}</p>}
