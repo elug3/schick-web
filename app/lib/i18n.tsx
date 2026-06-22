@@ -106,7 +106,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "footer.orderHistory": "Order History",
     "footer.myAccount": "My Account",
     "footer.shippingReturns": "Shipping & Returns",
-    "footer.authenticityGuarantee": "Quality Assurance",
+    "footer.authenticityGuarantee": "Quality Guarantee",
     "footer.privacyPolicy": "Privacy Policy",
     "footer.termsConditions": "Terms & Conditions",
     "footer.rights": "© 2026 Schick. All rights reserved.",
@@ -192,8 +192,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.removeWishlist": "Remove from wishlist",
     "product.addWishlist": "Add to wishlist",
     "product.authenticity": "Quality",
-    "product.guaranteed": "Assurance",
-    "product.qualityAssurance": "Quality Assurance",
+    "product.guaranteed": "Guarantee",
+    "product.qualityAssurance": "Quality Guarantee",
     "product.freeShipping": "Free Shipping",
     "product.over100": "Over $100",
     "product.easyReturns": "Easy Returns",
@@ -205,7 +205,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "Free standard shipping on orders over $100. Express and overnight options available at checkout. Returns accepted within 30 days of delivery.",
     "product.authenticityBody":
-      "Every item sold by Schick comes with a certificate of authenticity. We partner directly with authorized retailers to guarantee genuine products.",
+      "Every item sold by Schick is backed by our Quality Guarantee. We partner directly with authorized retailers to ensure each product meets our rigorous standards.",
     "product.badgeNew": "New",
     "product.badgeFeatured": "Featured",
     "product.priceLoading": "Loading",
@@ -243,7 +243,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "cart.apply": "Apply",
     "cart.invalidPromo": "Invalid promo code",
     "cart.discountApplied": "{discount}% off applied.",
-    "cart.authenticityGuaranteed": "Quality assurance on every order",
+    "cart.authenticityGuaranteed": "Quality guarantee on every order",
     "cart.complimentaryShippingOver":
       "Complimentary shipping over {amount}",
     "cart.returns": "30-day returns on eligible items",
@@ -664,7 +664,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "$100 이상 주문 시 무료 일반 배송. 결제 시 특급 및 익일 배송 옵션을 선택할 수 있습니다. 배송 후 30일 이내 반품 가능합니다.",
     "product.authenticityBody":
-      "Schick에서 판매되는 모든 제품에는 정품 인증서가 제공됩니다. 정품 보장을 위해 공식 리테일러와 직접 협력합니다.",
+      "Schick에서 판매되는 모든 상품은 품질 보증이 적용됩니다. 공식 리테일러와 직접 협력하여 엄격한 품질 기준을 충족하는 제품만 제공합니다.",
     "product.badgeNew": "신상품",
     "product.badgeFeatured": "추천",
     "product.priceLoading": "불러오는 중",
@@ -1112,7 +1112,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "订单满 $100 享免费标准配送。结账时可选择加急和隔夜配送。收货后 30 天内可退货。",
     "product.authenticityBody":
-      "Schick 售出的每件商品都附带正品证书。我们直接与授权零售商合作，保证商品真实可靠。",
+      "Schick 售出的每件商品均享有品质保证。我们直接与授权零售商合作，确保每件商品均符合我们的严格品质标准。",
     "product.badgeNew": "新品",
     "product.badgeFeatured": "精选",
     "product.priceLoading": "加载中",
