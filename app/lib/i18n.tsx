@@ -1615,6 +1615,16 @@ const productTranslations: Record<
       description: "Balenciaga Rodeo Bag Small，采用小牛皮材质。",
     },
   },
+  "bag-chanel-classic-flap-medium": {
+    ko: {
+      name: "샤넬 클래식 플랩 미디움",
+      description: "샤넬 클래식 플랩 미디움. 램스킨 가죽 소재.",
+    },
+    zh: {
+      name: "Chanel Classic Flap Medium",
+      description: "Chanel Classic Flap Medium，采用羔羊皮材质。",
+    },
+  },
   "bag-hermes-garden-party-30": {
     ko: {
       name: "에르메스 가든파티 30",

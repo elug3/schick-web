@@ -37,7 +37,7 @@ export default function Home() {
 
 // ── Hero ───────────────────────────────────────────────────────────────────
 
-const HERO_BAG_ID = "bag-hermes-birkin-25";
+const HERO_BAG_ID = "bag-chanel-classic-flap-medium";
 const SUMMER_EDIT_BAG_ID = "bag-hermes-garden-party-30";
 
 function Hero() {
@@ -49,7 +49,7 @@ function Hero() {
       .then((bags) => {
         const selected =
           bags.find((bag) => bag.id === HERO_BAG_ID) ??
-          bags.find((bag) => bag.brand === "Hermès") ??
+          bags.find((bag) => bag.brand === "Chanel") ??
           bags[0] ??
           null;
         setHeroBag(selected);
