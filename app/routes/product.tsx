@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
+import { LoadingBadge } from "~/components/loading-badge";
 import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
 import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
 import { useCart } from "../lib/useCart";
+import { useCartMutation } from "../lib/useCartMutation";
 
 export function meta() {
   return [
@@ -183,18 +185,20 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     translateProductName,
     translateValue,
   } = useLanguage();
-  const { add } = useCart();
+  const { addItem, isPending, getAction } = useCartMutation();
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const [wishlist, setWishlist] = useState(false);
+  const adding = isPending(product.id) && getAction(product.id) === "add";
   const inStock = product.stock > 0;
   const brandSlug = brandToSlug(product.brand);
   const brandLink = brandSlug
     ? `/category/brand/${brandSlug}`
     : "/category/product-type/handbags";
 
-  function handleAddToBag() {
-    add({
+  async function handleAddToBag() {
+    if (adding) return;
+    await addItem({
       productId: product.id,
       name: product.name,
       brand: product.brand,
@@ -205,9 +209,9 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     setTimeout(() => setAdded(false), 2000);
   }
 
-  function handleBuy() {
-    if (!inStock) return;
-    handleAddToBag();
+  async function handleBuy() {
+    if (!inStock || adding) return;
+    await handleAddToBag();
     navigate("/checkout");
   }
 
@@ -268,33 +272,55 @@ function ProductInfo({ product }: { product: ServerProduct }) {
       <div className="flex gap-3">
         <button
           type="button"
-          disabled={!inStock}
+          disabled={!inStock || adding}
           onClick={handleBuy}
           className={[
             "flex h-14 flex-1 items-center justify-center text-xs font-semibold uppercase tracking-widest transition",
-            inStock
+            inStock && !adding
               ? "bg-zinc-950 text-white hover:bg-zinc-800"
               : "cursor-not-allowed bg-zinc-100 text-zinc-400",
           ].join(" ")}
         >
-          {inStock ? t("product.buy") : t("product.outOfStock")}
+          {adding ? (
+            <LoadingBadge label={t("product.addingToBag")} size="lg" />
+          ) : inStock ? (
+            t("product.buy")
+          ) : (
+            t("product.outOfStock")
+          )}
         </button>
 
         <button
           type="button"
-          disabled={!inStock}
+          disabled={!inStock || adding}
           onClick={handleAddToBag}
-          aria-label={added ? t("product.added") : t("product.addToBag")}
+          aria-label={
+            adding
+              ? t("product.addingToBag")
+              : added
+                ? t("product.added")
+                : t("product.addToBag")
+          }
+          aria-busy={adding}
           className={[
             "flex h-14 w-14 shrink-0 items-center justify-center border transition",
-            inStock
+            inStock && !adding
               ? added
                 ? "border-zinc-950 bg-zinc-950 text-white"
                 : "border-zinc-200 text-zinc-600 hover:border-zinc-950 hover:text-zinc-950"
               : "cursor-not-allowed border-zinc-100 text-zinc-300",
           ].join(" ")}
         >
-          {added ? <CheckIcon /> : <BagIcon />}
+          {adding ? (
+            <span
+              className="size-2 animate-pulse rounded-full bg-[#c8a96e]"
+              aria-hidden="true"
+            />
+          ) : added ? (
+            <CheckIcon />
+          ) : (
+            <BagIcon />
+          )}
         </button>
 
         <button
