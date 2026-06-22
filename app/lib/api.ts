@@ -87,6 +87,11 @@ export function heroBagImage(image?: string, brand?: string): string {
   return image.replace(/w_\d+,h_\d+/, "w_1200,h_1400");
 }
 
+export function bannerBagImage(image?: string, brand?: string): string {
+  if (!image) return bagImage(brand ?? "").replace(/w=\d+,h=\d+/, "w=1600,h=600");
+  return image.replace(/w_\d+,h_\d+/, "w_1600,h_600");
+}
+
 const PRODUCT_IMAGES: Record<string, string> = {
   bags: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=720&fit=crop",
   sneakers: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=720&fit=crop",
