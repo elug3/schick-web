@@ -12,6 +12,7 @@ import {
   searchProducts,
 } from "../lib/api";
 import { useLanguage } from "../lib/i18n";
+import { ContactFloat } from "../components/contact-float";
 import { ProductPrice } from "../components/product-price";
 
 export function meta() {
@@ -31,6 +32,7 @@ export default function Home() {
       <FeaturedBags />
       <CrossCategoryProducts />
       <EditorialBanner />
+      <ContactFloat />
     </main>
   );
 }
