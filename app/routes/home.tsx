@@ -38,6 +38,7 @@ export default function Home() {
 // ── Hero ───────────────────────────────────────────────────────────────────
 
 const HERO_BAG_ID = "bag-chanel-classic-flap-medium";
+const CATEGORY_PILLAR_BAG_ID = "bag-lv-capucines-bb";
 const SUMMER_EDIT_BAG_ID = "bag-hermes-garden-party-30";
 
 function Hero() {
@@ -154,14 +155,26 @@ const categoryPillars = [
     key: "bags",
     titleKey: "home.categoryBags",
     descriptionKey: "home.categoryBagsDescription",
-    image:
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&h=1100&fit=crop",
     to: "/category/product-type/handbags",
   },
 ];
 
 function CategoryPillars() {
   const { t } = useLanguage();
+  const [pillarBag, setPillarBag] = useState<Bag | null>(null);
+
+  useEffect(() => {
+    fetchBags()
+      .then((bags) => {
+        const selected =
+          bags.find((bag) => bag.id === CATEGORY_PILLAR_BAG_ID) ??
+          bags.find((bag) => bag.brand === "Louis Vuitton") ??
+          bags[0] ??
+          null;
+        setPillarBag(selected);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="bg-zinc-950 px-4 py-14 text-white md:px-8 md:py-20">
@@ -188,11 +201,15 @@ function CategoryPillars() {
               to={category.to}
               className="group relative min-h-[22rem] overflow-hidden bg-zinc-900"
             >
-              <img
-                src={category.image}
-                alt={t(category.titleKey)}
-                className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-90"
-              />
+              {pillarBag ? (
+                <img
+                  src={heroBagImage(pillarBag.image, pillarBag.brand)}
+                  alt={t(category.titleKey)}
+                  className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-90"
+                />
+              ) : (
+                <div className="absolute inset-0 animate-pulse bg-zinc-800" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/25 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#c8a96e]">
