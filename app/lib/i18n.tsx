@@ -68,6 +68,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "announcement.code": "Code",
     "announcement.discount": "30% off",
 
+    "contact.us": "Contact Us",
+    "contact.telegram": "Contact Us on Telegram",
+    "contact.kakao": "Contact Us on KakaoTalk",
+
     "nav.home": "Home",
     "nav.bag": "Bag",
     "nav.profile": "Profile",
@@ -527,6 +531,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "announcement.code": "코드",
     "announcement.discount": "30% 할인",
 
+    "contact.us": "문의하기",
+    "contact.telegram": "텔레그램 문의하기",
+    "contact.kakao": "카카오톡 문의하기",
+
     "nav.home": "홈",
     "nav.bag": "장바구니",
     "nav.profile": "프로필",
@@ -980,6 +988,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "announcement.freeShipping": "订单满 $100 免运费",
     "announcement.code": "代码",
     "announcement.discount": "7 折优惠",
+
+    "contact.us": "联系我们",
+    "contact.telegram": "Telegram 联系我们",
+    "contact.kakao": "KakaoTalk 联系我们",
 
     "nav.home": "首页",
     "nav.bag": "购物袋",
