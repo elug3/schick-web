@@ -78,6 +78,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "nav.shoppingBag": "Shopping bag",
     "nav.main": "Main",
     "nav.primary": "Primary",
+    "nav.openMenu": "Open menu",
+    "nav.closeMenu": "Close menu",
 
     "category.totes": "Totes",
     "category.shoulderBags": "Shoulder Bags",
@@ -537,6 +539,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "nav.shoppingBag": "장바구니",
     "nav.main": "메인",
     "nav.primary": "주요 메뉴",
+    "nav.openMenu": "메뉴 열기",
+    "nav.closeMenu": "메뉴 닫기",
 
     "category.totes": "토트백",
     "category.shoulderBags": "숄더백",
@@ -991,6 +995,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "nav.shoppingBag": "购物袋",
     "nav.main": "主导航",
     "nav.primary": "主要导航",
+    "nav.openMenu": "打开菜单",
+    "nav.closeMenu": "关闭菜单",
 
     "category.totes": "托特包",
     "category.shoulderBags": "单肩包",
