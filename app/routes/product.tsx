@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "~/components/not-found";
 import { LoadingBadge } from "~/components/loading-badge";
+import { ProductImageGallery } from "~/components/product-image-gallery";
 import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
@@ -104,6 +105,19 @@ function ProductLayout({ product }: { product: ServerProduct }) {
 
   const [activeImg, setActiveImg] = useState(0);
 
+  useEffect(() => {
+    setActiveImg(0);
+  }, [product.id]);
+
+  const badge = (() => {
+    const b = getBadge(product);
+    return b ? (
+      <span className={`px-3 py-1 text-[9px] font-semibold uppercase tracking-wider ${b.style}`}>
+        {t(b.labelKey)}
+      </span>
+    ) : null;
+  })();
+
   return (
     <div className="mx-auto max-w-7xl px-0 md:px-8 md:py-10">
       <div className="flex flex-col md:flex-row md:gap-12 lg:gap-20">
@@ -134,37 +148,13 @@ function ProductLayout({ product }: { product: ServerProduct }) {
             ))}
           </div>
 
-          {/* Main image */}
-          <div className="relative flex-1 overflow-hidden bg-zinc-50">
-            <div className="relative" style={{ paddingBottom: "120%" }}>
-              <img
-                src={images[activeImg].src}
-                alt={translateProductName(product.id, product.name)}
-                className={`absolute inset-0 h-full w-full object-cover transition duration-500 ${images[activeImg].position}`}
-              />
-              {/* Badge */}
-              {(() => { const b = getBadge(product); return b && (
-                <span className={`absolute left-4 top-4 px-3 py-1 text-[9px] font-semibold uppercase tracking-wider ${b.style}`}>
-                  {t(b.labelKey)}
-                </span>
-              ); })()}
-            </div>
-
-            {/* Mobile dot nav */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 md:hidden">
-              {images.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setActiveImg(i)}
-                  className={[
-                    "h-1.5 rounded-full transition-all",
-                    activeImg === i ? "w-5 bg-zinc-950" : "w-1.5 bg-zinc-400",
-                  ].join(" ")}
-                />
-              ))}
-            </div>
-          </div>
+          <ProductImageGallery
+            images={images}
+            activeIndex={activeImg}
+            onActiveIndexChange={setActiveImg}
+            alt={translateProductName(product.id, product.name)}
+            badge={badge}
+          />
         </div>
 
         {/* ── Right: product info ──────────────────────────────────────── */}
