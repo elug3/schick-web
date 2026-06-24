@@ -49,7 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-white pb-28 text-zinc-950 md:pb-0">
+      <div className="min-h-screen bg-white text-zinc-950">
         <AnnouncementBar />
         <TopNav />
         {/* announcement 32px + logo row 56px = 88px mobile; + nav row ~36px = 124px desktop */}
@@ -57,7 +57,6 @@ export default function App() {
           <Outlet />
         </div>
         <Footer />
-        <BottomNav />
       </div>
     </LanguageProvider>
   );
@@ -76,12 +75,6 @@ function AnnouncementBar() {
     </div>
   );
 }
-
-const navItems = [
-  { labelKey: "nav.home", to: "/", icon: HomeIcon },
-  { labelKey: "nav.bag", to: "/cart", icon: BagIcon },
-  { labelKey: "nav.profile", to: "/profile", icon: ProfileIcon },
-];
 
 const desktopNavLinks = [
   {
@@ -309,29 +302,18 @@ function TopNav() {
   );
 }
 
-function LanguageSelector({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
+function LanguageSelector() {
   const { language, languages, setLanguage, t } = useLanguage();
-  const isMobile = variant === "mobile";
 
   return (
-    <label
-      className={[
-        "items-center rounded text-zinc-400 transition hover:text-zinc-950",
-        isMobile
-          ? "inline-flex gap-2 border border-zinc-100 bg-zinc-50 px-3 py-1.5"
-          : "mr-1 hidden gap-1 p-1 sm:flex",
-      ].join(" ")}
-    >
+    <label className="mr-1 hidden items-center gap-1 rounded p-1 text-zinc-400 transition hover:text-zinc-950 sm:flex">
       <span className="sr-only">{t("language.label")}</span>
       <GlobeIcon />
       <select
         value={language}
         onChange={(event) => setLanguage(event.target.value as LanguageCode)}
         aria-label={t("language.label")}
-        className={[
-          "cursor-pointer bg-transparent font-semibold uppercase outline-none",
-          isMobile ? "text-[11px] tracking-[0.08em]" : "text-[10px] tracking-[0.12em]",
-        ].join(" ")}
+        className="cursor-pointer bg-transparent text-[10px] font-semibold uppercase tracking-[0.12em] outline-none"
       >
         {languages.map((option) => (
           <option key={option.code} value={option.code}>
@@ -418,47 +400,7 @@ function Footer() {
   );
 }
 
-function BottomNav() {
-  const { t } = useLanguage();
-
-  return (
-    <nav
-      aria-label={t("nav.primary")}
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-100 bg-white px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
-    >
-      <div className="mx-auto mb-2 flex max-w-md justify-center sm:hidden">
-        <LanguageSelector variant="mobile" />
-      </div>
-      <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
-        {navItems.map(({ labelKey, to, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              [
-                "flex h-12 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium uppercase tracking-widest transition-colors",
-                isActive ? "text-zinc-950" : "text-zinc-300 hover:text-zinc-950",
-              ].join(" ")
-            }
-          >
-            <Icon />
-            <span>{t(labelKey)}</span>
-          </NavLink>
-        ))}
-      </div>
-    </nav>
-  );
-}
-
 // ── Icons ──────────────────────────────────────────────────────────────────
-
-function HomeIcon() {
-  return (
-    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-    </svg>
-  );
-}
 
 function SearchIcon() {
   return (
