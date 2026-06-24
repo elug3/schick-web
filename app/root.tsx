@@ -136,6 +136,7 @@ function TopNav() {
   const { t } = useLanguage();
   const { count } = useCart();
   const [activeNav, setActiveNav] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header
@@ -144,7 +145,18 @@ function TopNav() {
     >
       {/* Row 1 — Logo (center) + Icons (right) */}
       <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 md:px-10">
-        <div />
+        <div className="flex justify-start">
+          <button
+            type="button"
+            className="rounded p-2 text-zinc-400 transition hover:text-zinc-950 md:hidden"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-menu"
+            aria-label={mobileMenuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
+            onClick={() => setMobileMenuOpen((open) => !open)}
+          >
+            {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
 
         <NavLink
           to="/"
@@ -178,6 +190,53 @@ function TopNav() {
           </NavLink>
         </div>
       </div>
+
+      {/* Mobile menu panel */}
+      {mobileMenuOpen && (
+        <>
+          <button
+            type="button"
+            aria-label={t("nav.closeMenu")}
+            className="fixed inset-0 top-[5.5rem] z-30 bg-black/20 md:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <nav
+            id="mobile-nav-menu"
+            aria-label={t("nav.main")}
+            className="absolute inset-x-0 top-full z-40 max-h-[calc(100vh-5.5rem)] overflow-y-auto border-b border-zinc-100 bg-white md:hidden"
+          >
+            <div className="mx-auto max-w-7xl px-6 py-4">
+              {desktopNavLinks.map(({ id, labelKey, to, items }) => (
+                <div key={id} className="border-b border-zinc-100 py-4 last:border-b-0">
+                  <NavLink
+                    to={to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-950"
+                  >
+                    {t(labelKey)}
+                  </NavLink>
+                  <ul className="space-y-2">
+                    {items.map((item) => {
+                      const label = "labelKey" in item ? t(item.labelKey) : item.label;
+                      return (
+                        <li key={label}>
+                          <NavLink
+                            to={item.to}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="text-[11px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950"
+                          >
+                            {label}
+                          </NavLink>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </nav>
+        </>
+      )}
 
       {/* Row 2 — Nav links below logo (desktop only) */}
       <nav
@@ -439,6 +498,22 @@ function GlobeIcon() {
     <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
       <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
       <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.25 2.45 3.35 5.45 3.35 9S14.25 18.55 12 21c-2.25-2.45-3.35-5.45-3.35-9S9.75 5.45 12 3Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }
