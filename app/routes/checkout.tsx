@@ -71,6 +71,35 @@ const stepFields: Record<CheckoutStep, (keyof FormState)[]> = {
   payment: ["cardName", "cardNumber", "expiry", "cvc"],
 };
 
+const CARD_NUMBER_DIGITS = 12;
+const EXPIRY_DIGITS = 4;
+const CVC_DIGITS = 3;
+
+function digitsOnly(value: string, max: number): string {
+  return value.replace(/\D/g, "").slice(0, max);
+}
+
+function formatCardNumber(value: string): string {
+  const digits = digitsOnly(value, CARD_NUMBER_DIGITS);
+  return digits.replace(/(\d{4})(?=\d)/g, "$1 ");
+}
+
+function formatExpiry(value: string): string {
+  const digits = digitsOnly(value, EXPIRY_DIGITS);
+  if (digits.length <= 2) return digits;
+  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+}
+
+function formatCvc(value: string): string {
+  return digitsOnly(value, CVC_DIGITS);
+}
+
+function focusField(id: string) {
+  requestAnimationFrame(() => {
+    document.getElementById(id)?.focus({ preventScroll: true });
+  });
+}
+
 export default function CheckoutPage() {
   const { t, formatCurrency, translateProductName } = useLanguage();
   const lockedCountry = t("checkout.countryValue");
@@ -115,6 +144,26 @@ export default function CheckoutPage() {
   function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
+  }
+
+  function handleCardNumberChange(value: string) {
+    const formatted = formatCardNumber(value);
+    updateField("cardNumber", formatted);
+    if (digitsOnly(formatted, CARD_NUMBER_DIGITS).length === CARD_NUMBER_DIGITS) {
+      focusField("expiry");
+    }
+  }
+
+  function handleExpiryChange(value: string) {
+    const formatted = formatExpiry(value);
+    updateField("expiry", formatted);
+    if (digitsOnly(formatted, EXPIRY_DIGITS).length === EXPIRY_DIGITS) {
+      focusField("cvc");
+    }
+  }
+
+  function handleCvcChange(value: string) {
+    updateField("cvc", formatCvc(value));
   }
 
   const activeStepIndex = checkoutSteps.indexOf(activeStep);
@@ -417,6 +466,12 @@ export default function CheckoutPage() {
                   error={errors.cardName}
                   onChange={(v) => updateField("cardName", v)}
                   autoComplete="cc-name"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && form.cardName.trim()) {
+                      e.preventDefault();
+                      focusField("cardNumber");
+                    }
+                  }}
                   required
                 />
                 <Field
@@ -424,9 +479,11 @@ export default function CheckoutPage() {
                   id="cardNumber"
                   value={form.cardNumber}
                   error={errors.cardNumber}
-                  onChange={(v) => updateField("cardNumber", v)}
+                  onChange={handleCardNumberChange}
                   autoComplete="cc-number"
-                  placeholder="4242 4242 4242 4242"
+                  inputMode="numeric"
+                  maxLength={14}
+                  placeholder="1234 5678 9012"
                   required
                 />
                 <div className="grid gap-4 md:grid-cols-2">
@@ -435,9 +492,11 @@ export default function CheckoutPage() {
                     id="expiry"
                     value={form.expiry}
                     error={errors.expiry}
-                    onChange={(v) => updateField("expiry", v)}
+                    onChange={handleExpiryChange}
                     autoComplete="cc-exp"
-                    placeholder="MM / YY"
+                    inputMode="numeric"
+                    maxLength={5}
+                    placeholder="05/30"
                     required
                   />
                   <Field
@@ -445,8 +504,10 @@ export default function CheckoutPage() {
                     id="cvc"
                     value={form.cvc}
                     error={errors.cvc}
-                    onChange={(v) => updateField("cvc", v)}
+                    onChange={handleCvcChange}
                     autoComplete="cc-csc"
+                    inputMode="numeric"
+                    maxLength={CVC_DIGITS}
                     placeholder="123"
                     required
                   />
@@ -673,6 +734,9 @@ function Field({
   type = "text",
   autoComplete,
   placeholder,
+  inputMode,
+  maxLength,
+  onKeyDown,
   required = false,
   readOnly = false,
 }: {
@@ -684,6 +748,9 @@ function Field({
   type?: string;
   autoComplete?: string;
   placeholder?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  maxLength?: number;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
   required?: boolean;
   readOnly?: boolean;
 }) {
@@ -706,10 +773,13 @@ function Field({
         value={value}
         autoComplete={autoComplete}
         placeholder={placeholder}
+        inputMode={inputMode}
+        maxLength={maxLength}
         required={required}
         readOnly={readOnly}
         aria-required={required}
         aria-readonly={readOnly}
+        onKeyDown={onKeyDown}
         onChange={(e) => onChange(e.target.value)}
         className={[
           "h-12 w-full scroll-mt-32 border bg-white px-4 text-sm text-zinc-950 outline-none transition",
