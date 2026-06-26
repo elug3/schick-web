@@ -72,6 +72,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "contact.telegram": "Contact Us on Telegram",
     "contact.kakao": "Contact Us on KakaoTalk",
 
+    "cookie.title": "Cookies",
+    "cookie.description":
+      "We use cookies to keep your session secure, remember your preferences, and improve your shopping experience. By continuing, you agree to our use of cookies as described in our Privacy Policy.",
+    "cookie.accept": "Accept",
+    "cookie.decline": "Decline",
+
     "nav.home": "Home",
     "nav.bag": "Bag",
     "nav.profile": "Profile",
@@ -537,6 +543,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "contact.telegram": "텔레그램 문의하기",
     "contact.kakao": "카카오톡 문의하기",
 
+    "cookie.title": "쿠키",
+    "cookie.description":
+      "세션 보안 유지, 환경 설정 저장, 쇼핑 경험 개선을 위해 쿠키를 사용합니다. 계속 이용하시면 개인정보 처리방침에 설명된 쿠키 사용에 동의하는 것으로 간주됩니다.",
+    "cookie.accept": "동의",
+    "cookie.decline": "거부",
+
     "nav.home": "홈",
     "nav.bag": "장바구니",
     "nav.profile": "프로필",
@@ -996,6 +1008,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "contact.us": "联系我们",
     "contact.telegram": "Telegram 联系我们",
     "contact.kakao": "KakaoTalk 联系我们",
+
+    "cookie.title": "Cookie",
+    "cookie.description":
+      "我们使用 Cookie 保障会话安全、记住您的偏好并改善购物体验。继续浏览即表示您同意我们按照隐私政策所述使用 Cookie。",
+    "cookie.accept": "接受",
+    "cookie.decline": "拒绝",
 
     "nav.home": "首页",
     "nav.bag": "购物袋",
