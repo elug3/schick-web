@@ -11,6 +11,7 @@ import {
 } from "react-router";
 
 import "./app.css";
+import { CookieBanner } from "./components/cookie-banner";
 import { NotFoundPage } from "./components/not-found";
 import { LanguageProvider, useLanguage, type LanguageCode } from "./lib/i18n";
 import { useCart } from "./lib/useCart";
@@ -57,6 +58,7 @@ export default function App() {
           <Outlet />
         </div>
         <Footer />
+        <CookieBanner />
       </div>
     </LanguageProvider>
   );
