@@ -1,5 +1,5 @@
-import { getMockCategories } from "~/data/mock-products";
+import { supportedCategories } from "~/lib/product-upstream.server";
 
 export async function loader() {
-  return Response.json({ categories: getMockCategories() });
+  return Response.json({ categories: supportedCategories() });
 }
