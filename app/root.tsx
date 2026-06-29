@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   isRouteErrorResponse,
   Link,
@@ -127,11 +127,65 @@ const desktopNavLinks = [
   },
 ];
 
+const MOBILE_MENU_ANIM_MS = 280;
+
 function TopNav() {
   const { t } = useLanguage();
   const { count } = useCart();
   const [activeNav, setActiveNav] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+  const closeMenuTimeoutRef = useRef<number | null>(null);
+
+  const openMobileMenu = () => {
+    if (closeMenuTimeoutRef.current) {
+      clearTimeout(closeMenuTimeoutRef.current);
+      closeMenuTimeoutRef.current = null;
+    }
+    setMobileMenuVisible(true);
+    setMobileMenuOpen(true);
+  };
+
+  const closeMobileMenu = () => {
+    if (closeMenuTimeoutRef.current) {
+      clearTimeout(closeMenuTimeoutRef.current);
+    }
+    setMobileMenuOpen(false);
+    closeMenuTimeoutRef.current = window.setTimeout(() => {
+      setMobileMenuVisible(false);
+      closeMenuTimeoutRef.current = null;
+    }, MOBILE_MENU_ANIM_MS);
+  };
+
+  const toggleMobileMenu = () => {
+    if (mobileMenuOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  };
+
+  useEffect(() => {
+    if (!mobileMenuVisible) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMobileMenu();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      if (closeMenuTimeoutRef.current) {
+        clearTimeout(closeMenuTimeoutRef.current);
+        closeMenuTimeoutRef.current = null;
+      }
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileMenuVisible]);
 
   return (
     <header
@@ -143,13 +197,20 @@ function TopNav() {
         <div className="flex justify-start">
           <button
             type="button"
-            className="rounded p-2 text-zinc-400 transition hover:text-zinc-950 md:hidden"
+            className="rounded p-2 text-zinc-400 transition-colors duration-200 hover:text-zinc-950 active:scale-95 md:hidden"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-menu"
             aria-label={mobileMenuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
-            onClick={() => setMobileMenuOpen((open) => !open)}
+            onClick={toggleMobileMenu}
           >
-            {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            <span
+              className={[
+                "block transition-transform duration-300 ease-out",
+                mobileMenuOpen ? "rotate-90" : "rotate-0",
+              ].join(" ")}
+            >
+              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            </span>
           </button>
         </div>
 
@@ -187,38 +248,48 @@ function TopNav() {
       </div>
 
       {/* Mobile menu panel */}
-      {mobileMenuOpen && (
+      {mobileMenuVisible && (
         <>
           <button
             type="button"
             aria-label={t("nav.closeMenu")}
-            className="fixed inset-0 top-[5.5rem] z-30 bg-black/20 md:hidden"
-            onClick={() => setMobileMenuOpen(false)}
+            className={[
+              "fixed inset-0 top-[5.5rem] z-30 bg-black/25 backdrop-blur-[1px] md:hidden",
+              mobileMenuOpen ? "animate-mobile-menu-overlay-in" : "animate-mobile-menu-overlay-out",
+            ].join(" ")}
+            onClick={closeMobileMenu}
           />
           <nav
             id="mobile-nav-menu"
             aria-label={t("nav.main")}
-            className="absolute inset-x-0 top-full z-40 max-h-[calc(100vh-5.5rem)] overflow-y-auto border-b border-zinc-100 bg-white md:hidden"
+            className={[
+              "absolute inset-x-0 top-full z-40 max-h-[calc(100vh-5.5rem)] overflow-y-auto border-b border-zinc-100 bg-white shadow-[0_18px_40px_-24px_rgba(9,9,11,0.35)] md:hidden",
+              mobileMenuOpen ? "animate-mobile-menu-panel-in" : "animate-mobile-menu-panel-out",
+            ].join(" ")}
           >
-            <div className="mx-auto max-w-7xl px-6 py-4">
-              {desktopNavLinks.map(({ id, labelKey, to, items }) => (
-                <div key={id} className="border-b border-zinc-100 py-4 last:border-b-0">
+            <div className="mx-auto max-w-7xl px-6 py-5">
+              {desktopNavLinks.map(({ id, labelKey, to, items }, sectionIndex) => (
+                <div
+                  key={id}
+                  className="animate-mobile-menu-item-in border-b border-zinc-100 py-4 last:border-b-0"
+                  style={{ animationDelay: `${80 + sectionIndex * 55}ms` }}
+                >
                   <NavLink
                     to={to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="mb-3 block text-sm font-bold uppercase tracking-[0.15em] text-zinc-950"
+                    onClick={closeMobileMenu}
+                    className="mb-3 block py-1 text-sm font-bold uppercase tracking-[0.15em] text-zinc-950 transition-colors duration-200 active:text-zinc-600"
                   >
                     {t(labelKey)}
                   </NavLink>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1">
                     {items.map((item) => {
                       const label = "labelKey" in item ? t(item.labelKey) : item.label;
                       return (
                         <li key={label}>
                           <NavLink
                             to={item.to}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500 transition hover:text-zinc-950"
+                            onClick={closeMobileMenu}
+                            className="block py-2 text-xs font-medium uppercase tracking-[0.12em] text-zinc-500 transition-colors duration-200 hover:text-zinc-950 active:text-zinc-950"
                           >
                             {label}
                           </NavLink>
