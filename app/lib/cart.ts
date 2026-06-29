@@ -15,7 +15,10 @@ export interface CartItem {
   productId: string;
   name: string;
   brand: string;
+  /** Unit price charged in checkout (sale price when SUMMER30 applies). */
   price: number;
+  /** Original list price before promo, when different from price. */
+  listPrice?: number;
   image: string;
   size?: string;
   quantity: number;
@@ -137,14 +140,38 @@ export function clearCart(): void {
 export function getCartTotals(promoCode?: string): CartTotals {
   const items = getCart();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = items.reduce(
+  const saleSubtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const promoApplied =
-    promoCode?.trim().toUpperCase() === PROMO_CODE && subtotal > 0;
-  const discount = promoApplied ? subtotal * PROMO_DISCOUNT : 0;
-  const afterDiscount = subtotal - discount;
+  const listSubtotal = items.reduce(
+    (sum, item) => sum + (item.listPrice ?? item.price) * item.quantity,
+    0
+  );
+
+  const hasEmbeddedSale = items.some(
+    (item) => item.listPrice != null && item.listPrice > item.price
+  );
+  const promoEntered =
+    promoCode?.trim().toUpperCase() === PROMO_CODE && saleSubtotal > 0;
+
+  let subtotal: number;
+  let discount: number;
+  let promoApplied: boolean;
+  let afterDiscount: number;
+
+  if (hasEmbeddedSale) {
+    subtotal = listSubtotal;
+    discount = listSubtotal - saleSubtotal;
+    promoApplied = promoEntered || discount > 0;
+    afterDiscount = saleSubtotal;
+  } else {
+    subtotal = saleSubtotal;
+    promoApplied = promoEntered;
+    discount = promoApplied ? subtotal * PROMO_DISCOUNT : 0;
+    afterDiscount = subtotal - discount;
+  }
+
   const shipping =
     itemCount === 0
       ? 0
