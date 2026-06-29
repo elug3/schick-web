@@ -14,14 +14,18 @@ import { ProductImageGallery } from "~/components/product-image-gallery";
 import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
-import { type ServerProduct, productImage } from "../lib/api";
+import { type Bag, type ServerProduct, bagImage, productImage } from "../lib/api";
 import { getSalePrice } from "../lib/cart";
 import {
+  fetchUpstreamBags,
   fetchUpstreamProductById,
+  toBagResponse,
   toProductResponse,
 } from "../lib/product-upstream.server";
+import { rankRelatedProducts } from "../lib/related-products.server";
 import { useLanguage } from "../lib/i18n";
 import { useCartMutation } from "../lib/useCartMutation";
+import { useWishlist } from "../lib/useWishlist";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const id = params.id ?? "";
@@ -35,7 +39,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
       throw new Response("Not Found", { status: 404 });
     }
 
-    return { product: toProductResponse(upstream) as ServerProduct };
+    let related: Bag[] = [];
+    try {
+      const bags = await fetchUpstreamBags();
+      related = rankRelatedProducts(upstream, bags).map(toBagResponse);
+    } catch {
+      related = [];
+    }
+
+    return {
+      product: toProductResponse(upstream) as ServerProduct,
+      related,
+    };
   } catch (error) {
     if (error instanceof Response) throw error;
     throw new Response("Product unavailable", { status: 502 });
@@ -79,12 +94,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function ProductPage() {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, related } = useLoaderData<typeof loader>();
 
   return (
     <main className="bg-white">
       <Breadcrumb product={product} />
       <ProductLayout product={product} />
+      <RelatedProducts products={related} />
     </main>
   );
 }
@@ -218,9 +234,10 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     translateValue,
   } = useLanguage();
   const { addItem, isPending, getAction } = useCartMutation();
+  const { isWishlisted, toggle } = useWishlist();
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
-  const [wishlist, setWishlist] = useState(false);
+  const wishlist = isWishlisted(product.id);
   const adding = isPending(product.id) && getAction(product.id) === "add";
   const inStock = product.stock > 0;
   const brandSlug = brandToSlug(product.brand);
@@ -246,6 +263,44 @@ function ProductInfo({ product }: { product: ServerProduct }) {
     if (!inStock || adding) return;
     await handleAddToBag();
     navigate("/checkout");
+  }
+
+  async function handleWishlistToggle() {
+    const result = await toggle(product.id);
+    if (result === "auth_required") {
+      navigate("/login");
+    }
+  }
+
+  const detailRows: Array<[string, string]> = [
+    [t("product.brand"), product.brand],
+    [t("product.category"), translateValue("category", product.category || "Bags")],
+    [
+      t("product.material"),
+      product.material
+        ? translateValue("material", product.material)
+        : t("product.premiumLeather"),
+    ],
+    [
+      t("product.color"),
+      product.color ? translateValue("color", product.color) : "—",
+    ],
+  ];
+
+  if (product.capacity) {
+    detailRows.push([t("product.capacity"), product.capacity]);
+  }
+  if (product.style) {
+    detailRows.push([t("product.style"), translateValue("style", product.style)]);
+  }
+  if (product.family) {
+    detailRows.push([t("product.family"), translateValue("family", product.family)]);
+  }
+  if (product.productType) {
+    detailRows.push([
+      t("product.productType"),
+      translateValue("productType", product.productType),
+    ]);
   }
 
   return (
@@ -286,12 +341,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
 
       {/* Details */}
       <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-xs">
-        {[
-          [t("product.brand"), product.brand],
-          [t("product.category"), translateValue("category", product.category || "Bags")],
-          [t("product.material"), product.material ? translateValue("material", product.material) : t("product.premiumLeather")],
-          [t("product.color"), product.color ? translateValue("color", product.color) : "—"],
-        ].map(([dt, dd]) => (
+        {detailRows.map(([dt, dd]) => (
           <div key={dt}>
             <dt className="font-semibold uppercase tracking-widest text-zinc-400">{dt}</dt>
             <dd className="mt-0.5 text-zinc-700">{dd}</dd>
@@ -358,7 +408,7 @@ function ProductInfo({ product }: { product: ServerProduct }) {
 
         <button
           type="button"
-          onClick={() => setWishlist((v) => !v)}
+          onClick={handleWishlistToggle}
           aria-label={wishlist ? t("product.removeWishlist") : t("product.addWishlist")}
           className="flex h-14 w-14 shrink-0 items-center justify-center border border-zinc-200 text-zinc-500 transition hover:border-zinc-950 hover:text-zinc-950"
         >
@@ -434,6 +484,54 @@ function AccordionItem({ title, body }: { title: string; body: string }) {
         <p className="pb-4 text-xs leading-relaxed text-zinc-400">{body}</p>
       )}
     </div>
+  );
+}
+
+// ── Related products ───────────────────────────────────────────────────────
+
+function RelatedProducts({ products }: { products: Bag[] }) {
+  const { t, translateProductName } = useLanguage();
+
+  if (products.length === 0) return null;
+
+  return (
+    <section className="mx-auto max-w-7xl border-t border-zinc-100 px-4 py-12 md:px-8 md:py-16">
+      <div className="mb-8">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+          {t("product.relatedSubtitle")}
+        </p>
+        <h2
+          className="mt-2 text-2xl font-light text-zinc-950 md:text-3xl"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {t("product.relatedTitle")}
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
+        {products.map((item) => (
+          <Link key={item.id} to={`/product/${item.id}`} className="group">
+            <div
+              className="relative mb-3 overflow-hidden bg-zinc-50"
+              style={{ paddingBottom: "120%" }}
+            >
+              <img
+                src={bagImage(item.brand, item.image)}
+                alt={translateProductName(item.id, item.name)}
+                className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+            </div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+              {item.brand}
+            </p>
+            <p className="mt-1 text-sm font-light text-zinc-950">
+              {translateProductName(item.id, item.name)}
+            </p>
+            <ProductPrice price={item.price} />
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
