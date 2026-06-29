@@ -1,25 +1,27 @@
 import type { LoaderFunctionArgs } from "react-router";
 
-import { MOCK_PRODUCTS, toBagResponse } from "~/data/mock-products";
+import {
+  fetchUpstreamBags,
+  toBagResponse,
+} from "~/lib/product-upstream.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const params = new URL(request.url).searchParams;
-  const products = MOCK_PRODUCTS.filter((product) => product.category === "bags").filter((product) => {
-    for (const [key, value] of params.entries()) {
-      const normalizedValue = value.trim().toLowerCase();
-      if (!normalizedValue) continue;
+  const filters: Record<string, string> = {};
 
-      const productValue = product[key as keyof typeof product];
-      if (
-        productValue == null ||
-        String(productValue).toLowerCase() !== normalizedValue
-      ) {
-        return false;
-      }
-    }
+  for (const key of ["brand", "color", "material"]) {
+    const value = params.get(key);
+    if (value?.trim()) filters[key] = value.trim();
+  }
 
-    return true;
-  }).map(toBagResponse);
+  try {
+    const products = await fetchUpstreamBags(filters);
+    const results = products.map(toBagResponse);
 
-  return Response.json({ total: products.length, results: products });
+    return Response.json({ total: results.length, results });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch bags";
+    return Response.json({ error: message }, { status: 502 });
+  }
 }
