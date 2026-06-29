@@ -28,7 +28,17 @@ export interface ServerProduct {
   status: string;
   image?: string;
   images?: string[];
+  tags?: string[];
+  capacity?: string;
+  style?: string;
+  family?: string;
+  productType?: string;
   createdAt: string;
+}
+
+export interface WishlistResponse {
+  productIds: string[];
+  items: Bag[];
 }
 
 // ── Bag listing — public ───────────────────────────────────────────────────
@@ -57,6 +67,37 @@ export async function fetchProduct(id: string): Promise<ServerProduct> {
   if (res.status === 404) throw new Error(`Product not found: ${id}`);
   if (!res.ok) throw new Error(`Product fetch failed: ${res.status}`);
   return res.json() as Promise<ServerProduct>;
+}
+
+// ── Wishlist — BFF-backed, requires sign-in ────────────────────────────────
+
+export async function fetchWishlist(): Promise<WishlistResponse> {
+  const res = await fetch("/api/wishlist", { credentials: "same-origin" });
+  if (res.status === 401) throw new Error("Not authenticated");
+  if (!res.ok) throw new Error(`Wishlist fetch failed: ${res.status}`);
+  return res.json() as Promise<WishlistResponse>;
+}
+
+export async function addWishlistItem(productId: string): Promise<WishlistResponse> {
+  const res = await fetch("/api/wishlist", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId }),
+  });
+  if (res.status === 401) throw new Error("Not authenticated");
+  if (!res.ok) throw new Error(`Wishlist add failed: ${res.status}`);
+  return res.json() as Promise<WishlistResponse>;
+}
+
+export async function removeWishlistItem(productId: string): Promise<WishlistResponse> {
+  const res = await fetch(`/api/wishlist/${encodeURIComponent(productId)}`, {
+    method: "DELETE",
+    credentials: "same-origin",
+  });
+  if (res.status === 401) throw new Error("Not authenticated");
+  if (!res.ok) throw new Error(`Wishlist remove failed: ${res.status}`);
+  return res.json() as Promise<WishlistResponse>;
 }
 
 // ── Brand fallback images (server has no image column) ────────────────────

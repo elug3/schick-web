@@ -14,6 +14,8 @@ export default [
   route("api/categories", "routes/api.categories.ts"),
   route("api/filters", "routes/api.filters.ts"),
   route("api/coupons/redeem", "routes/api.coupons.redeem.ts"),
+  route("api/wishlist", "routes/api.wishlist.ts"),
+  route("api/wishlist/:productId", "routes/api.wishlist.productId.ts"),
   index("routes/home.tsx"),
   route("product/:id", "routes/product.tsx"),
   route("cart", "routes/cart.tsx"),

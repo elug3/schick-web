@@ -8,6 +8,8 @@
  * Authenticated admin reads/writes are proxied separately via proxyProductApi.
  */
 
+import { mergeProductFacets } from "./product-tags";
+
 const API_PREFIX = "/api/v1";
 
 export interface UpstreamProduct {
@@ -53,6 +55,11 @@ export interface ProductResponse {
   status: string;
   image?: string;
   images?: string[];
+  tags?: string[];
+  capacity?: string;
+  style?: string;
+  family?: string;
+  productType?: string;
   createdAt: string;
 }
 
@@ -119,6 +126,7 @@ export function toBagResponse(product: UpstreamProduct): BagResponse {
 
 export function toProductResponse(product: UpstreamProduct): ProductResponse {
   const images = (product.imageUrls ?? []).filter((url) => url.trim().length > 0);
+  const facets = mergeProductFacets({}, product.tags);
 
   return {
     id: product.id,
@@ -133,6 +141,11 @@ export function toProductResponse(product: UpstreamProduct): ProductResponse {
     status: mapDisplayStatus(product.status, product.tags),
     image: images[0],
     images: images.length > 0 ? images : undefined,
+    tags: product.tags,
+    capacity: product.capacity || undefined,
+    style: facets.style,
+    family: facets.family,
+    productType: facets.productType,
     createdAt: product.createdAt ?? new Date(0).toISOString(),
   };
 }
@@ -211,6 +224,8 @@ export async function fetchUpstreamProductById(
 }
 
 function getSearchableValue(product: UpstreamProduct, key: string): string {
+  const facets = mergeProductFacets({}, product.tags);
+
   switch (key.toLowerCase()) {
     case "brand":
       return product.brand;
@@ -218,15 +233,17 @@ function getSearchableValue(product: UpstreamProduct, key: string): string {
       return product.color;
     case "material":
       return product.material;
+    case "capacity":
+      return product.capacity ?? "";
     case "producttype":
     case "product-type":
     case "type":
-      return "";
+      return facets.productType ?? "";
     case "style":
-      return "";
+      return facets.style ?? "";
     case "family":
     case "gender":
-      return "";
+      return facets.family ?? "";
     default:
       return "";
   }
