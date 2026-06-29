@@ -206,7 +206,7 @@ function TopNav() {
                   <NavLink
                     to={to}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-950"
+                    className="mb-3 block text-sm font-bold uppercase tracking-[0.15em] text-zinc-950"
                   >
                     {t(labelKey)}
                   </NavLink>
@@ -218,7 +218,7 @@ function TopNav() {
                           <NavLink
                             to={item.to}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="text-[11px] uppercase tracking-[0.12em] text-zinc-400 transition hover:text-zinc-950"
+                            className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500 transition hover:text-zinc-950"
                           >
                             {label}
                           </NavLink>
