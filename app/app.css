@@ -4,6 +4,75 @@
   --font-sans: "Inter", "Noto Sans KR", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-display: "Cormorant Garamond", Georgia, serif;
+
+  --animate-mobile-menu-overlay-in: mobile-menu-overlay-in 220ms ease-out both;
+  --animate-mobile-menu-overlay-out: mobile-menu-overlay-out 180ms ease-in both;
+  --animate-mobile-menu-panel-in: mobile-menu-panel-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-mobile-menu-panel-out: mobile-menu-panel-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+  --animate-mobile-menu-item-in: mobile-menu-item-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes mobile-menu-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mobile-menu-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mobile-menu-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mobile-menu-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes mobile-menu-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(
+    .animate-mobile-menu-overlay-in,
+    .animate-mobile-menu-overlay-out,
+    .animate-mobile-menu-panel-in,
+    .animate-mobile-menu-panel-out,
+    .animate-mobile-menu-item-in
+  ) {
+    animation: none !important;
+  }
 }
 
 html[lang="ko"] {
