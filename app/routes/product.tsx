@@ -1,52 +1,99 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
-import { NotFoundPage } from "~/components/not-found";
+import {
+  Link,
+  isRouteErrorResponse,
+  useLoaderData,
+  useNavigate,
+  useRouteError,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "react-router";
 import { LoadingBadge } from "~/components/loading-badge";
+import { NotFoundPage } from "~/components/not-found";
 import { ProductImageGallery } from "~/components/product-image-gallery";
 import { ProductPrice } from "~/components/product-price";
 import { TELEGRAM_URL } from "../lib/contact";
 import { brandToSlug } from "../lib/catalog";
-import { type ServerProduct, fetchProduct, productImage } from "../lib/api";
+import { type ServerProduct, productImage } from "../lib/api";
+import { getSalePrice } from "../lib/cart";
+import {
+  fetchUpstreamProductById,
+  toProductResponse,
+} from "../lib/product-upstream.server";
 import { useLanguage } from "../lib/i18n";
-import { useCart } from "../lib/useCart";
 import { useCartMutation } from "../lib/useCartMutation";
 
-export function meta() {
-  return [
-    { title: "Product | Schick" },
-    { name: "description", content: "Authentic luxury bag." },
-  ];
+export async function loader({ params }: LoaderFunctionArgs) {
+  const id = params.id ?? "";
+  if (!id) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  try {
+    const upstream = await fetchUpstreamProductById(id);
+    if (!upstream) {
+      throw new Response("Not Found", { status: 404 });
+    }
+
+    return { product: toProductResponse(upstream) as ServerProduct };
+  } catch (error) {
+    if (error instanceof Response) throw error;
+    throw new Response("Product unavailable", { status: 502 });
+  }
 }
 
-export default function ProductPage() {
-  const { t } = useLanguage();
-  const { id } = useParams();
-  const [product, setProduct] = useState<ServerProduct | null>(null);
-  const [status, setStatus] = useState<"loading" | "error" | "ok">("loading");
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const product = data?.product;
+  if (!product) {
+    return [
+      { title: "Product | Schick" },
+      { name: "description", content: "Authentic luxury bag." },
+    ];
+  }
 
-  useEffect(() => {
-    if (!id) { setStatus("error"); return; }
-    fetchProduct(id)
-      .then((p) => { setProduct(p); setStatus("ok"); })
-      .catch(() => setStatus("error"));
-  }, [id]);
+  const description =
+    product.description.length > 160
+      ? `${product.description.slice(0, 157)}...`
+      : product.description;
+  const image = product.image ?? product.images?.[0];
 
-  if (status === "loading") {
-    return (
-      <main className="mx-auto max-w-7xl animate-pulse px-4 py-10 md:px-8">
-        <div className="flex flex-col gap-10 md:flex-row">
-          <div className="flex-1 bg-zinc-100" style={{ paddingBottom: "120%" }} />
-          <div className="w-full space-y-4 md:w-[420px]">
-            <div className="h-4 w-24 rounded bg-zinc-100" />
-            <div className="h-10 w-64 rounded bg-zinc-100" />
-            <div className="h-8 w-32 rounded bg-zinc-100" />
-          </div>
-        </div>
-      </main>
+  const tags: ReturnType<MetaFunction> = [
+    { title: `${product.name} | Schick` },
+    { name: "description", content: description },
+    { property: "og:title", content: product.name },
+    { property: "og:description", content: description },
+    { property: "og:type", content: "product" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: product.name },
+    { name: "twitter:description", content: description },
+  ];
+
+  if (image) {
+    tags.push(
+      { property: "og:image", content: image },
+      { name: "twitter:image", content: image }
     );
   }
 
-  if (status === "error" || !product) {
+  return tags;
+};
+
+export default function ProductPage() {
+  const { product } = useLoaderData<typeof loader>();
+
+  return (
+    <main className="bg-white">
+      <Breadcrumb product={product} />
+      <ProductLayout product={product} />
+    </main>
+  );
+}
+
+export function ErrorBoundary() {
+  const { t } = useLanguage();
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
     return (
       <NotFoundPage
         eyebrow={t("product.noProduct")}
@@ -57,12 +104,7 @@ export default function ProductPage() {
     );
   }
 
-  return (
-    <main className="bg-white">
-      <Breadcrumb product={product} />
-      <ProductLayout product={product} />
-    </main>
-  );
+  throw error;
 }
 
 // ── Breadcrumb ─────────────────────────────────────────────────────────────
@@ -192,7 +234,8 @@ function ProductInfo({ product }: { product: ServerProduct }) {
       productId: product.id,
       name: product.name,
       brand: product.brand,
-      price: product.price,
+      price: getSalePrice(product.price),
+      listPrice: product.price,
       image: productImage(product.category, product.brand, product.image),
     });
     setAdded(true);
