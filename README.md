@@ -82,13 +82,11 @@ shared gateway with `SCHICK_AUTH_API_BASE_URL` and
 
 Product catalog BFF routes (`/api/products/bags`, `/api/products/:id`,
 `/api/products/search`) read from the Schick product service
-([elug3/schick](https://github.com/elug3/schick)):
+([elug3/schick](https://github.com/elug3/schick)) via the gateway:
 
-- Public bag search: `GET /api/products/bags` on the product service (port `8081` locally).
-- Optional server token: set `SCHICK_PRODUCT_API_BEARER_TOKEN` to an HMAC JWT
-  signed with the product service `JWT_SECRET` so the BFF can also read
-  `GET /api/products` and `GET /api/products/:id` for catalog items stored in
-  the `products` table.
+- Public bag search: `GET /api/v1/products/bags`
+- Public product detail: `GET /api/v1/products/{id}` (active products only)
+- Admin product CRUD is proxied to `/api/v1/products` with the user's session token
 
 Authenticated browser sessions use an opaque `HttpOnly` session cookie. Access
 and refresh tokens are cached server-side by the BFF; access tokens are reused

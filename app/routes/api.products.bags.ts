@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "react-router";
 
 import {
-  fetchMergedBagCatalog,
+  fetchUpstreamBags,
   toBagResponse,
 } from "~/lib/product-upstream.server";
 
@@ -15,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    const products = await fetchMergedBagCatalog(filters);
+    const products = await fetchUpstreamBags(filters);
     const results = products.map(toBagResponse);
 
     return Response.json({ total: results.length, results });

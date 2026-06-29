@@ -1,10 +1,14 @@
 /**
  * Server-side client for the Schick product service (elug3/schick).
  *
- * Public reads use GET /api/products/bags. Authenticated catalog reads use
- * GET /api/products and GET /api/products/:id when SCHICK_PRODUCT_API_BEARER_TOKEN
- * is configured (HMAC JWT signed with the product service JWT_SECRET).
+ * Public storefront reads:
+ *   GET /api/v1/products/bags
+ *   GET /api/v1/products/{id}
+ *
+ * Authenticated admin reads/writes are proxied separately via proxyProductApi.
  */
+
+const API_PREFIX = "/api/v1";
 
 export interface UpstreamProduct {
   id: string;
@@ -77,7 +81,7 @@ export function productApiBaseUrl(): string {
   return (
     process.env.SCHICK_PRODUCT_API_BASE_URL ??
     process.env.SCHICK_API_BASE_URL ??
-    "http://localhost:8081"
+    "http://localhost:8080"
   );
 }
 
@@ -85,11 +89,6 @@ function upstreamUrl(path: string, searchParams?: URLSearchParams): string {
   const url = new URL(path, productApiBaseUrl());
   if (searchParams) url.search = searchParams.toString();
   return url.toString();
-}
-
-function serviceBearerToken(): string | undefined {
-  const token = process.env.SCHICK_PRODUCT_API_BEARER_TOKEN?.trim();
-  return token || undefined;
 }
 
 function firstImage(imageUrls?: string[]): string | undefined {
@@ -169,19 +168,6 @@ export function supportedFilters(category: string): string[] {
   return [...BAG_FILTERS];
 }
 
-function dedupeProducts(products: UpstreamProduct[]): UpstreamProduct[] {
-  const seen = new Set<string>();
-  const merged: UpstreamProduct[] = [];
-
-  for (const product of products) {
-    if (seen.has(product.id)) continue;
-    seen.add(product.id);
-    merged.push(product);
-  }
-
-  return merged;
-}
-
 export async function fetchUpstreamBags(
   filters: Record<string, string> = {}
 ): Promise<UpstreamProduct[]> {
@@ -191,9 +177,10 @@ export async function fetchUpstreamBags(
     if (value) params.set(key, value);
   }
 
-  const response = await fetch(upstreamUrl("/api/products/bags", params), {
-    headers: { Accept: "application/json" },
-  });
+  const response = await fetch(
+    upstreamUrl(`${API_PREFIX}/products/bags`, params),
+    { headers: { Accept: "application/json" } }
+  );
 
   if (!response.ok) {
     throw new Error(`Upstream bag search failed: ${response.status}`);
@@ -207,42 +194,13 @@ export async function fetchUpstreamBags(
   return body.results ?? [];
 }
 
-export async function fetchUpstreamCatalog(): Promise<UpstreamProduct[]> {
-  const token = serviceBearerToken();
-  if (!token) return [];
-
-  const response = await fetch(upstreamUrl("/api/products"), {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Upstream product list failed: ${response.status}`);
-  }
-
-  const body = (await response.json()) as UpstreamProduct[] | { results?: UpstreamProduct[] };
-  if (Array.isArray(body)) return body;
-  return body.results ?? [];
-}
-
 export async function fetchUpstreamProductById(
   id: string
 ): Promise<UpstreamProduct | null> {
-  const bags = await fetchUpstreamBags().catch(() => []);
-  const fromBags = bags.find((product) => product.id === id);
-  if (fromBags) return fromBags;
-
-  const token = serviceBearerToken();
-  if (!token) return null;
-
-  const response = await fetch(upstreamUrl(`/api/products/${encodeURIComponent(id)}`), {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    upstreamUrl(`${API_PREFIX}/products/${encodeURIComponent(id)}`),
+    { headers: { Accept: "application/json" } }
+  );
 
   if (response.status === 404) return null;
   if (!response.ok) {
@@ -250,21 +208,6 @@ export async function fetchUpstreamProductById(
   }
 
   return (await response.json()) as UpstreamProduct;
-}
-
-export async function fetchMergedBagCatalog(
-  filters: Record<string, string> = {}
-): Promise<UpstreamProduct[]> {
-  const [bags, catalog] = await Promise.all([
-    fetchUpstreamBags(filters).catch(() => []),
-    fetchUpstreamCatalog().catch(() => []),
-  ]);
-
-  const bagCatalog = catalog.filter(
-    (product) => (product.category || "bags").toLowerCase() === "bags"
-  );
-
-  return dedupeProducts([...bags, ...bagCatalog]);
 }
 
 function getSearchableValue(product: UpstreamProduct, key: string): string {
@@ -312,7 +255,7 @@ export async function searchUpstreamProducts(
   }
 
   try {
-    const products = await fetchMergedBagCatalog(upstreamFilters);
+    const products = await fetchUpstreamBags(upstreamFilters);
 
     return products.filter((product) => {
       for (const [key, normalizedValue] of localFilters) {
