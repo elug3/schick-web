@@ -346,7 +346,7 @@ export async function handleRegister(request: Request): Promise<Response> {
     return json(
       {
         error:
-          "Registration is unavailable: SCHICK_WEB_SERVICE_EMAIL and SCHICK_WEB_SERVICE_PASSWORD must be configured",
+          "Registration is unavailable: SCHICK_WEB_SERVICE_TOKEN must be configured",
       },
       { status: 503 }
     );

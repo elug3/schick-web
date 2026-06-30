@@ -80,18 +80,16 @@ If auth and product services are deployed at separate origins, override the
 shared gateway with `SCHICK_AUTH_API_BASE_URL` and
 `SCHICK_PRODUCT_API_BASE_URL`.
 
-Customer registration requires a schick-web service account. Configure the same
-credentials on `schick-auth` (to seed the `customer_registrar` user) and on
-schick-web (for the BFF to obtain an access token):
+Customer registration requires a schick-web service account bearer token. Issue an
+access token for the seeded `customer_registrar` account on `schick-auth` and
+configure it on schick-web:
 
 ```bash
-SCHICK_WEB_SERVICE_EMAIL=schick-web@internal.schick
-SCHICK_WEB_SERVICE_PASSWORD=your-secret
+SCHICK_WEB_SERVICE_TOKEN=<access_token>
 ```
 
-The BFF logs in with these credentials server-side, caches the access token,
-and calls `POST /api/v1/auth/register` with `Authorization: Bearer <token>`.
-Never expose the service password to browsers.
+The BFF sends this token as `Authorization: Bearer <token>` when calling
+`POST /api/v1/auth/register`. Never expose the token to browsers.
 
 Product catalog BFF routes (`/api/products/bags`, `/api/products/:id`,
 `/api/products/search`) read from the Schick product service
@@ -194,7 +192,7 @@ Deployment uses GitHub OIDC to assume `arn:aws:iam::845061289093:role/github-act
 
 The container listens on port `3000` behind the `schick-web-3000-tg` load balancer target group. Backend API calls are routed through `SCHICK_API_BASE_URL=http://proxy.schick.local`.
 
-Set `SCHICK_WEB_SERVICE_EMAIL` and `SCHICK_WEB_SERVICE_PASSWORD` on the ECS task (prefer AWS Secrets Manager) so customer registration can authenticate with the schick-auth service account.
+Set `SCHICK_WEB_SERVICE_TOKEN` on the ECS task (prefer AWS Secrets Manager) so customer registration can authenticate with the schick-auth service account.
 
 ## Deployment Notes
 
