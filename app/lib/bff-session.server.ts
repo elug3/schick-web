@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import type { User } from "./auth";
+import { getServiceAccountAccessToken, serviceAccountConfigured } from "./service-account.server";
 
 const SESSION_COOKIE_NAME = "schick_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
@@ -13,6 +14,7 @@ type ApiService = "auth" | "products";
 interface TokenResponse {
   access_token?: unknown;
   refresh_token?: unknown;
+  token?: unknown;
   expires_in?: unknown;
   user?: unknown;
   [key: string]: unknown;
@@ -125,6 +127,57 @@ function readSession(request: Request): { id: string; record: SessionRecord } | 
   }
 
   return { id: sessionId, record };
+}
+
+async function exchangeRefreshToken(refreshToken: string): Promise<{
+  accessToken: string;
+  refreshToken: string;
+  expiresIn?: number;
+} | null> {
+  const upstream = await requestTokens("/api/v1/auth/refresh", {
+    refresh_token: refreshToken,
+  });
+
+  if (!upstream.ok) return null;
+
+  const body = (await upstream.json()) as TokenResponse;
+  const accessToken =
+    typeof body.token === "string"
+      ? body.token
+      : typeof body.access_token === "string"
+        ? body.access_token
+        : null;
+
+  if (!accessToken) return null;
+
+  return {
+    accessToken,
+    refreshToken:
+      typeof body.refresh_token === "string" && body.refresh_token
+        ? body.refresh_token
+        : refreshToken,
+    expiresIn:
+      typeof body.expires_in === "number" && Number.isFinite(body.expires_in)
+        ? body.expires_in
+        : undefined,
+  };
+}
+
+async function createSessionFromRefreshToken(
+  refreshToken: string,
+  user?: User
+): Promise<{ setCookie: string } | Response> {
+  const exchanged = await exchangeRefreshToken(refreshToken);
+  if (!exchanged) {
+    return json({ error: "Auth server did not issue an access token" }, { status: 502 });
+  }
+
+  return createSession({
+    access_token: exchanged.accessToken,
+    refresh_token: exchanged.refreshToken,
+    expires_in: exchanged.expiresIn,
+    user,
+  });
 }
 
 function isTokenResponse(value: TokenResponse): value is {
@@ -270,35 +323,84 @@ export async function handleLogin(request: Request): Promise<Response> {
   }
 
   const tokens = (await upstream.json()) as TokenResponse;
-  if (!isTokenResponse(tokens)) {
-    return json({ error: "Auth server did not return a token pair" }, { status: 502 });
-  }
-
-  const { setCookie } = createSession(tokens);
-  return json({ ok: true, user: tokens.user ?? null }, { status: 200 }, setCookie);
-}
-
-export async function handleRegister(request: Request): Promise<Response> {
-  const body = await parseJsonBody(request);
-  const upstream = await requestTokens("/api/v1/auth/register", body);
-
-  if (!upstream.ok) {
-    return sanitizedAuthResponse(upstream);
-  }
-
-  const tokens = (await upstream.json()) as TokenResponse;
   if (isTokenResponse(tokens)) {
     const { setCookie } = createSession(tokens);
     return json({ ok: true, user: tokens.user ?? null }, { status: 200 }, setCookie);
   }
 
-  const { access_token, refresh_token, ...safeBody } = tokens;
-  void access_token;
-  void refresh_token;
-  return json(
-    Object.keys(safeBody).length ? safeBody : { ok: true },
-    { status: upstream.status }
+  if (typeof tokens.refresh_token !== "string" || !tokens.refresh_token) {
+    return json({ error: "Auth server did not return a refresh token" }, { status: 502 });
+  }
+
+  const sessionResult = await createSessionFromRefreshToken(
+    tokens.refresh_token,
+    (tokens.user as User | undefined) ?? undefined
   );
+  if (sessionResult instanceof Response) return sessionResult;
+
+  return json({ ok: true, user: tokens.user ?? null }, { status: 200 }, sessionResult.setCookie);
+}
+
+export async function handleRegister(request: Request): Promise<Response> {
+  if (!serviceAccountConfigured()) {
+    return json(
+      {
+        error:
+          "Registration is unavailable: SCHICK_WEB_SERVICE_EMAIL and SCHICK_WEB_SERVICE_PASSWORD must be configured",
+      },
+      { status: 503 }
+    );
+  }
+
+  const body = await parseJsonBody(request);
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const password = typeof body.password === "string" ? body.password : "";
+
+  if (!email || !password) {
+    return json({ error: "email and password are required" }, { status: 400 });
+  }
+
+  let serviceToken: string;
+  try {
+    serviceToken = await getServiceAccountAccessToken();
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Service account authentication failed";
+    return json({ error: message }, { status: 503 });
+  }
+
+  const registerResponse = await fetch(upstreamUrl("auth", "/api/v1/auth/register"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${serviceToken}`,
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!registerResponse.ok) {
+    return sanitizedAuthResponse(registerResponse);
+  }
+
+  const loginResponse = await requestTokens("/api/v1/auth/login", { email, password });
+  if (!loginResponse.ok) {
+    return sanitizedAuthResponse(loginResponse);
+  }
+
+  const loginBody = (await loginResponse.json()) as TokenResponse;
+  if (isTokenResponse(loginBody)) {
+    const { setCookie } = createSession(loginBody);
+    return json({ ok: true, user: loginBody.user ?? null }, { status: 200 }, setCookie);
+  }
+
+  if (typeof loginBody.refresh_token !== "string" || !loginBody.refresh_token) {
+    return json({ error: "Auth server did not return a refresh token" }, { status: 502 });
+  }
+
+  const sessionResult = await createSessionFromRefreshToken(loginBody.refresh_token);
+  if (sessionResult instanceof Response) return sessionResult;
+
+  return json({ ok: true }, { status: 200 }, sessionResult.setCookie);
 }
 
 export async function getAccessToken(request: Request): Promise<AccessTokenResult | Response> {
@@ -318,11 +420,9 @@ export async function getAccessToken(request: Request): Promise<AccessTokenResul
     return { token: session.record.accessToken };
   }
 
-  const upstream = await requestTokens("/api/v1/auth/refresh", {
-    refresh_token: session.record.refreshToken,
-  });
+  const exchanged = await exchangeRefreshToken(session.record.refreshToken);
 
-  if (!upstream.ok) {
+  if (!exchanged) {
     sessions.delete(session.id);
     return json(
       { error: "Session expired. Please sign in again." },
@@ -331,20 +431,9 @@ export async function getAccessToken(request: Request): Promise<AccessTokenResul
     );
   }
 
-  const tokens = (await upstream.json()) as TokenResponse;
-  if (!isTokenResponse(tokens)) {
-    sessions.delete(session.id);
-    return json(
-      { error: "Auth server did not refresh the token pair" },
-      { status: 502 },
-      clearSessionCookie()
-    );
-  }
-
-  session.record.accessToken = tokens.access_token;
-  session.record.refreshToken = tokens.refresh_token;
-  session.record.accessTokenExpiresAt = accessTokenExpiresAt(tokens.expires_in);
-  if (tokens.user) session.record.user = tokens.user;
+  session.record.accessToken = exchanged.accessToken;
+  session.record.refreshToken = exchanged.refreshToken;
+  session.record.accessTokenExpiresAt = accessTokenExpiresAt(exchanged.expiresIn);
 
   return {
     token: session.record.accessToken,
