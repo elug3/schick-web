@@ -1,11 +1,11 @@
 export function serviceAccountConfigured(): boolean {
-  return Boolean(process.env.SCHICK_WEB_SERVICE_TOKEN?.trim());
+  return Boolean(process.env.DUPLI1_WEB_SERVICE_TOKEN?.trim());
 }
 
 export function requireServiceAccountToken(): string {
-  const token = process.env.SCHICK_WEB_SERVICE_TOKEN?.trim();
+  const token = process.env.DUPLI1_WEB_SERVICE_TOKEN?.trim();
   if (!token) {
-    throw new Error("SCHICK_WEB_SERVICE_TOKEN is required");
+    throw new Error("DUPLI1_WEB_SERVICE_TOKEN is required");
   }
   return token;
 }

@@ -14,7 +14,7 @@ import { useCartMutation } from "../lib/useCartMutation";
 
 export function meta() {
   return [
-    { title: "Shopping Bag — Schick" },
+    { title: "Shopping Bag — Dupli1" },
     {
       name: "description",
       content: "Review your selected luxury bags and proceed to checkout.",
@@ -394,10 +394,10 @@ function HelpBar() {
           {t("cart.assistanceDescription")}
         </p>
         <a
-          href="mailto:concierge@schick.com"
+          href="mailto:concierge@dupli1.com"
           className="mt-4 inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-950 underline-offset-4 hover:underline"
         >
-          concierge@schick.com
+          concierge@dupli1.com
         </a>
       </div>
     </section>

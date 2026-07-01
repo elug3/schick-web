@@ -1,4 +1,4 @@
-const KEY = "schick_history";
+const KEY = "dupli1_history";
 const MAX = 20;
 
 export interface HistoryEntry {

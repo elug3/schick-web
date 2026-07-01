@@ -1,5 +1,5 @@
 /**
- * Server-side client for the Schick product service (elug3/schick).
+ * Server-side client for the Dupli1 product service (elug3/dupli1).
  *
  * Public storefront reads:
  *   GET /api/v1/products/bags
@@ -79,8 +79,8 @@ const SUPPORTED_CATEGORIES = ["bags"] as const;
 
 export function productApiBaseUrl(): string {
   return (
-    process.env.SCHICK_PRODUCT_API_BASE_URL ??
-    process.env.SCHICK_API_BASE_URL ??
+    process.env.DUPLI1_PRODUCT_API_BASE_URL ??
+    process.env.DUPLI1_API_BASE_URL ??
     "http://localhost:8080"
   );
 }

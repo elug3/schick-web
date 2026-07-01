@@ -2,10 +2,10 @@ import { NotFoundPage } from "~/components/not-found";
 
 export function meta() {
   return [
-    { title: "Page not found | Schick" },
+    { title: "Page not found | Dupli1" },
     {
       name: "description",
-      content: "The requested Schick page could not be found.",
+      content: "The requested Dupli1 page could not be found.",
     },
   ];
 }

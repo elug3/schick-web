@@ -31,7 +31,7 @@ interface LanguageContextValue {
   translateValue: (scope: string, fallback: string) => string;
 }
 
-const STORAGE_KEY = "schick_language";
+const STORAGE_KEY = "dupli1_language";
 
 export const LANGUAGES: LanguageOption[] = [
   {
@@ -121,10 +121,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "footer.authenticityGuarantee": "Quality Guarantee",
     "footer.privacyPolicy": "Privacy Policy",
     "footer.termsConditions": "Terms & Conditions",
-    "footer.rights": "© 2026 Schick. All rights reserved.",
+    "footer.rights": "© 2026 Dupli1. All rights reserved.",
     "footer.tagline": "Premium Bags · Authenticated · Curated",
 
-    "home.metaTitle": "Schick — Curated Luxury Bags",
+    "home.metaTitle": "Dupli1 — Curated Luxury Bags",
     "home.metaDescription":
       "Authentic luxury bags from the world's most coveted brands.",
     "home.eyebrow": "New Season 2026",
@@ -178,7 +178,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.valueAuthenticity": "Authenticity Guaranteed",
     "home.valueCuration": "Expert Curation",
     "home.scroll": "Scroll",
-    "home.editorialEyebrow": "The Schick Edit",
+    "home.editorialEyebrow": "The Dupli1 Edit",
     "home.editorialTitle": "Luxury, distilled.",
     "home.editorialBody":
       "Every piece passes our editors' lens — verified authenticity, impeccable condition, and a point of view that cuts through the noise.",
@@ -191,7 +191,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.featuredEyebrow": "The Selection",
     "home.brandMarquee": "Curated Houses",
 
-    "product.metaTitle": "Product | Schick",
+    "product.metaTitle": "Product | Dupli1",
     "product.metaDescription": "Authentic luxury bag.",
     "product.signInRequired": "Sign In Required",
     "product.signInRequiredDescription":
@@ -233,12 +233,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "Free standard shipping on orders over $100. Express and overnight options available at checkout. Returns accepted within 30 days of delivery.",
     "product.authenticityBody":
-      "Every item sold by Schick is backed by our Quality Guarantee. We partner directly with authorized retailers to ensure each product meets our rigorous standards.",
+      "Every item sold by Dupli1 is backed by our Quality Guarantee. We partner directly with authorized retailers to ensure each product meets our rigorous standards.",
     "product.badgeNew": "New",
     "product.badgeFeatured": "Featured",
     "product.priceLoading": "Loading",
 
-    "cart.metaTitle": "Shopping Bag — Schick",
+    "cart.metaTitle": "Shopping Bag — Dupli1",
     "cart.metaDescription":
       "Review your selected luxury bags and proceed to checkout.",
     "cart.continueShopping": "Continue Shopping",
@@ -279,11 +279,11 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "cart.increaseQuantity": "Increase quantity",
     "cart.needAssistance": "Need assistance?",
     "cart.assistanceDescription":
-      "Contact the Schick Client Services team for personal shopping support.",
+      "Contact the Dupli1 Client Services team for personal shopping support.",
 
-    "checkout.metaTitle": "Checkout — Schick",
+    "checkout.metaTitle": "Checkout — Dupli1",
     "checkout.metaDescription":
-      "Complete your Schick order with secure checkout.",
+      "Complete your Dupli1 order with secure checkout.",
     "checkout.invalidPromo": "Invalid promo code",
     "checkout.required": "Required",
     "checkout.validEmail": "Enter a valid email",
@@ -329,9 +329,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.continueToPayment": "Continue to Payment",
     "checkout.previousStep": "Previous Step",
 
-    "confirmation.metaTitle": "Order Confirmed — Schick",
+    "confirmation.metaTitle": "Order Confirmed — Dupli1",
     "confirmation.metaDescription":
-      "Your Schick order has been placed successfully.",
+      "Your Dupli1 order has been placed successfully.",
     "confirmation.orderConfirmed": "Order Confirmed",
     "confirmation.thankYou": "Thank You",
     "confirmation.emailTo": "A confirmation email will be sent to {email}.",
@@ -340,8 +340,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "confirmation.total": "Total",
     "confirmation.viewOrders": "View Orders",
 
-    "login.metaTitle": "Sign in | Schick",
-    "login.metaDescription": "Sign in to your Schick account.",
+    "login.metaTitle": "Sign in | Dupli1",
+    "login.metaDescription": "Sign in to your Dupli1 account.",
     "login.welcomeBack": "Welcome back",
     "login.createYourAccount": "Create your account",
     "login.email": "Email",
@@ -361,13 +361,13 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.stepThreeEyebrow": "Step 03",
     "signup.termsTitle": "Review membership terms",
     "signup.termsDescription":
-      "Confirm the license terms before creating your Schick account.",
+      "Confirm the license terms before creating your Dupli1 account.",
     "signup.licenseIntro":
-      "By joining Schick, you agree to use the service for personal shopping, account management, and order support.",
+      "By joining Dupli1, you agree to use the service for personal shopping, account management, and order support.",
     "signup.licenseTermOne":
       "You will provide accurate account information and keep it up to date.",
     "signup.licenseTermTwo":
-      "You accept Schick's terms for product browsing, checkout, and account services.",
+      "You accept Dupli1's terms for product browsing, checkout, and account services.",
     "signup.licenseTermThree":
       "You understand that marketing messages are optional and can be changed later.",
     "signup.agreeTerms": "I agree to the license terms and privacy policy.",
@@ -404,12 +404,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.welcomeEyebrow": "Welcome",
     "signup.welcomeTitle": "Welcome, {name}",
     "signup.welcomeDescription":
-      "Your Schick account is ready. You can now manage your profile, wishlist, coupons, and orders.",
+      "Your Dupli1 account is ready. You can now manage your profile, wishlist, coupons, and orders.",
     "signup.goToAccount": "Go to account",
 
-    "profile.metaTitle": "Account | Schick",
-    "profile.metaDescription": "Manage your Schick account.",
-    "profile.signInToSchick": "Sign in to Schick",
+    "profile.metaTitle": "Account | Dupli1",
+    "profile.metaDescription": "Manage your Dupli1 account.",
+    "profile.signInToDupli1": "Sign in to Dupli1",
     "profile.signInDescription":
       "Access your wishlist, orders, and personal settings.",
     "profile.signIn": "Sign in",
@@ -471,7 +471,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "We accept returns within 14 days of delivery. Items must be unused and in original packaging. Contact support to initiate a return.",
     "profile.faqAuthenticated": "Are all items authenticated?",
     "profile.faqAuthenticatedAnswer":
-      "Yes. Every item on Schick undergoes our rigorous 12-point authentication process before listing.",
+      "Yes. Every item on Dupli1 undergoes our rigorous 12-point authentication process before listing.",
     "profile.faqApplyCoupon": "How do I apply a coupon?",
     "profile.faqApplyCouponAnswer":
       "Enter your coupon code at checkout in the promo code field. Only one code may be applied per order.",
@@ -479,14 +479,14 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "profile.faqCancelOrderAnswer":
       "Orders can be cancelled within 1 hour of placement. After that, please contact our support team and we'll do our best to assist.",
 
-    "notFound.metaTitle": "Page not found | Schick",
-    "notFound.metaDescription": "The requested Schick page could not be found.",
+    "notFound.metaTitle": "Page not found | Dupli1",
+    "notFound.metaDescription": "The requested Dupli1 page could not be found.",
     "notFound.title": "Page not found",
     "notFound.description":
       "The page you are looking for does not exist or has been moved.",
     "category.empty": "No products match this category yet. Browse the full collection instead.",
 
-    "history.metaTitle": "History | Schick",
+    "history.metaTitle": "History | Dupli1",
     "history.metaDescription": "View recent browsing history.",
     "history.title": "History",
 
@@ -608,10 +608,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "footer.authenticityGuarantee": "품질 보증",
     "footer.privacyPolicy": "개인정보 처리방침",
     "footer.termsConditions": "이용 약관",
-    "footer.rights": "© 2026 Schick. All rights reserved.",
+    "footer.rights": "© 2026 Dupli1. All rights reserved.",
     "footer.tagline": "프리미엄 가방 · 정품 보증 · 엄선 큐레이션",
 
-    "home.metaTitle": "Schick — 엄선한 럭셔리 가방",
+    "home.metaTitle": "Dupli1 — 엄선한 럭셔리 가방",
     "home.metaDescription":
       "세계적으로 사랑받는 브랜드의 정품 럭셔리 가방.",
     "home.eyebrow": "2026 새 시즌",
@@ -665,7 +665,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.valueAuthenticity": "정품 보증",
     "home.valueCuration": "전문 큐레이션",
     "home.scroll": "스크롤",
-    "home.editorialEyebrow": "Schick 에디트",
+    "home.editorialEyebrow": "Dupli1 에디트",
     "home.editorialTitle": "럭셔리, 정제되다.",
     "home.editorialBody":
       "모든 피스는 에디터의 기준을 통과합니다. 정품 인증, 완벽한 컨디션, 그리고 확고한 큐레이션.",
@@ -678,7 +678,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.featuredEyebrow": "셀렉션",
     "home.brandMarquee": "큐레이션 하우스",
 
-    "product.metaTitle": "제품 | Schick",
+    "product.metaTitle": "제품 | Dupli1",
     "product.metaDescription": "정품 럭셔리 가방.",
     "product.signInRequired": "로그인이 필요합니다",
     "product.signInRequiredDescription":
@@ -720,12 +720,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "$100 이상 주문 시 무료 일반 배송. 결제 시 특급 및 익일 배송 옵션을 선택할 수 있습니다. 배송 후 30일 이내 반품 가능합니다.",
     "product.authenticityBody":
-      "Schick에서 판매되는 모든 상품은 품질 보증이 적용됩니다. 공식 리테일러와 직접 협력하여 엄격한 품질 기준을 충족하는 제품만 제공합니다.",
+      "Dupli1에서 판매되는 모든 상품은 품질 보증이 적용됩니다. 공식 리테일러와 직접 협력하여 엄격한 품질 기준을 충족하는 제품만 제공합니다.",
     "product.badgeNew": "신상품",
     "product.badgeFeatured": "추천",
     "product.priceLoading": "불러오는 중",
 
-    "cart.metaTitle": "장바구니 — Schick",
+    "cart.metaTitle": "장바구니 — Dupli1",
     "cart.metaDescription":
       "담은 상품을 확인하고 결제를 진행하세요.",
     "cart.continueShopping": "쇼핑 계속하기",
@@ -764,10 +764,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "cart.increaseQuantity": "수량 늘리기",
     "cart.needAssistance": "도움이 필요하신가요?",
     "cart.assistanceDescription":
-      "퍼스널 쇼핑 상담은 Schick 고객센터로 문의해 주세요.",
+      "퍼스널 쇼핑 상담은 Dupli1 고객센터로 문의해 주세요.",
 
-    "checkout.metaTitle": "결제 — Schick",
-    "checkout.metaDescription": "안전한 결제로 Schick 주문을 완료하세요.",
+    "checkout.metaTitle": "결제 — Dupli1",
+    "checkout.metaDescription": "안전한 결제로 Dupli1 주문을 완료하세요.",
     "checkout.invalidPromo": "유효하지 않은 프로모션 코드",
     "checkout.required": "필수 항목",
     "checkout.validEmail": "유효한 이메일을 입력하세요",
@@ -813,8 +813,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.continueToPayment": "결제 정보 입력",
     "checkout.previousStep": "이전 단계",
 
-    "confirmation.metaTitle": "주문 확인 — Schick",
-    "confirmation.metaDescription": "Schick 주문이 성공적으로 접수되었습니다.",
+    "confirmation.metaTitle": "주문 확인 — Dupli1",
+    "confirmation.metaDescription": "Dupli1 주문이 성공적으로 접수되었습니다.",
     "confirmation.orderConfirmed": "주문 확인",
     "confirmation.thankYou": "감사합니다",
     "confirmation.emailTo": "확인 이메일을 {email}(으)로 보내드립니다.",
@@ -823,8 +823,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "confirmation.total": "합계",
     "confirmation.viewOrders": "주문 보기",
 
-    "login.metaTitle": "로그인 | Schick",
-    "login.metaDescription": "Schick 계정에 로그인하세요.",
+    "login.metaTitle": "로그인 | Dupli1",
+    "login.metaDescription": "Dupli1 계정에 로그인하세요.",
     "login.welcomeBack": "다시 오신 것을 환영합니다",
     "login.createYourAccount": "계정 만들기",
     "login.email": "이메일",
@@ -844,13 +844,13 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.stepThreeEyebrow": "3단계",
     "signup.termsTitle": "회원 약관 확인",
     "signup.termsDescription":
-      "Schick 계정을 만들기 전에 이용약관을 확인해 주세요.",
+      "Dupli1 계정을 만들기 전에 이용약관을 확인해 주세요.",
     "signup.licenseIntro":
-      "Schick 회원으로 가입하면 쇼핑, 계정 관리, 주문 관련 서비스 이용에 동의하게 됩니다.",
+      "Dupli1 회원으로 가입하면 쇼핑, 계정 관리, 주문 관련 서비스 이용에 동의하게 됩니다.",
     "signup.licenseTermOne":
       "본인의 정확한 정보를 제공하고, 변경 시 즉시 업데이트합니다.",
     "signup.licenseTermTwo":
-      "상품 조회, 결제, 계정 서비스 이용에 관한 Schick 이용약관에 동의합니다.",
+      "상품 조회, 결제, 계정 서비스 이용에 관한 Dupli1 이용약관에 동의합니다.",
     "signup.licenseTermThree":
       "마케팅 수신은 선택 사항이며, 언제든지 변경할 수 있습니다.",
     "signup.agreeTerms": "이용약관 및 개인정보 처리방침에 동의합니다.",
@@ -887,12 +887,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.welcomeEyebrow": "환영합니다",
     "signup.welcomeTitle": "{name}님, 환영합니다",
     "signup.welcomeDescription":
-      "Schick 계정이 준비되었습니다. 프로필, 위시리스트, 쿠폰, 주문 내역을 관리할 수 있습니다.",
+      "Dupli1 계정이 준비되었습니다. 프로필, 위시리스트, 쿠폰, 주문 내역을 관리할 수 있습니다.",
     "signup.goToAccount": "계정으로 이동",
 
-    "profile.metaTitle": "계정 | Schick",
-    "profile.metaDescription": "Schick 계정을 관리하세요.",
-    "profile.signInToSchick": "Schick에 로그인",
+    "profile.metaTitle": "계정 | Dupli1",
+    "profile.metaDescription": "Dupli1 계정을 관리하세요.",
+    "profile.signInToDupli1": "Dupli1에 로그인",
     "profile.signInDescription":
       "위시리스트, 주문 내역, 계정 설정을 이용하세요.",
     "profile.signIn": "로그인",
@@ -954,7 +954,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "배송 완료 후 14일 이내 반품이 가능합니다. 상품은 미사용 상태이며 원래 포장을 유지해야 합니다. 반품은 고객센터로 문의해 주세요.",
     "profile.faqAuthenticated": "모든 상품이 정품 인증되나요?",
     "profile.faqAuthenticatedAnswer":
-      "네. Schick의 모든 상품은 등록 전 엄격한 12단계 인증 과정을 거칩니다.",
+      "네. Dupli1의 모든 상품은 등록 전 엄격한 12단계 인증 과정을 거칩니다.",
     "profile.faqApplyCoupon": "쿠폰은 어떻게 적용하나요?",
     "profile.faqApplyCouponAnswer":
       "결제 화면의 프로모션 코드 입력란에 쿠폰 코드를 입력하세요. 주문당 하나의 코드만 적용할 수 있습니다.",
@@ -962,14 +962,14 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "profile.faqCancelOrderAnswer":
       "주문 후 1시간 이내에는 취소할 수 있습니다. 이후에는 지원팀에 문의해 주시면 가능한 한 도와드리겠습니다.",
 
-    "notFound.metaTitle": "페이지를 찾을 수 없음 | Schick",
-    "notFound.metaDescription": "요청한 Schick 페이지를 찾을 수 없습니다.",
+    "notFound.metaTitle": "페이지를 찾을 수 없음 | Dupli1",
+    "notFound.metaDescription": "요청한 Dupli1 페이지를 찾을 수 없습니다.",
     "notFound.title": "페이지를 찾을 수 없습니다",
     "notFound.description":
       "찾고 있는 페이지가 존재하지 않거나 이동되었습니다.",
     "category.empty": "이 카테고리에 해당하는 상품이 없습니다. 전체 컬렉션을 둘러보세요.",
 
-    "history.metaTitle": "내역 | Schick",
+    "history.metaTitle": "내역 | Dupli1",
     "history.metaDescription": "최근 탐색 내역을 확인하세요.",
     "history.title": "내역",
 
@@ -1090,10 +1090,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "footer.authenticityGuarantee": "品质保证",
     "footer.privacyPolicy": "隐私政策",
     "footer.termsConditions": "条款与条件",
-    "footer.rights": "© 2026 Schick. 保留所有权利。",
+    "footer.rights": "© 2026 Dupli1. 保留所有权利。",
     "footer.tagline": "高级包袋 · 正品认证 · 精选策划",
 
-    "home.metaTitle": "Schick — 精选奢华包袋",
+    "home.metaTitle": "Dupli1 — 精选奢华包袋",
     "home.metaDescription": "来自全球热门品牌的正品奢华包袋。",
     "home.eyebrow": "2026 新季",
     "home.heroTitleLine1": "携带",
@@ -1142,7 +1142,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.valueAuthenticity": "正品保证",
     "home.valueCuration": "专业甄选",
     "home.scroll": "滚动",
-    "home.editorialEyebrow": "Schick 精选",
+    "home.editorialEyebrow": "Dupli1 精选",
     "home.editorialTitle": "奢华，精炼呈现。",
     "home.editorialBody":
       "每一件单品都经过编辑甄选——正品认证、完美品相，以及独树一帜的审美视角。",
@@ -1155,7 +1155,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "home.featuredEyebrow": "精选系列",
     "home.brandMarquee": "甄选品牌",
 
-    "product.metaTitle": "产品 | Schick",
+    "product.metaTitle": "产品 | Dupli1",
     "product.metaDescription": "正品奢华包袋。",
     "product.signInRequired": "需要登录",
     "product.signInRequiredDescription": "请登录以查看产品详情。",
@@ -1196,12 +1196,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "product.shippingReturnsBody":
       "订单满 $100 享免费标准配送。结账时可选择加急和隔夜配送。收货后 30 天内可退货。",
     "product.authenticityBody":
-      "Schick 售出的每件商品均享有品质保证。我们直接与授权零售商合作，确保每件商品均符合我们的严格品质标准。",
+      "Dupli1 售出的每件商品均享有品质保证。我们直接与授权零售商合作，确保每件商品均符合我们的严格品质标准。",
     "product.badgeNew": "新品",
     "product.badgeFeatured": "精选",
     "product.priceLoading": "加载中",
 
-    "cart.metaTitle": "购物袋 — Schick",
+    "cart.metaTitle": "购物袋 — Dupli1",
     "cart.metaDescription": "查看已选奢华包袋并继续结账。",
     "cart.continueShopping": "继续购物",
     "cart.shoppingBag": "购物袋",
@@ -1237,10 +1237,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "cart.decreaseQuantity": "减少数量",
     "cart.increaseQuantity": "增加数量",
     "cart.needAssistance": "需要帮助？",
-    "cart.assistanceDescription": "联系 Schick 客户服务团队获取个人购物支持。",
+    "cart.assistanceDescription": "联系 Dupli1 客户服务团队获取个人购物支持。",
 
-    "checkout.metaTitle": "结账 — Schick",
-    "checkout.metaDescription": "通过安全结账完成您的 Schick 订单。",
+    "checkout.metaTitle": "结账 — Dupli1",
+    "checkout.metaDescription": "通过安全结账完成您的 Dupli1 订单。",
     "checkout.invalidPromo": "优惠码无效",
     "checkout.required": "必填",
     "checkout.validEmail": "请输入有效的电子邮箱",
@@ -1286,8 +1286,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "checkout.continueToPayment": "继续付款",
     "checkout.previousStep": "上一步",
 
-    "confirmation.metaTitle": "订单已确认 — Schick",
-    "confirmation.metaDescription": "您的 Schick 订单已成功提交。",
+    "confirmation.metaTitle": "订单已确认 — Dupli1",
+    "confirmation.metaDescription": "您的 Dupli1 订单已成功提交。",
     "confirmation.orderConfirmed": "订单已确认",
     "confirmation.thankYou": "谢谢您",
     "confirmation.emailTo": "确认邮件将发送至 {email}。",
@@ -1296,8 +1296,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "confirmation.total": "合计",
     "confirmation.viewOrders": "查看订单",
 
-    "login.metaTitle": "登录 | Schick",
-    "login.metaDescription": "登录您的 Schick 账户。",
+    "login.metaTitle": "登录 | Dupli1",
+    "login.metaDescription": "登录您的 Dupli1 账户。",
     "login.welcomeBack": "欢迎回来",
     "login.createYourAccount": "创建账户",
     "login.email": "电子邮箱",
@@ -1316,12 +1316,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.stepTwoEyebrow": "步骤 02",
     "signup.stepThreeEyebrow": "步骤 03",
     "signup.termsTitle": "查看会员条款",
-    "signup.termsDescription": "创建 Schick 账户前，请确认许可条款。",
+    "signup.termsDescription": "创建 Dupli1 账户前，请确认许可条款。",
     "signup.licenseIntro":
-      "加入 Schick 即表示您同意将服务用于个人购物、账户管理和订单支持。",
+      "加入 Dupli1 即表示您同意将服务用于个人购物、账户管理和订单支持。",
     "signup.licenseTermOne": "您将提供准确的账户信息并保持更新。",
     "signup.licenseTermTwo":
-      "您接受 Schick 关于商品浏览、结账和账户服务的条款。",
+      "您接受 Dupli1 关于商品浏览、结账和账户服务的条款。",
     "signup.licenseTermThree":
       "您了解营销信息为可选项，之后可随时更改。",
     "signup.agreeTerms": "我同意许可条款和隐私政策。",
@@ -1356,12 +1356,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "signup.welcomeEyebrow": "欢迎",
     "signup.welcomeTitle": "欢迎，{name}",
     "signup.welcomeDescription":
-      "您的 Schick 账户已准备就绪。现在可以管理个人资料、愿望清单、优惠券和订单。",
+      "您的 Dupli1 账户已准备就绪。现在可以管理个人资料、愿望清单、优惠券和订单。",
     "signup.goToAccount": "前往账户",
 
-    "profile.metaTitle": "账户 | Schick",
-    "profile.metaDescription": "管理您的 Schick 账户。",
-    "profile.signInToSchick": "登录 Schick",
+    "profile.metaTitle": "账户 | Dupli1",
+    "profile.metaDescription": "管理您的 Dupli1 账户。",
+    "profile.signInToDupli1": "登录 Dupli1",
     "profile.signInDescription": "访问您的愿望清单、订单和个人设置。",
     "profile.signIn": "登录",
     "profile.account": "账户",
@@ -1422,7 +1422,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
       "我们接受收货后 14 天内退货。商品必须未使用并保持原包装。请联系支持团队发起退货。",
     "profile.faqAuthenticated": "所有商品都经过认证吗？",
     "profile.faqAuthenticatedAnswer":
-      "是的。Schick 上的每件商品在上架前都会经过严格的 12 点认证流程。",
+      "是的。Dupli1 上的每件商品在上架前都会经过严格的 12 点认证流程。",
     "profile.faqApplyCoupon": "如何使用优惠券？",
     "profile.faqApplyCouponAnswer":
       "在结账时的优惠码输入框中输入您的优惠券代码。每个订单只能使用一个代码。",
@@ -1430,13 +1430,13 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     "profile.faqCancelOrderAnswer":
       "下单后 1 小时内可以取消。之后请联系我们的支持团队，我们会尽力协助。",
 
-    "notFound.metaTitle": "页面未找到 | Schick",
-    "notFound.metaDescription": "无法找到请求的 Schick 页面。",
+    "notFound.metaTitle": "页面未找到 | Dupli1",
+    "notFound.metaDescription": "无法找到请求的 Dupli1 页面。",
     "notFound.title": "页面未找到",
     "notFound.description": "您查找的页面不存在或已被移动。",
     "category.empty": "此分类暂无商品，请浏览全部系列。",
 
-    "history.metaTitle": "历史 | Schick",
+    "history.metaTitle": "历史 | Dupli1",
     "history.metaDescription": "查看最近浏览历史。",
     "history.title": "历史",
 

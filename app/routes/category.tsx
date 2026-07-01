@@ -18,7 +18,7 @@ import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
-    { title: "Shop Bags | Schick" },
+    { title: "Shop Bags | Dupli1" },
     { name: "description", content: "Browse curated luxury handbags." },
   ];
 }

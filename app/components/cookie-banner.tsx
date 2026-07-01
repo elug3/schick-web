@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useLanguage } from "../lib/i18n";
 
-const STORAGE_KEY = "schick_cookie_consent";
+const STORAGE_KEY = "dupli1_cookie_consent";
 
 export function CookieBanner() {
   const { t } = useLanguage();

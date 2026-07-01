@@ -220,7 +220,7 @@ function TopNav() {
           className="justify-self-center text-sm font-medium uppercase tracking-[0.4em] text-zinc-950 transition hover:opacity-70"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Schick
+          Dupli1
         </NavLink>
 
         <div className="flex justify-end gap-0.5">
@@ -412,7 +412,7 @@ function Footer() {
               className="mb-3 text-2xl font-light tracking-[0.35em] uppercase text-zinc-950"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Schick
+              Dupli1
             </p>
             <p className="text-xs leading-relaxed text-zinc-400">
               {t("footer.description")}

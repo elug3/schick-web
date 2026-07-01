@@ -1,4 +1,4 @@
-const KEY = "schick_cart";
+const KEY = "dupli1_cart";
 export const FREE_SHIPPING_THRESHOLD = 100;
 export const PROMO_CODE = "SUMMER30";
 export const PROMO_DISCOUNT = 0.3;
@@ -30,7 +30,7 @@ export interface CartTotals {
   promoApplied: boolean;
 }
 
-const CART_EVENT = "schick-cart-update";
+const CART_EVENT = "dupli1-cart-update";
 
 function emitCartUpdate(): void {
   if (typeof window !== "undefined") {

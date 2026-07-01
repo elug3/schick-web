@@ -5,8 +5,8 @@ import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
-    { title: "Sign in | Schick" },
-    { name: "description", content: "Sign in to your Schick account." },
+    { title: "Sign in | Dupli1" },
+    { name: "description", content: "Sign in to your Dupli1 account." },
   ];
 }
 
@@ -37,7 +37,7 @@ export default function Login() {
     <main className="mx-auto max-w-2xl px-5 py-14">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold tracking-tight text-zinc-950">
-          Schick
+          Dupli1
         </h1>
         <p className="mt-2 text-sm text-zinc-500">
           {mode === "login" ? t("login.welcomeBack") : t("login.createYourAccount")}
@@ -169,7 +169,7 @@ function SignupWizard({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
       await login(email, password);
       try {
         localStorage.setItem(
-          "schick_signup_profile",
+          "dupli1_signup_profile",
           JSON.stringify({
             name: name.trim(),
             marketingConsent,
