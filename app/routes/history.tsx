@@ -2,7 +2,7 @@ import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
-    { title: "History | Schick" },
+    { title: "History | Dupli1" },
     { name: "description", content: "View recent browsing history." },
   ];
 }

@@ -9,10 +9,10 @@ import { OrderSummary } from "./cart";
 
 export function meta() {
   return [
-    { title: "Checkout — Schick" },
+    { title: "Checkout — Dupli1" },
     {
       name: "description",
-      content: "Complete your Schick order with secure checkout.",
+      content: "Complete your Dupli1 order with secure checkout.",
     },
   ];
 }

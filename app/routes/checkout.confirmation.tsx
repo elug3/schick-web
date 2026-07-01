@@ -9,10 +9,10 @@ interface ConfirmationState {
 
 export function meta() {
   return [
-    { title: "Order Confirmed — Schick" },
+    { title: "Order Confirmed — Dupli1" },
     {
       name: "description",
-      content: "Your Schick order has been placed successfully.",
+      content: "Your Dupli1 order has been placed successfully.",
     },
   ];
 }

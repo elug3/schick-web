@@ -52,8 +52,8 @@ const NAV_ITEMS: { id: Section; labelKey: string; icon: React.FC }[] = [
 
 export function meta() {
   return [
-    { title: "Account | Schick" },
-    { name: "description", content: "Manage your Schick account." },
+    { title: "Account | Dupli1" },
+    { name: "description", content: "Manage your Dupli1 account." },
   ];
 }
 
@@ -92,7 +92,7 @@ export default function Profile() {
             <ProfileIcon className="size-8 text-zinc-400" />
           </span>
         </div>
-        <h1 className="text-xl font-semibold text-zinc-950">{t("profile.signInToSchick")}</h1>
+        <h1 className="text-xl font-semibold text-zinc-950">{t("profile.signInToDupli1")}</h1>
         <p className="mt-2 text-sm text-zinc-500">
           {t("profile.signInDescription")}
         </p>

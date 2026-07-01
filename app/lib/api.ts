@@ -50,7 +50,7 @@ export async function fetchBags(filters?: {
   return data.results ?? [];
 }
 
-// ── Single product — proxied to Schick product service ───────────────────
+// ── Single product — proxied to Dupli1 product service ───────────────────
 
 export async function fetchProduct(id: string): Promise<ServerProduct> {
   const res = await fetch(`/api/products/${id}`);

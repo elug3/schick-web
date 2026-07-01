@@ -14,7 +14,7 @@ import { ProductPrice } from "../components/product-price";
 
 export function meta() {
   return [
-    { title: "Schick — Curated Luxury Bags" },
+    { title: "Dupli1 — Curated Luxury Bags" },
     { name: "description", content: "Authentic luxury bags from the world's most coveted brands." },
   ];
 }

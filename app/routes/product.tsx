@@ -13,7 +13,7 @@ import { useCartMutation } from "../lib/useCartMutation";
 
 export function meta() {
   return [
-    { title: "Product | Schick" },
+    { title: "Product | Dupli1" },
     { name: "description", content: "Authentic luxury bag." },
   ];
 }

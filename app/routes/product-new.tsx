@@ -6,7 +6,7 @@ import { useLanguage } from "~/lib/i18n";
 
 export function meta() {
   return [
-    { title: "New Product | Schick" },
+    { title: "New Product | Dupli1" },
     { name: "description", content: "Add a new product to the catalogue." },
   ];
 }

@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import type { User } from "./auth";
 import { getServiceAccountAccessToken, serviceAccountConfigured } from "./service-account.server";
 
-const SESSION_COOKIE_NAME = "schick_session";
+const SESSION_COOKIE_NAME = "dupli1_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
 const ACCESS_TOKEN_TTL_SECONDS = 60 * 5;
 const ACCESS_TOKEN_REFRESH_SKEW_MS = 15_000;
@@ -36,22 +36,22 @@ interface AccessTokenResult {
 declare global {
   // Keep the cache stable across Vite server reloads during local development.
   // Production deployments should replace this with shared server-side storage.
-  var __schickBffSessions: Map<string, SessionRecord> | undefined;
+  var __dupli1BffSessions: Map<string, SessionRecord> | undefined;
 }
 
-const sessions = (globalThis.__schickBffSessions ??= new Map());
+const sessions = (globalThis.__dupli1BffSessions ??= new Map());
 
 function now(): number {
   return Date.now();
 }
 
 function sharedApiBaseUrl(): string | undefined {
-  return process.env.SCHICK_API_BASE_URL;
+  return process.env.DUPLI1_API_BASE_URL;
 }
 
 function authApiBaseUrl(): string {
   return (
-    process.env.SCHICK_AUTH_API_BASE_URL ??
+    process.env.DUPLI1_AUTH_API_BASE_URL ??
     sharedApiBaseUrl() ??
     "http://localhost:8080"
   );
@@ -59,7 +59,7 @@ function authApiBaseUrl(): string {
 
 function productApiBaseUrl(): string {
   return (
-    process.env.SCHICK_PRODUCT_API_BASE_URL ??
+    process.env.DUPLI1_PRODUCT_API_BASE_URL ??
     sharedApiBaseUrl() ??
     "http://localhost:8081"
   );
@@ -346,7 +346,7 @@ export async function handleRegister(request: Request): Promise<Response> {
     return json(
       {
         error:
-          "Registration is unavailable: SCHICK_WEB_SERVICE_TOKEN must be configured",
+          "Registration is unavailable: DUPLI1_WEB_SERVICE_TOKEN must be configured",
       },
       { status: 503 }
     );

@@ -1,6 +1,6 @@
-# Schick Web
+# Dupli1 Web
 
-Schick Web is a React Router application for a specialty fashion and accessories marketplace. The project is structured as a server-rendered React app with Tailwind CSS, Docker support, and production build scripts.
+Dupli1 Web is a React Router application for a specialty fashion and accessories marketplace. The project is structured as a server-rendered React app with Tailwind CSS, Docker support, and production build scripts.
 
 ## Compliance Notice
 
@@ -73,27 +73,27 @@ routes act as a BFF and forward requests to the internal API gateway configured
 with:
 
 ```bash
-SCHICK_API_BASE_URL=http://localhost:8080
+DUPLI1_API_BASE_URL=http://localhost:8080
 ```
 
 If auth and product services are deployed at separate origins, override the
-shared gateway with `SCHICK_AUTH_API_BASE_URL` and
-`SCHICK_PRODUCT_API_BASE_URL`.
+shared gateway with `DUPLI1_AUTH_API_BASE_URL` and
+`DUPLI1_PRODUCT_API_BASE_URL`.
 
-Customer registration requires a schick-web service account bearer token. Issue an
-access token for the seeded `customer_registrar` account on `schick-auth` and
-configure it on schick-web:
+Customer registration requires a dupli1-web service account bearer token. Issue an
+access token for the seeded `customer_registrar` account on `dupli1-auth` and
+configure it on dupli1-web:
 
 ```bash
-SCHICK_WEB_SERVICE_TOKEN=<access_token>
+DUPLI1_WEB_SERVICE_TOKEN=<access_token>
 ```
 
 The BFF sends this token as `Authorization: Bearer <token>` when calling
 `POST /api/v1/auth/register`. Never expose the token to browsers.
 
 Product catalog BFF routes (`/api/products/bags`, `/api/products/:id`,
-`/api/products/search`) read from the Schick product service
-([elug3/schick](https://github.com/elug3/schick)) via the gateway:
+`/api/products/search`) read from the Dupli1 product service
+([elug3/dupli1](https://github.com/elug3/dupli1)) via the gateway:
 
 - Public bag search: `GET /api/v1/products/bags`
 - Public product detail: `GET /api/v1/products/{id}` (active products only)
@@ -131,13 +131,13 @@ npm run start
 Build the image:
 
 ```bash
-docker build -t schick-web .
+docker build -t dupli1-web .
 ```
 
 Run the container:
 
 ```bash
-docker run -p 3000:3000 schick-web
+docker run -p 3000:3000 dupli1-web
 ```
 
 The production server is then available at:
@@ -176,7 +176,7 @@ Pull requests and pushes to `master` must pass:
 npm ci
 npm run typecheck
 npm run build
-docker build -t schick-web .
+docker build -t dupli1-web .
 ```
 
 ### Production deployment
@@ -185,14 +185,14 @@ Merging to `master` deploys to Amazon ECS in `us-east-1`:
 
 - **ECR repository:** `web`
 - **ECS cluster:** `production`
-- **ECS service:** `schick-web`
+- **ECS service:** `dupli1-web`
 - **Task definition:** [.aws/task-definition.json](.aws/task-definition.json)
 
 Deployment uses GitHub OIDC to assume `arn:aws:iam::845061289093:role/github-actions-deploy-role`. That role has ECR push and ECS deploy permissions. Ensure the role's OIDC trust policy includes this repository.
 
-The container listens on port `3000` behind the `schick-web-3000-tg` load balancer target group. Backend API calls are routed through `SCHICK_API_BASE_URL=http://proxy.schick.local`.
+The container listens on port `3000` behind the `dupli1-web-3000-tg` load balancer target group. Backend API calls are routed through `DUPLI1_API_BASE_URL=http://proxy.dupli1.local`.
 
-Set `SCHICK_WEB_SERVICE_TOKEN` on the ECS task (prefer AWS Secrets Manager) so customer registration can authenticate with the schick-auth service account.
+Set `DUPLI1_WEB_SERVICE_TOKEN` on the ECS task (prefer AWS Secrets Manager) so customer registration can authenticate with the dupli1-auth service account.
 
 ## Deployment Notes
 
